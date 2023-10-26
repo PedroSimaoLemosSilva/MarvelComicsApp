@@ -10,17 +10,13 @@ import UIKit
 class HeroListViewController: UIViewController {
 
     let scrollView = UIScrollView()
-    let safeView = UIView()
-    //let stackView = UIStackView()
 
-    //let heroesView1 = HeroesView()
-    //let heroesView2 = HeroesView()
-    //let heroesView3 = HeroesView()
+    let safeView = UIView()
 
     let gridView = GridView()
 
-
     override func viewDidLoad() {
+
         super.viewDidLoad()
 
         view.addSubview(self.scrollView)
@@ -45,25 +41,16 @@ class HeroListViewController: UIViewController {
 
         safeView.backgroundColor = .brown
 
-        /*
-        scrollView.addSubview(stackView)
+        Task {
+            do {
 
-        stackView.setRulesStackView(backgroundColor: .magenta, axis: .vertical, distribution: .fillEqually, alignment: .fill, spacing: 0)
+                let i = try await Webservice().fetchCharacterDataWrapper(url: Constants.Urls.characters)
+            } catch {
 
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
-        stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
-        stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
-        stackView.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
-
-        heroesView1.setupHeroesRowView(parentView: stackView)
-        heroesView2.setupHeroesRowView(parentView: stackView)
-        heroesView3.setupHeroesRowView(parentView: stackView)
-         */
-
+                print(error)
+            }
+        }
     }
-
-
 }
 
 

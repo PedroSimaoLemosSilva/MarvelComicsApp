@@ -21,11 +21,7 @@ class RowStackView: UIStackView {
 
         view.addArrangedSubview(self)
 
-        //self.translatesAutoresizingMaskIntoConstraints = false
-        //self.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         self.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        //self.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        //self.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
 
         self.setRulesStackView(backgroundColor: .magenta, axis: .horizontal, distribution: .fillEqually,
                                alignment: .fill, spacing: 5)

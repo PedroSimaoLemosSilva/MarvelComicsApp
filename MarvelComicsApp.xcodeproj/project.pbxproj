@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		685E44062AEA6BB100D19541 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 685E44052AEA6BB100D19541 /* Constants.swift */; };
+		685E44082AEA6F5700D19541 /* CharacterInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 685E44072AEA6F5700D19541 /* CharacterInfo.swift */; };
+		685E440D2AEAAF2500D19541 /* Webservice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 685E440C2AEAAF2500D19541 /* Webservice.swift */; };
 		686CCCF62AE94E35003F8D80 /* HeroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 686CCCF52AE94E35003F8D80 /* HeroView.swift */; };
 		686CCCF82AE97EE6003F8D80 /* GridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 686CCCF72AE97EE6003F8D80 /* GridView.swift */; };
 		686CCCFA2AE98563003F8D80 /* RowStackViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 686CCCF92AE98563003F8D80 /* RowStackViews.swift */; };
@@ -17,6 +20,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		685E44052AEA6BB100D19541 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		685E44072AEA6F5700D19541 /* CharacterInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterInfo.swift; sourceTree = "<group>"; };
+		685E440C2AEAAF2500D19541 /* Webservice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Webservice.swift; sourceTree = "<group>"; };
 		686CCCF52AE94E35003F8D80 /* HeroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeroView.swift; sourceTree = "<group>"; };
 		686CCCF72AE97EE6003F8D80 /* GridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridView.swift; sourceTree = "<group>"; };
 		686CCCF92AE98563003F8D80 /* RowStackViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RowStackViews.swift; sourceTree = "<group>"; };
@@ -39,6 +45,31 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		685E44092AEA7BF800D19541 /* App Delegate */ = {
+			isa = PBXGroup;
+			children = (
+				68C58A5B2AE822B600C473FA /* AppDelegate.swift */,
+				68C58A5D2AE822B600C473FA /* SceneDelegate.swift */,
+			);
+			path = "App Delegate";
+			sourceTree = "<group>";
+		};
+		685E440A2AEA7C3C00D19541 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				68C58A692AE822B800C473FA /* Info.plist */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		685E440B2AEAAECF00D19541 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				685E440C2AEAAF2500D19541 /* Webservice.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
 		686CCCF22AE91741003F8D80 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -52,6 +83,7 @@
 		686CCCF32AE91751003F8D80 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				68C58A5F2AE822B600C473FA /* HeroListViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -59,6 +91,7 @@
 		686CCCF42AE9175C003F8D80 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				685E44072AEA6F5700D19541 /* CharacterInfo.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -67,6 +100,7 @@
 			isa = PBXGroup;
 			children = (
 				686CCCFC2AE991E1003F8D80 /* NamesImages.swift */,
+				685E44052AEA6BB100D19541 /* Constants.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -90,14 +124,13 @@
 		68C58A5A2AE822B600C473FA /* MarvelComicsApp */ = {
 			isa = PBXGroup;
 			children = (
+				685E440B2AEAAECF00D19541 /* Services */,
 				686CCCFB2AE99195003F8D80 /* Utils */,
 				686CCCF42AE9175C003F8D80 /* Models */,
 				686CCCF32AE91751003F8D80 /* Controllers */,
 				686CCCF22AE91741003F8D80 /* Views */,
-				68C58A5B2AE822B600C473FA /* AppDelegate.swift */,
-				68C58A5D2AE822B600C473FA /* SceneDelegate.swift */,
-				68C58A5F2AE822B600C473FA /* HeroListViewController.swift */,
-				68C58A692AE822B800C473FA /* Info.plist */,
+				685E44092AEA7BF800D19541 /* App Delegate */,
+				685E440A2AEA7C3C00D19541 /* Resources */,
 			);
 			path = MarvelComicsApp;
 			sourceTree = "<group>";
@@ -170,13 +203,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				685E440D2AEAAF2500D19541 /* Webservice.swift in Sources */,
 				686CCCFD2AE991E1003F8D80 /* NamesImages.swift in Sources */,
 				686CCCFA2AE98563003F8D80 /* RowStackViews.swift in Sources */,
 				68C58A602AE822B600C473FA /* HeroListViewController.swift in Sources */,
 				68C58A5C2AE822B600C473FA /* AppDelegate.swift in Sources */,
 				686CCCF62AE94E35003F8D80 /* HeroView.swift in Sources */,
 				686CCCF82AE97EE6003F8D80 /* GridView.swift in Sources */,
+				685E44082AEA6F5700D19541 /* CharacterInfo.swift in Sources */,
 				68C58A5E2AE822B600C473FA /* SceneDelegate.swift in Sources */,
+				685E44062AEA6BB100D19541 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -305,7 +341,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = MarvelComicsApp/Info.plist;
+				INFOPLIST_FILE = MarvelComicsApp/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -330,7 +366,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = MarvelComicsApp/Info.plist;
+				INFOPLIST_FILE = MarvelComicsApp/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";

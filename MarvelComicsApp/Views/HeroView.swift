@@ -32,11 +32,7 @@ class HeroView: UIStackView {
         self.setRulesStackView(backgroundColor: .green, axis: .vertical, distribution: .fill,
                                alignment: .fill, spacing: 0)
 
-        //let imageView = UIImageView()
-        //let label = UILabel()
-
         let randomInt = Int.random(in: 1...5)
-
 
         imageView.backgroundColor = .orange
         imageView.layer.cornerRadius = 15
@@ -50,16 +46,10 @@ class HeroView: UIStackView {
 
         self.addChildren(imageView: imageView, label: label)
 
-        //imageView.translatesAutoresizingMaskIntoConstraints = false
-        //imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        //imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        //imageView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.heightAnchor.constraint(equalToConstant: 140).isActive = true
 
-        //label.translatesAutoresizingMaskIntoConstraints = false
-        //label.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        //label.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        //label.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.heightAnchor.constraint(equalToConstant: 30).isActive = true
     }
 }
