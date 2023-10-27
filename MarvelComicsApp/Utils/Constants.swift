@@ -18,7 +18,7 @@ struct Constants {
         static let hash = apiTime + apiPrivateKey + apiPublicKey
         static let apiHash = String.MD5(string: hash)
 
-        static let characters: URL? = URL(string: "https://gateway.marvel.com/v1/public/characters?ts=\(apiTime)&apikey=\(apiPublicKey)&hash=\(apiHash)")
+        static let characters: URL? = URL(string: "https://gateway.marvel.com/v1/public/characters?limit=20&ts=\(apiTime)&apikey=\(apiPublicKey)&hash=\(apiHash)")
     }
 }
 

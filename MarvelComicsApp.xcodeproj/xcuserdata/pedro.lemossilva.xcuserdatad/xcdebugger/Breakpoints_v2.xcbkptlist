@@ -32,7 +32,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "40"
             endingLineNumber = "40"
-            landmarkName = "populateHeroView(parentView:)"
+            landmarkName = "populateHeroView(parentView:tuple:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -46,133 +46,10 @@
             filePath = "MarvelComicsApp/Services/Webservice.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "20"
-            endingLineNumber = "20"
-            landmarkName = "fetchCharacterDataWrapper(url:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "87E1E295-0E43-4412-AB9A-B2A284BA90DA"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MarvelComicsApp/Services/Webservice.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
             startingLineNumber = "21"
             endingLineNumber = "21"
             landmarkName = "fetchCharacterDataWrapper(url:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "87E1E295-0E43-4412-AB9A-B2A284BA90DA - 271af34dc7edce81"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for MarvelComicsApp.Webservice.fetchCharacterDataWrapper(url: Swift.Optional&lt;Foundation.URL&gt;) async throws -&gt; Swift.Array&lt;MarvelComicsApp.CharacterDataWrapper&gt;"
-                  moduleName = "MarvelComicsApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/pedro.lemossilva/Desktop/GitLabReps/MarvelComicsApp/MarvelComicsApp/Services/Webservice.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "22"
-                  endingLineNumber = "22"
-                  offsetFromSymbolStart = "370">
-               </Location>
-               <Location
-                  uuid = "87E1E295-0E43-4412-AB9A-B2A284BA90DA - 271af34dc7edce7f"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for MarvelComicsApp.Webservice.fetchCharacterDataWrapper(url: Swift.Optional&lt;Foundation.URL&gt;) async throws -&gt; Swift.Array&lt;MarvelComicsApp.CharacterDataWrapper&gt;"
-                  moduleName = "MarvelComicsApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/pedro.lemossilva/Desktop/GitLabReps/MarvelComicsApp/MarvelComicsApp/Services/Webservice.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "24"
-                  endingLineNumber = "24"
-                  offsetFromSymbolStart = "568">
-               </Location>
-               <Location
-                  uuid = "87E1E295-0E43-4412-AB9A-B2A284BA90DA - 271af34dc7edce7f"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for MarvelComicsApp.Webservice.fetchCharacterDataWrapper(url: Swift.Optional&lt;Foundation.URL&gt;) async throws -&gt; Swift.Array&lt;MarvelComicsApp.CharacterDataWrapper&gt;"
-                  moduleName = "MarvelComicsApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/pedro.lemossilva/Desktop/GitLabReps/MarvelComicsApp/MarvelComicsApp/Services/Webservice.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "24"
-                  endingLineNumber = "24"
-                  offsetFromSymbolStart = "707">
-               </Location>
-               <Location
-                  uuid = "87E1E295-0E43-4412-AB9A-B2A284BA90DA - 271af34dc7edce7f"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for MarvelComicsApp.Webservice.fetchCharacterDataWrapper(url: Swift.Optional&lt;Foundation.URL&gt;) async throws -&gt; Swift.Array&lt;MarvelComicsApp.CharacterDataWrapper&gt;"
-                  moduleName = "MarvelComicsApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/pedro.lemossilva/Desktop/GitLabReps/MarvelComicsApp/MarvelComicsApp/Services/Webservice.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "24"
-                  endingLineNumber = "24"
-                  offsetFromSymbolStart = "703">
-               </Location>
-               <Location
-                  uuid = "87E1E295-0E43-4412-AB9A-B2A284BA90DA - 271af34dc7edce7f"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for MarvelComicsApp.Webservice.fetchCharacterDataWrapper(url: Swift.Optional&lt;Foundation.URL&gt;) async throws -&gt; Swift.Array&lt;MarvelComicsApp.CharacterDataWrapper&gt;"
-                  moduleName = "MarvelComicsApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/pedro.lemossilva/Desktop/GitLabReps/MarvelComicsApp/MarvelComicsApp/Services/Webservice.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "24"
-                  endingLineNumber = "24"
-                  offsetFromSymbolStart = "580">
-               </Location>
-               <Location
-                  uuid = "87E1E295-0E43-4412-AB9A-B2A284BA90DA - 271af34dc7edce7f"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for MarvelComicsApp.Webservice.fetchCharacterDataWrapper(url: Swift.Optional&lt;Foundation.URL&gt;) async throws -&gt; Swift.Array&lt;MarvelComicsApp.CharacterDataWrapper&gt;"
-                  moduleName = "MarvelComicsApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/pedro.lemossilva/Desktop/GitLabReps/MarvelComicsApp/MarvelComicsApp/Services/Webservice.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "24"
-                  endingLineNumber = "24"
-                  offsetFromSymbolStart = "616">
-               </Location>
-               <Location
-                  uuid = "87E1E295-0E43-4412-AB9A-B2A284BA90DA - 271af34dc7edce7f"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for MarvelComicsApp.Webservice.fetchCharacterDataWrapper(url: Swift.Optional&lt;Foundation.URL&gt;) async throws -&gt; Swift.Array&lt;MarvelComicsApp.CharacterDataWrapper&gt;"
-                  moduleName = "MarvelComicsApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/pedro.lemossilva/Desktop/GitLabReps/MarvelComicsApp/MarvelComicsApp/Services/Webservice.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "24"
-                  endingLineNumber = "24"
-                  offsetFromSymbolStart = "646">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -185,8 +62,8 @@
             filePath = "MarvelComicsApp/Controllers/HeroListViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "47"
-            endingLineNumber = "47"
+            startingLineNumber = "49"
+            endingLineNumber = "49"
             landmarkName = "viewDidLoad()"
             landmarkType = "7">
             <Locations>
@@ -263,8 +140,8 @@
             filePath = "MarvelComicsApp/Services/Webservice.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "19"
-            endingLineNumber = "19"
+            startingLineNumber = "20"
+            endingLineNumber = "20"
             landmarkName = "fetchCharacterDataWrapper(url:)"
             landmarkType = "7">
          </BreakpointContent>

@@ -17,7 +17,7 @@ class GridView: UIStackView {
         self.rowStackView.append(view)
     }
 
-    func populateGrid(parentView view: UIScrollView) {
+    func populateGrid(parentView view: UIScrollView, characterDictionary dict: [String: String]) {
 
         view.addSubview(self)
 
@@ -26,15 +26,28 @@ class GridView: UIStackView {
         self.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         self.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
 
-        self.setRulesStackView(backgroundColor: .purple, axis: .vertical, distribution: .fillEqually,
+        self.setRulesStackView(backgroundColor: .white, axis: .vertical, distribution: .fillEqually,
                                alignment: .fill, spacing: 1)
 
         //Shows 5 row until theres a need to lead more
-        for i in 0...5 {
+        var newDict = dict
+        for i in 0...4 {
 
             self.addRowStackView(childView: RowStackView())
 
-            rowStackView[i].populateRowStackView(parentView: self)
+            var rowDict: [String: String] = [:]
+            
+            var j = 0
+            for (charactersName, _) in newDict {
+
+                if j < 4 {
+
+                    rowDict[charactersName] = newDict.removeValue(forKey: charactersName)
+                }
+                j += 1
+            }
+            
+            rowStackView[i].populateRowStackView(parentView: self, characterDictionary: rowDict)
         }
 
 

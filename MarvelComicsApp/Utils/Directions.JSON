@@ -1,0 +1,341 @@
+{
+  "code": 200,
+  "status": "Ok",
+  "copyright": "© 2023 MARVEL",
+  "attributionText": "Data provided by Marvel. © 2023 MARVEL",
+  "attributionHTML": "<a href=\"http://marvel.com\">Data provided by Marvel. © 2023 MARVEL</a>",
+  "etag": "5779ddd85a1f507d81c91b27d988d650f1d1cb9f",
+  "data": {
+    "offset": 0,
+    "limit": 20,
+    "total": 1,
+    "count": 1,
+    "results": [
+      {
+        "id": 1009191,
+        "name": "Blade",
+        "description": "",
+        "modified": "2013-10-04T18:29:21-0400",
+        "thumbnail": {
+          "path": "http://i.annihil.us/u/prod/marvel/i/mg/8/a0/523ca6f2b11e4",
+          "extension": "jpg"
+        },
+        "resourceURI": "http://gateway.marvel.com/v1/public/characters/1009191",
+        "comics": {
+          "available": 130,
+          "collectionURI": "http://gateway.marvel.com/v1/public/characters/1009191/comics",
+          "items": [
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/comics/71049",
+              "name": "Avengers (2018) #16"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/comics/84363",
+              "name": "Avengers (2018) #45"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/comics/89540",
+              "name": "Avengers (2018) #49"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/comics/89541",
+              "name": "Avengers (2018) #50"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/comics/92195",
+              "name": "Avengers (2018) #51"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/comics/92196",
+              "name": "Avengers (2018) #52"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/comics/3015",
+              "name": "Black Panther (2005) #10"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/comics/3356",
+              "name": "Black Panther (2005) #12"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/comics/65441",
+              "name": "Black Panther by Reginald Hudlin: The Complete Collection Vol. 1 (Trade Paperback)"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/comics/4140",
+              "name": "Black Panther: Bad Mutha (Trade Paperback)"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/comics/5133",
+              "name": "Blade (2006) #1"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/comics/106957",
+              "name": "Blade (2023) #1"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/comics/74892",
+              "name": "Blade (1998) #1"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/comics/5288",
+              "name": "Blade (2006) #2"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/comics/106960",
+              "name": "Blade (2023) #2"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/comics/74893",
+              "name": "Blade (1998) #2"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/comics/74894",
+              "name": "Blade (1998) #3"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/comics/106961",
+              "name": "Blade (2023) #3"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/comics/5596",
+              "name": "Blade (2006) #3"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/comics/106962",
+              "name": "Blade (2023) #4"
+            }
+          ],
+          "returned": 20
+        },
+        "series": {
+          "available": 60,
+          "collectionURI": "http://gateway.marvel.com/v1/public/characters/1009191/series",
+          "items": [
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/series/24229",
+              "name": "Avengers (2018 - 2023)"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/series/784",
+              "name": "Black Panther (2005 - 2008)"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/series/23806",
+              "name": "Black Panther by Reginald Hudlin: The Complete Collection Vol. 1 (2017)"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/series/1479",
+              "name": "Black Panther: Bad Mutha (2006)"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/series/1123",
+              "name": "Blade (2006 - 2007)"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/series/36880",
+              "name": "Blade (2023 - Present)"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/series/26963",
+              "name": "Blade (1998)"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/series/29188",
+              "name": "Blade By Marc Guggenheim: The Complete Collection (2020)"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/series/22633",
+              "name": "Blade the Vampire Hunter (1994 - 1995)"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/series/1249",
+              "name": "BLADE: BLACK AND WHITE TPB (2004)"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/series/25798",
+              "name": "Blade: Blood and Chaos (2018)"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/series/21235",
+              "name": "Blade: Crescent City Blues (1998)"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/series/32122",
+              "name": "Blade: First Bite Infinity Comic (2023)"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/series/26710",
+              "name": "Blade: Sins of the Father (1998)"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/series/2931",
+              "name": "BLADE: SINS OF THE FATHER TPB (2007)"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/series/2236",
+              "name": "BLADE: UNDEAD AGAIN TPB (2007)"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/series/26394",
+              "name": "Blade: Vampire Hunter (1999 - 2000)"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/series/34294",
+              "name": "Blade: Vampire Nation (2022)"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/series/29489",
+              "name": "Bloodline: Daughter Of Blade (2024 - Present)"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/series/29488",
+              "name": "Bloodline: Daughter of Blade (2023)"
+            }
+          ],
+          "returned": 20
+        },
+        "stories": {
+          "available": 144,
+          "collectionURI": "http://gateway.marvel.com/v1/public/characters/1009191/stories",
+          "items": [
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/stories/3685",
+              "name": "PART 1 (OF 6) ",
+              "type": "cover"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/stories/3687",
+              "name": "3 of 6",
+              "type": "cover"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/stories/3830",
+              "name": "1 of 4 - Bride Prelude",
+              "type": "cover"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/stories/3834",
+              "name": "3 of 4 - Bride Prelude",
+              "type": "cover"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/stories/4117",
+              "name": "2 of 6 - Master of the Ring",
+              "type": "cover"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/stories/6172",
+              "name": "Cover #6172",
+              "type": "cover"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/stories/6173",
+              "name": "Interior #6173",
+              "type": "interiorStory"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/stories/6174",
+              "name": "1 of 1 - Dr. Doom and Latveria",
+              "type": "cover"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/stories/6175",
+              "name": "1 of 1 - Dr. Doom and Latveria",
+              "type": "interiorStory"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/stories/6177",
+              "name": "Interior #6177",
+              "type": "interiorStory"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/stories/6178",
+              "name": "Cover #6178",
+              "type": "cover"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/stories/6179",
+              "name": "Interior #6179",
+              "type": "interiorStory"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/stories/6180",
+              "name": "5 of 6 - Fathers and Sons",
+              "type": "cover"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/stories/6181",
+              "name": "5 of 6 - Fathers and Sons",
+              "type": "interiorStory"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/stories/6182",
+              "name": "5 of 6 - Fathers and Sons",
+              "type": "cover"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/stories/6183",
+              "name": "5 of 6 - Fathers and Sons",
+              "type": "interiorStory"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/stories/7876",
+              "name": "6 of 6 - Fathers and Sons",
+              "type": "cover"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/stories/7877",
+              "name": "6 of 6 - Fathers and Sons",
+              "type": "interiorStory"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/stories/7878",
+              "name": "1 of 6 - Death of Blade",
+              "type": "cover"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/stories/7879",
+              "name": "1 of 6 - Death of Blade",
+              "type": "interiorStory"
+            }
+          ],
+          "returned": 20
+        },
+        "events": {
+          "available": 3,
+          "collectionURI": "http://gateway.marvel.com/v1/public/characters/1009191/events",
+          "items": [
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/events/238",
+              "name": "Civil War"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/events/336",
+              "name": "Secret Empire"
+            },
+            {
+              "resourceURI": "http://gateway.marvel.com/v1/public/events/219",
+              "name": "Siege of Darkness"
+            }
+          ],
+          "returned": 3
+        },
+        "urls": [
+          {
+            "type": "detail",
+            "url": "http://marvel.com/comics/characters/1009191/blade?utm_campaign=apiRef&utm_source=bf3a93c4a0fd6dc17fdbba86491f5056"
+          },
+          {
+            "type": "wiki",
+            "url": "http://marvel.com/universe/Blade_(Eric_Brooks)?utm_campaign=apiRef&utm_source=bf3a93c4a0fd6dc17fdbba86491f5056"
+          },
+          {
+            "type": "comiclink",
+            "url": "http://marvel.com/comics/characters/1009191/blade?utm_campaign=apiRef&utm_source=bf3a93c4a0fd6dc17fdbba86491f5056"
+          }
+        ]
+      }
+    ]
+  }
+}

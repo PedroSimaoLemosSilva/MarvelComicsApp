@@ -20,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		68073B5D2AEBCD7400CA4C16 /* Directions.JSON */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Directions.JSON; sourceTree = "<group>"; };
 		685E44052AEA6BB100D19541 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		685E44072AEA6F5700D19541 /* CharacterInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterInfo.swift; sourceTree = "<group>"; };
 		685E440C2AEAAF2500D19541 /* Webservice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Webservice.swift; sourceTree = "<group>"; };
@@ -101,6 +102,7 @@
 			children = (
 				686CCCFC2AE991E1003F8D80 /* NamesImages.swift */,
 				685E44052AEA6BB100D19541 /* Constants.swift */,
+				68073B5D2AEBCD7400CA4C16 /* Directions.JSON */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
