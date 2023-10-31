@@ -64,13 +64,13 @@ struct Url: Decodable, Encodable {
 struct Image: Decodable, Encodable {
 
     let path: String? //The directory path of to the image.,
-    let ´extension´: String? //The file extension for the image.
-    /*
+    let extension0: String? //The file extension for the image.
+
     enum CodingKeys: String, CodingKey {
 
         case extension0 = "extension"
         case path
-    } */
+    }
 }
 
 struct ComicList: Decodable, Encodable {

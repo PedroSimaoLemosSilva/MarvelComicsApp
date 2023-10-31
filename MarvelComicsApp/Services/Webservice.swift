@@ -25,32 +25,46 @@ class Webservice {
         return marvelData
     }
 
-    func fetchCharactersNameThumbnailPath(url: URL?) async throws -> [String: String] {
+    // fetches the characters names and thumbnail images into a sorted dictionary
+    // where the names are the keys and the full image paths are the values
+    func fetchCharactersNameThumbnailPath(url: URL?) async throws -> [[(String, String)]] {
 
         guard let url = url else {
 
-            return [:]
+            return []
         }
 
         let (data, _) = try await URLSession.shared.data(from: url)
 
         let marvelData = try? JSONDecoder().decode(CharacterDataWrapper.self, from: data)
 
-        var characterDict = [String: String]()
+        var array: [[(String, String)]] = []
+        var subArray: [(String, String)] = []
         if let comicsCharacters = marvelData?.data?.results {
-
+            var i = 0
             for comicsCharacter in comicsCharacters {
 
                 if let name = comicsCharacter.name,
-                   let thumbnailPath = comicsCharacter.thumbnail?.path {
+                   let thumbnailPath = comicsCharacter.thumbnail?.path,
+                   let thumbnailExtension = comicsCharacter.thumbnail?.extension0{
 
-                    characterDict[name] = thumbnailPath
+                    let fullPath = thumbnailPath + "/portrait_xlarge." + thumbnailExtension
+
+                    subArray.append((name, fullPath))
+
+                    i += 1
+
+                    if subArray.count == 4 {
+
+                        let auxArray = subArray
+
+                        subArray = []
+                        array.append(auxArray)
+                    }
                 }
             }
         }
 
-        return characterDict
+        return array
     }
-
-    
 }
