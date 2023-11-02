@@ -6,21 +6,21 @@
 //
 
 import UIKit
-
 class MainViewController: UIViewController {
 
-    let scrollView = UIScrollView()
+    private let tableView = UITableView()
 
-    lazy var gridView = VerticalStackView()
+    private let webservice = Webservice()
 
-    lazy var data: [[(String, String)]] = []
+    lazy var characterThumbnails: [CharacterThumbnail] = []
 
     override func viewDidLoad() {
 
         super.viewDidLoad()
 
-        setupViews()
-        setupConstraints()
+        addSubviews()
+        defineSubviewConstraints()
+        configureSubviews()
 
         navigationItem.title = "Marvel Comics"
 
@@ -28,15 +28,33 @@ class MainViewController: UIViewController {
 
             do {
                 
-                data = try await Webservice().fetchCharactersNameThumbnailPath(url: Constants.Urls.characters)
+                guard let characterDataWrapper = try await webservice.fetchCharactersInfo(url: Constants.Urls.characters),
+                      let charactersData = characterDataWrapper.data?.results else {
 
-                gridView.transferThumbnailData(data: self.data)
+                }
+
+                charactersData.forEach { character in
+
+                    guard let id = character.id,
+                          let name = character.name,
+                          let path = character.thumbnail?.path,
+                          let ext = character.thumbnail?.extension0 else {
+
+                    }
+
+                    let imageUrl = path + "." + ext
+
+                    let characterThumbnail = CharacterThumbnail(id: id, name: name, imageUrl: imageUrl)
+
+                    characterThumbnails.append(characterThumbnail)
+                }
+
+                tableView.register(UITableViewCell.self, forCellReuseIdentifier: "TableViewCell")
             } catch {
                 
                 print(error)
             }
         }
-
     }
 
     // Segue action - pushing to the new view
@@ -46,33 +64,60 @@ class MainViewController: UIViewController {
         let detailsViewController = DetailsViewController()
         navigationController?.pushViewController(detailsViewController, animated: false)
     }
+}
 
-    func setupViews() {
+private extension MainViewController {
 
-        scrollView.backgroundColor = .white
-        scrollView.addSubview(gridView)
+    func addSubviews() {
 
-        view.backgroundColor = .white
-        view.addSubview(self.scrollView)
+        self.view.addSubview(self.tableView)
     }
 
-    func setupConstraints() {
+    func defineSubviewConstraints() {
 
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        self.tableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            scrollView.topAnchor.constraint(equalTo: view.topAnchor)
+            self.tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            self.tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            self.tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            self.tableView.topAnchor.constraint(equalTo: view.topAnchor)
         ])
+    }
 
-        gridView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            gridView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            gridView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            gridView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor)
-        ])
+    func configureSubviews() {
+
+        self.view.backgroundColor = .white
+
+        self.tableView.backgroundColor = .white
+        self.tableView.dataSource = self
+        self.tableView.delegate = self
+        self.tableView.separatorStyle = .none
+        self.tableView.tableFooterView = UIView()
     }
 }
+
+extension MainViewController: UITableViewDataSource {
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+
+        return self.characterThumbnails.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+
+        let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewCell", for: indexPath)
+        let item = characterThumbnails[indexPath.row]
+        configureCell(for: cell, with: item)
+        return cell
+    }
+}
+
+extension MainViewController: UITableViewDelegate {
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+
+    }
+}
+
 
 

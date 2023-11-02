@@ -71,54 +71,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "3D3D7D40-E1F1-46E4-AEF8-7A1A3A3B767C"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MarvelComicsApp/Services/Webservice.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "68"
-            endingLineNumber = "68"
-            landmarkName = "fetchCharactersNameThumbnailPath(url:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "3D3D7D40-E1F1-46E4-AEF8-7A1A3A3B767C - 5a84dcaaad2a5e43"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for MarvelComicsApp.Webservice.fetchCharactersNameThumbnailPath(url: Swift.Optional&lt;Foundation.URL&gt;) async throws -&gt; Swift.Array&lt;Swift.Array&lt;(Swift.String, Swift.String)&gt;&gt;"
-                  moduleName = "MarvelComicsApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/pedro.lemossilva/Desktop/GitLabReps/MarvelComicsApp/MarvelComicsApp/Services/Webservice.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "69"
-                  endingLineNumber = "69"
-                  offsetFromSymbolStart = "6476">
-               </Location>
-               <Location
-                  uuid = "3D3D7D40-E1F1-46E4-AEF8-7A1A3A3B767C - 5a84dcaaad2a5e43"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for MarvelComicsApp.Webservice.fetchCharactersNameThumbnailPath(url: Swift.Optional&lt;Foundation.URL&gt;) async throws -&gt; Swift.Array&lt;Swift.Array&lt;(Swift.String, Swift.String)&gt;&gt;"
-                  moduleName = "MarvelComicsApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/pedro.lemossilva/Desktop/GitLabReps/MarvelComicsApp/MarvelComicsApp/Services/Webservice.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "69"
-                  endingLineNumber = "69"
-                  offsetFromSymbolStart = "6489">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "3AA4A901-55B1-411C-BB11-A9140BDAE785"
             shouldBeEnabled = "No"
             ignoreCount = "0"

@@ -22,24 +22,25 @@ struct CharacterInfo: Decodable {
 
 struct CharacterDataWrapper: Decodable, Encodable {
 
-    let code : Int? //The HTTP status code of the returned result.
-    let status: String? //A string description of the call status.
-    let copyright: String? //The copyright notice for the returned result.
-    let attributionText: String? //The attribution notice for this result.
-    let attributionHTML: String? //An HTML representation of the attribution notice for this result.
-    let etag: String? //A digest value of the content returned by the call.
+    //let code : Int? //The HTTP status code of the returned result.
+    //let status: String? //A string description of the call status.
+    //let copyright: String? //The copyright notice for the returned result.
+    //let attributionText: String? //The attribution notice for this result.
+    //let attributionHTML: String? //An HTML representation of the attribution notice for this result.
+    //let etag: String? //A digest value of the content returned by the call.
     let data: CharacterDataContainer? //The results returned by the call.
 }
 
 struct CharacterDataContainer: Decodable, Encodable {
 
-    let offset: Int? //The requested offset (number of skipped results) of the call.,
-    let limit: Int? //The requested result limit.,
-    let total: Int? //The total number of resources available given the current filter set.,
-    let count: Int? //The total number of results returned by this call.,
+    //let offset: Int? //The requested offset (number of skipped results) of the call.,
+    //let limit: Int? //The requested result limit.,
+    //let total: Int? //The total number of resources available given the current filter set.,
+    //let count: Int? //The total number of results returned by this call.,
     let results: [Character]? //The list of characters returned by the call.
 }
 
+/*
 struct Character: Decodable, Encodable {
 
     let id: Int? //The unique ID of the character resource.,
@@ -59,18 +60,6 @@ struct Url: Decodable, Encodable {
 
     let type: String? //A text identifier for the URL.,
     let url: String? //A full URL (including scheme, domain, and path).
-}
-
-struct Image: Decodable, Encodable {
-
-    let path: String? //The directory path of to the image.,
-    let extension0: String? //The file extension for the image.
-
-    enum CodingKeys: String, CodingKey {
-
-        case extension0 = "extension"
-        case path
-    }
 }
 
 struct ComicList: Decodable, Encodable {
@@ -127,4 +116,26 @@ struct SeriesSummary: Decodable, Encodable  {
 
     let resourceURI: String? //The path to the individual series resource.,
     let name: String? //The canonical name of the series.
+}
+*/
+
+struct Character: Decodable, Encodable {
+
+    let id: Int? //The unique ID of the character resource.,
+    let name: String?  //The name of the character.,
+    //let description: String? //A short bio or description of the character.,
+    let thumbnail: Image?  //The representative image for this character.,
+}
+
+
+struct Image: Decodable, Encodable {
+
+    let path: String? //The directory path of to the image.,
+    let extension0: String? //The file extension for the image.
+
+    enum CodingKeys: String, CodingKey {
+
+        case extension0 = "extension"
+        case path
+    }
 }
