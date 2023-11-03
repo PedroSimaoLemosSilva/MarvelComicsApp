@@ -20,6 +20,10 @@ class CharacterThumbnailCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
     }
 
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     func transferThumbnailData(id: Int, name: String, imageUrl: String) {
 
         self.setupViews()
@@ -30,18 +34,13 @@ class CharacterThumbnailCell: UITableViewCell {
         guard let url = URL(string: imageUrl) else { return }
         self.image.load(url: url)
     }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
 }
 
 extension CharacterThumbnailCell {
 
     func setupViews() {
 
-        image.backgroundColor = .magenta
+
         image.layer.cornerRadius = 15
         image.clipsToBounds = true
         image.contentMode = .scaleAspectFill
@@ -70,8 +69,15 @@ extension CharacterThumbnailCell {
             label.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             label.bottomAnchor.constraint(equalTo: self.bottomAnchor),
             label.topAnchor.constraint(equalTo: self.topAnchor),
-            label.leadingAnchor.constraint(equalTo: image.trailingAnchor, constant: 10)
+            label.leadingAnchor.constraint(equalTo: image.trailingAnchor)
         ])
+    }
+
+    override func prepareForReuse() {
+
+        super.prepareForReuse()
+
+        self.image.image = nil
     }
 }
 

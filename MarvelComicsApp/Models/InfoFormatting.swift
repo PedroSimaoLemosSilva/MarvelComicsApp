@@ -13,9 +13,23 @@ struct CharacterThumbnail {
     let name: String //Character's name
     let imageUrl: String //The full URL of the image
 
+    init() {
+        self.id = 0
+        self.name = ""
+        self.imageUrl = ""
+    }
+
     init(id: Int,  name: String, imageUrl: String) {
+
         self.id = id
         self.name = name
         self.imageUrl = imageUrl
+    }
+
+    init(character: CharacterThumbnail) {
+
+        self.id = character.id
+        self.name = character.name
+        self.imageUrl = character.imageUrl
     }
 }

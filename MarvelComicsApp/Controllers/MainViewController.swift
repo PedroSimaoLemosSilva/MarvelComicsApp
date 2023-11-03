@@ -32,14 +32,6 @@ class MainViewController: UIViewController {
         tableView.register(CharacterThumbnailCell.self, forCellReuseIdentifier: "TableViewCell")
 
     }
-
-    // Segue action - pushing to the new view
-    @objc
-    func clickAction() {
-        
-        let detailsViewController = DetailsViewController()
-        navigationController?.pushViewController(detailsViewController, animated: false)
-    }
 }
 
 private extension MainViewController {
@@ -110,6 +102,8 @@ extension MainViewController: UITableViewDataSource {
             return UITableViewCell()
         }
 
+        cell.selectionStyle = .none
+
         let item = characterThumbnails[indexPath.row]
         configureCell(for: cell, with: item)
         return cell
@@ -136,7 +130,10 @@ extension MainViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
-        clickAction()
+        let item = characterThumbnails[indexPath.row]
+
+        let detailsViewController = DetailsViewController(characterThumbnail: item)
+        navigationController?.pushViewController(detailsViewController, animated: false)
     }
 }
 
