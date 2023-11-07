@@ -60,7 +60,8 @@ extension CharacterThumbnailCell {
             image.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             image.bottomAnchor.constraint(equalTo: self.bottomAnchor),
             image.topAnchor.constraint(equalTo: self.topAnchor),
-            image.widthAnchor.constraint(equalToConstant: 150)
+            image.widthAnchor.constraint(equalToConstant: 150),
+            image.heightAnchor.constraint(equalToConstant: 100)
             //image.trailingAnchor.constraint(equalTo: label.leadingAnchor, constant: -100)
         ])
 
@@ -69,7 +70,8 @@ extension CharacterThumbnailCell {
             label.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             label.bottomAnchor.constraint(equalTo: self.bottomAnchor),
             label.topAnchor.constraint(equalTo: self.topAnchor),
-            label.leadingAnchor.constraint(equalTo: image.trailingAnchor)
+            label.leadingAnchor.constraint(equalTo: image.trailingAnchor),
+            label.heightAnchor.constraint(equalToConstant: 100)
         ])
     }
 

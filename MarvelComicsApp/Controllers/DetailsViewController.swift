@@ -15,13 +15,7 @@ class DetailsViewController: UIViewController {
 
     private var characterThumbnail: CharacterThumbnail = CharacterThumbnail()
 
-    lazy var characterComics: [Comic] = []
-
-    lazy var characterEvents: [Event] = []
-
-    lazy var characterStories: [Story] = []
-
-    lazy var characterSeries: [Series] = []
+    lazy var characterDetails: [String: [Detail]] = [:]
 
     init(characterThumbnail: CharacterThumbnail) {
 
@@ -38,18 +32,20 @@ class DetailsViewController: UIViewController {
 
         super.viewDidLoad()
 
-        self.title = characterThumbnail.name
-
         Task {
 
-            //await dataFormatting()
+            await dataFormatting()
             addSubviews()
             defineSubviewConstraints()
             configureSubviews()
         }
-    }
 
-    
+        self.title = characterThumbnail.name
+
+        tableView.register(CharacterThumbnailCell.self, forCellReuseIdentifier: "ThumbnailCell")
+        tableView.register(DetailsCell.self, forCellReuseIdentifier: "DetailsCell")
+
+    }
 }
 
 private extension DetailsViewController {
@@ -77,60 +73,168 @@ private extension DetailsViewController {
         self.tableView.backgroundColor = .white
         self.tableView.dataSource = self
         self.tableView.separatorStyle = .none
-        self.tableView.tableFooterView = UIView()
+        //self.tableView.tableFooterView = UIView()
     }
 
-    /*
     func dataFormatting() async {
 
         do {
 
-            guard let characterDataWrapper = try await webservice.fetchCharactersInfo(url: Constants.Urls.characters),
-                  let charactersData = characterDataWrapper.data?.results else { return }
+            var constants = Constants.Urls(id: characterThumbnail.id)
+            let comicsUrl = constants.comics
+            let eventsUrl = constants.events
+            let seriesUrl = constants.series
+            let storiesUrl = constants.stories
 
-            charactersData.forEach { character in
+            guard let comicsDataWrapper = try await webservice.fetchDetailsInfo(url: comicsUrl),
+                  let eventsDataWrapper = try await webservice.fetchDetailsInfo(url: eventsUrl),
+                  let seriesDataWrapper = try await webservice.fetchDetailsInfo(url: seriesUrl),
+                  let storiesDataWrapper = try await webservice.fetchDetailsInfo(url: storiesUrl) else { return }
 
-                guard let id = character.id,
-                      let name = character.name,
-                      let path = character.thumbnail?.path,
-                      let ext = character.thumbnail?.extension0 else { return }
+            //let comicsTitle = constants.comics
+            //let eventsTitle = constants.events
+            //let seriesTitle = constants.series
+            //let storiesTitle = constants.stories
 
-                let imageUrl = path + "." + ext
 
-                let characterThumbnail = CharacterThumbnail(id: id, name: name, imageUrl: imageUrl)
+            if let comicsData = comicsDataWrapper.data?.results {
+                //comicsData.insert(, at: )
+                if comicsData.count > 3 {
 
-                characterThumbnails.append(characterThumbnail)
+                    let newComicsData = Array(comicsData[0...2])
+                    characterDetails["Comics"] = newComicsData
+                } else { characterDetails["Comics"] = comicsData }
+            } else { characterDetails["Comics"] = nil }
 
-            }
+            if let eventsData = eventsDataWrapper.data?.results {
+
+                if eventsData.count > 3 {
+
+                    let newEventsData = Array(eventsData[0...2])
+                    characterDetails["Events"] = newEventsData
+                } else { characterDetails["Events"] = eventsData}
+            } else { characterDetails["Events"] = nil }
+
+            if let seriesData = seriesDataWrapper.data?.results {
+
+                if seriesData.count > 3 {
+
+                    let newSeriesData = Array(seriesData[0...2])
+                    characterDetails["Series"] = newSeriesData
+                } else { characterDetails["Series"] = seriesData }
+            } else { characterDetails["Series"] = nil  }
+
+            if let storiesData = storiesDataWrapper.data?.results {
+
+                if storiesData.count > 3 {
+
+                    let newStoriesData = Array(storiesData[0...2])
+                    characterDetails["Stories"] = newStoriesData
+                } else { characterDetails["Stories"] = storiesData }
+            } else { characterDetails["Stories"] = nil  }
+
+            characterDetails["Name"] = [Detail(title: "", description: "")]
+
         } catch { print(error) }
-    } */
+    }
 }
 
 extension DetailsViewController: UITableViewDataSource {
 
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-
-        return 5
-    }
-
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
-        return UITableViewCell()
+        if indexPath.section == 0 {
+            //print(indexPath.row)
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "ThumbnailCell", for: indexPath) as? CharacterThumbnailCell else {
+
+                return UITableViewCell()
+            }
+
+            cell.selectionStyle = .none
+            let item = characterThumbnail
+            configureThumbnailCell(for: cell, with: item)
+            return cell
+        } else {
+
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "DetailsCell", for: indexPath) as? DetailsCell else {
+
+                return UITableViewCell()
+            }
+
+            let sectionsNames = ["Name", "Comics", "Events", "Series", "Stories"]
+            let key = sectionsNames[indexPath.section]
+
+            let item = characterDetails[key]?[indexPath.row]
+            cell.selectionStyle = .none
+
+            if let item = item {
+                configureDetailsCell(for: cell, with: item)
+            }
+            return cell
+        }
+    }
+
+    func numberOfSections(in tableView: UITableView) -> Int {
+
+        return characterDetails.count
+    }
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+
+        let sectionsNames = ["Name", "Comics", "Events", "Series", "Stories"]
+
+        let sectionName = sectionsNames[section]
+
+        if let sectionList = characterDetails[sectionName] {
+
+            return sectionList.count
+        } else {
+
+            return 0
+        }
+    }
+
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+
+        let sectionName: String
+        switch section {
+            case 0:
+                sectionName = NSLocalizedString("", comment: "Names")
+            case 1:
+                sectionName = NSLocalizedString("Comics", comment: "Comics")
+            case 2:
+                sectionName = NSLocalizedString("Events", comment: "Events")
+            case 3:
+                sectionName = NSLocalizedString("Series", comment: "Series")
+            case 4:
+                sectionName = NSLocalizedString("Stories", comment: "Stories")
+            default:
+                sectionName = ""
+        }
+        return sectionName
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
 
-        return 200
+        return 150
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
 
-        return 5
+        return 1
     }
 
-    func configureCell(for cell: CharacterThumbnailCell, with item: CharacterThumbnail) {
+    func configureThumbnailCell(for cell: CharacterThumbnailCell, with item: CharacterThumbnail) {
 
         cell.transferThumbnailData(id: item.id, name: item.name, imageUrl: item.imageUrl)
 
     }
+
+
+    func configureDetailsCell(for cell: DetailsCell, with item: Detail) {
+
+        cell.transferDetailsData(detail: item)
+
+    }
 }
+

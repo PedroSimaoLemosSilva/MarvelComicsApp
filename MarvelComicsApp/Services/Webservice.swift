@@ -20,8 +20,6 @@ class Webservice {
 
         let marvelData = try? JSONDecoder().decode(CharactersDataWrapper.self, from: data)
 
-        //print(String(data: data, encoding: .utf8)) // does the job
-
         return marvelData
     }
 
@@ -39,5 +37,19 @@ class Webservice {
         let characterDataWrapper = try? JSONDecoder().decode(CharactersDataWrapper.self, from: data)
 
         return characterDataWrapper
+    }
+
+    func fetchDetailsInfo(url: URL?) async throws -> DetailsDataWrapper? {
+
+        guard let url = url else {
+
+            return nil
+        }
+
+        let (data, _) = try await URLSession.shared.data(from: url)
+
+        let detailsDataWrapper = try? JSONDecoder().decode(DetailsDataWrapper.self, from: data)
+
+        return detailsDataWrapper
     }
 }

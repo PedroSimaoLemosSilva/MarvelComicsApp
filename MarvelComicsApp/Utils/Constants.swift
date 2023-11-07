@@ -18,7 +18,18 @@ struct Constants {
         static let hash = apiTime + apiPrivateKey + apiPublicKey
         static let apiHash = String.MD5(string: hash)
 
+        var id: Int
+
         static let characters: URL? = URL(string: "https://gateway.marvel.com/v1/public/characters?limit=20&ts=\(apiTime)&apikey=\(apiPublicKey)&hash=\(apiHash)")
+        lazy var comics: URL? = URL(string: "https://gateway.marvel.com/v1/public/characters/\(self.id)/comics?limit=3&ts=\(Constants.Urls.apiTime)&apikey=\(Constants.Urls.apiPublicKey)&hash=\(Constants.Urls.apiHash)")
+        lazy var events: URL? = URL(string: "https://gateway.marvel.com/v1/public/characters/\(self.id)/events?limit=3&ts=\(Constants.Urls.apiTime)&apikey=\(Constants.Urls.apiPublicKey)&hash=\(Constants.Urls.apiHash)")
+        lazy var series: URL? = URL(string: "https://gateway.marvel.com/v1/public/characters/\(self.id)/series?limit=3&ts=\(Constants.Urls.apiTime)&apikey=\(Constants.Urls.apiPublicKey)&hash=\(Constants.Urls.apiHash)")
+        lazy var stories: URL? = URL(string: "https://gateway.marvel.com/v1/public/characters/\(self.id)/stories?limit=3&ts=\(Constants.Urls.apiTime)&apikey=\(Constants.Urls.apiPublicKey)&hash=\(Constants.Urls.apiHash)")
+
+        init(id: Int) {
+
+            self.id = id
+        }
     }
 }
 

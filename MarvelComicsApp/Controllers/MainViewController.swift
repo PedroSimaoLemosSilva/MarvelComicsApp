@@ -26,7 +26,6 @@ class MainViewController: UIViewController {
             configureSubviews()
         }
 
-        //print(characterThumbnails)
         navigationItem.title = "Marvel Comics"
 
         tableView.register(CharacterThumbnailCell.self, forCellReuseIdentifier: "TableViewCell")
@@ -103,7 +102,7 @@ extension MainViewController: UITableViewDataSource {
         }
 
         cell.selectionStyle = .none
-
+        
         let item = characterThumbnails[indexPath.row]
         configureCell(for: cell, with: item)
         return cell
