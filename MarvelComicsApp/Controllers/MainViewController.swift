@@ -10,7 +10,7 @@ class MainViewController: UIViewController {
 
     private let tableView = UITableView()
 
-    private let webservice = Webservice()
+    private let webservice = MainWebservice()
 
     lazy var characterThumbnails: [CharacterThumbnail] = []
 
@@ -20,16 +20,17 @@ class MainViewController: UIViewController {
 
         Task {
 
-            await dataFormatting()
+            tableView.reloadData()
+            await dataLoad()
             addSubviews()
             defineSubviewConstraints()
             configureSubviews()
+            configureFooterTableView()
+
+            navigationItem.title = "Marvel Comics"
+
+            tableView.register(CharacterThumbnailCell.self, forCellReuseIdentifier: "TableViewCell")
         }
-
-        navigationItem.title = "Marvel Comics"
-
-        tableView.register(CharacterThumbnailCell.self, forCellReuseIdentifier: "TableViewCell")
-
     }
 }
 
@@ -59,14 +60,29 @@ private extension MainViewController {
         self.tableView.dataSource = self
         self.tableView.delegate = self
         self.tableView.separatorStyle = .none
-        self.tableView.tableFooterView = UIView()
     }
 
-    func dataFormatting() async {
+    func configureFooterTableView() {
+
+        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width , height: 100))
+        footerView.backgroundColor = .clear
+
+        let loadButton = UIButton(frame: CGRect(x: 30, y: 30, width: self.view.frame.width - 60, height: 40))
+        loadButton.backgroundColor = .systemGray
+        loadButton.isUserInteractionEnabled = true
+        loadButton.setTitle("Load More", for: .normal)
+        loadButton.addTarget(self, action: #selector(self.dataLoadMore), for: .touchUpInside)
+
+        footerView.addSubview(loadButton)
+        self.tableView.tableFooterView = footerView
+
+    }
+
+    func dataLoad() async {
 
         do {
 
-            guard let characterDataWrapper = try await webservice.fetchCharactersInfo(url: Constants.Urls.characters),
+            guard let characterDataWrapper = try await webservice.fetchCharactersInfo(),
                   let charactersData = characterDataWrapper.data?.results else { return }
 
             charactersData.forEach { character in
@@ -81,9 +97,18 @@ private extension MainViewController {
                 let characterThumbnail = CharacterThumbnail(id: id, name: name, imageUrl: imageUrl)
 
                 characterThumbnails.append(characterThumbnail)
-                
             }
         } catch { print(error) }
+    }
+
+    @objc
+    func dataLoadMore() {
+
+        Task {
+
+            await dataLoad()
+            tableView.reloadData()
+        }
     }
 }
 

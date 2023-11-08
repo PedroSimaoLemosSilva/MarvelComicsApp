@@ -21,6 +21,7 @@ class CharacterThumbnailCell: UITableViewCell {
     }
 
     required init?(coder: NSCoder) {
+
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -39,7 +40,6 @@ class CharacterThumbnailCell: UITableViewCell {
 extension CharacterThumbnailCell {
 
     func setupViews() {
-
 
         image.layer.cornerRadius = 15
         image.clipsToBounds = true
@@ -62,7 +62,6 @@ extension CharacterThumbnailCell {
             image.topAnchor.constraint(equalTo: self.topAnchor),
             image.widthAnchor.constraint(equalToConstant: 150),
             image.heightAnchor.constraint(equalToConstant: 100)
-            //image.trailingAnchor.constraint(equalTo: label.leadingAnchor, constant: -100)
         ])
 
         label.translatesAutoresizingMaskIntoConstraints = false

@@ -55,16 +55,16 @@ extension DetailsCell {
 
         title.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            title.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -2),
-            title.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 2),
+            title.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -5),
+            title.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 5),
             title.topAnchor.constraint(equalTo: self.topAnchor),
             title.heightAnchor.constraint(equalToConstant: 50)
         ])
 
         textDescription.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            textDescription.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -2),
-            textDescription.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 2),
+            textDescription.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -7),
+            textDescription.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 7),
             textDescription.bottomAnchor.constraint(equalTo: self.bottomAnchor),
             textDescription.topAnchor.constraint(equalTo: title.bottomAnchor, constant: 2)
         ])
