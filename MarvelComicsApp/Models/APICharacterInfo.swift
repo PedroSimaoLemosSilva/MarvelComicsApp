@@ -34,7 +34,7 @@ struct Character: Decodable, Encodable {
 
     let id: Int? //The unique ID of the character resource.,
     let name: String?  //The name of the character.,
-    let thumbnail: Image?  //The representative image for this character.,
+    let thumbnail: Image?  //The representative image for this character.
 }
 
 struct Image: Decodable, Encodable {

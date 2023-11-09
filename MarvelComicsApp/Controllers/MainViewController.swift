@@ -8,9 +8,9 @@
 import UIKit
 class MainViewController: UIViewController {
 
-    private let tableView = UITableView()
+    private let mainViewModel = MainViewModel()
 
-    private let webservice = MainWebservice()
+    private let tableView = UITableView()
 
     private let footerView = UIView()
 
@@ -20,23 +20,26 @@ class MainViewController: UIViewController {
 
     private let loadButton = UIButton()
 
-    lazy var characterThumbnails: [CharacterThumbnail] = []
-
     override func viewDidLoad() {
 
         super.viewDidLoad()
 
         Task {
 
+            self.view.backgroundColor = .white
+
             configureLoadingView()
             indicatorView.showSpinner()
-            tableView.reloadData()
-            await dataLoad()
+
+            await mainViewModel.dataLoad()
+
             indicatorView.hideSpinner()
-            addSubviews()
-            defineSubviewConstraints()
-            configureSubviews()
-            configureFooterTableView()
+
+            tableView.reloadData()
+            addTableView()
+            defineTableViewConstraints()
+            configureTableView()
+            configureTableViewFooter()
 
             navigationItem.title = "Marvel Comics"
 
@@ -63,12 +66,12 @@ private extension MainViewController {
         ])
     }
 
-    func addSubviews() {
+    func addTableView() {
 
         self.view.addSubview(self.tableView)
     }
 
-    func defineSubviewConstraints() {
+    func defineTableViewConstraints() {
 
         self.tableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -79,9 +82,7 @@ private extension MainViewController {
         ])
     }
 
-    func configureSubviews() {
-
-        self.view.backgroundColor = .white
+    func configureTableView() {
 
         self.tableView.backgroundColor = .white
         self.tableView.dataSource = self
@@ -89,7 +90,7 @@ private extension MainViewController {
         self.tableView.separatorStyle = .none
     }
 
-    func configureFooterTableView() {
+    func configureTableViewFooter() {
 
         footerView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width , height: 100)
         loadIndicator.frame = CGRect(x: 0, y: 0, width: self.view.frame.width , height: 100)
@@ -123,38 +124,13 @@ private extension MainViewController {
 
     }
 
-    func dataLoad() async {
-
-        do {
-
-            guard let characterDataWrapper = try await webservice.fetchCharactersInfo(),
-                  let charactersData = characterDataWrapper.data?.results else { return }
-
-            for character in charactersData {
-
-                guard let id = character.id,
-                      let name = character.name,
-                      let path = character.thumbnail?.path,
-                      let ext = character.thumbnail?.extension0 else { return }
-
-                let imageUrl = path + "." + ext
-
-                let imageData = try await webservice.fetchCharactersImageData(name: name,url: imageUrl)
-
-                let characterThumbnail = CharacterThumbnail(id: id, name: name, imageData: imageData)
-
-                characterThumbnails.append(characterThumbnail)
-            }
-        } catch { print(error) }
-    }
-
     @objc
     func dataLoadMore() {
 
         Task {
 
             self.showSpinner()
-            await dataLoad()
+            await mainViewModel.dataLoad()
             self.hideSpinner()
             tableView.reloadData()
         }
@@ -165,7 +141,7 @@ extension MainViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
-        return self.characterThumbnails.count
+        return mainViewModel.numberOfRows()
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -176,9 +152,10 @@ extension MainViewController: UITableViewDataSource {
         }
 
         cell.selectionStyle = .none
-        
-        let item = characterThumbnails[indexPath.row]
-        configureCell(for: cell, with: item)
+
+        let item = mainViewModel.characterForRowAt(indexPath: indexPath)
+        cell.transferThumbnailData(id: item.id, name: item.name, imageData: item.imageData)
+
         return cell
     }
 
@@ -191,19 +168,13 @@ extension MainViewController: UITableViewDataSource {
 
         return 5
     }
-
-    func configureCell(for cell: CharacterThumbnailCell, with item: CharacterThumbnail) {
-
-        cell.transferThumbnailData(id: item.id, name: item.name, imageData: item.imageData)
-        
-    }
 }
 
 extension MainViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
-        let item = characterThumbnails[indexPath.row]
+        let item = mainViewModel.characterForRowAt(indexPath: indexPath)
 
         let detailsViewController = DetailsViewController(characterThumbnail: item)
         navigationController?.pushViewController(detailsViewController, animated: false)

@@ -19,6 +19,35 @@ class DetailsViewController: UIViewController {
 
     lazy var characterDetails: [String: [Detail]] = [:]
 
+    enum ProfileSection: Int {
+
+        case Time, WarmUp, CoolDown, Count
+
+        static var count = {
+
+            return ProfileSection.Count.rawValue
+        }
+
+        static let sectionTitles = [
+
+            Time: "Time",
+            WarmUp: "Warm Up",
+            CoolDown: "Cool Down"
+        ]
+
+        func sectionTitle() -> String {
+
+            if let sectionTitle = ProfileSection.sectionTitles[self] {
+
+                return sectionTitle
+            } else {
+
+                return ""
+            }
+        }
+    }
+
+
     init(characterThumbnail: CharacterThumbnail) {
 
         super.init(nibName: nil, bundle: nil)
