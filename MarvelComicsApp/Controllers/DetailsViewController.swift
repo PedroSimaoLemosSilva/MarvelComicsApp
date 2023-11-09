@@ -11,6 +11,8 @@ class DetailsViewController: UIViewController {
 
     private let tableView = UITableView()
 
+    private let indicatorView = IndicatorView()
+
     private let webservice = DetailsWebservice()
 
     private var characterThumbnail: CharacterThumbnail = CharacterThumbnail()
@@ -33,8 +35,15 @@ class DetailsViewController: UIViewController {
         super.viewDidLoad()
 
         Task {
+        
+            configureLoadingView()
+
+            indicatorView.showSpinner()
 
             await dataFormatting()
+
+            indicatorView.hideSpinner()
+
             addSubviews()
             defineSubviewConstraints()
             configureSubviews()
@@ -48,6 +57,22 @@ class DetailsViewController: UIViewController {
 
 private extension DetailsViewController {
 
+    func configureLoadingView() {
+
+        indicatorView.setupViews()
+        indicatorView.setupConstraints()
+
+        self.view.addSubview(self.indicatorView)
+
+        self.indicatorView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.indicatorView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            self.indicatorView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            self.indicatorView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+            self.indicatorView.topAnchor.constraint(equalTo: self.view.topAnchor)
+        ])
+    }
+
     func addSubviews() {
 
         self.view.addSubview(self.tableView)
@@ -60,7 +85,7 @@ private extension DetailsViewController {
             self.tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             self.tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             self.tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            self.tableView.topAnchor.constraint(equalTo: view.topAnchor)
+            self.tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
         ])
     }
 
@@ -201,7 +226,7 @@ extension DetailsViewController: UITableViewDataSource {
 
     func configureThumbnailCell(for cell: CharacterThumbnailCell, with item: CharacterThumbnail) {
 
-        cell.transferThumbnailData(id: item.id, name: item.name, imageUrl: item.imageUrl)
+        cell.transferThumbnailData(id: item.id, name: item.name, imageData: item.imageData)
 
     }
 

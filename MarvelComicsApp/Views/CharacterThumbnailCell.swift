@@ -25,15 +25,14 @@ class CharacterThumbnailCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func transferThumbnailData(id: Int, name: String, imageUrl: String) {
+    func transferThumbnailData(id: Int, name: String, imageData: Data) {
 
         self.setupViews()
         self.setupConstraints()
 
         self.id = id
         self.label.text = name
-        guard let url = URL(string: imageUrl) else { return }
-        self.image.load(url: url)
+        self.image.load(data: imageData)
     }
 }
 
@@ -84,12 +83,11 @@ extension CharacterThumbnailCell {
 
 extension UIImageView {
 
-    func load(url: URL) {
+    func load(data: Data) {
 
         DispatchQueue.global().async { [weak self] in
 
-            if let data = try? Data(contentsOf: url),
-               let image = UIImage(data: data) {
+           if let image = UIImage(data: data) {
 
                 DispatchQueue.main.async {
 

@@ -11,25 +11,25 @@ struct CharacterThumbnail {
 
     let id: Int //The unique ID of the character resource
     let name: String //Character's name
-    let imageUrl: String //The full URL of the image
+    let imageData: Data //The full URL of the image
 
     init() {
         self.id = 0
         self.name = ""
-        self.imageUrl = ""
+        self.imageData = Data()
     }
 
-    init(id: Int,  name: String, imageUrl: String) {
+    init(id: Int,  name: String, imageData: Data) {
 
         self.id = id
         self.name = name
-        self.imageUrl = imageUrl
+        self.imageData = imageData
     }
 
     init(character: CharacterThumbnail) {
 
         self.id = character.id
         self.name = character.name
-        self.imageUrl = character.imageUrl
+        self.imageData = character.imageData
     }
 }

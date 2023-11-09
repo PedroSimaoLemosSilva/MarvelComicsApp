@@ -1,1 +1,31 @@
-[MarvelComicsApp.Character(id: Optional(1011176), name: Optional("Ajak"), thumbnail: Optional(MarvelComicsApp.Image(path: Optional("http://i.annihil.us/u/prod/marvel/i/mg/2/80/4c002f35c5215"), extension0: Optional("jpg")))), MarvelComicsApp.Character(id: Optional(1010870), name: Optional("Ajaxis"), thumbnail: Optional(MarvelComicsApp.Image(path: Optional("http://i.annihil.us/u/prod/marvel/i/mg/b/70/4c0035adc7d3a"), extension0: Optional("jpg")))), MarvelComicsApp.Character(id: Optional(1011194), name: Optional("Akemi"), thumbnail: Optional(MarvelComicsApp.Image(path: Optional("http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available"), extension0: Optional("jpg")))), MarvelComicsApp.Character(id: Optional(1011170), name: Optional("Alain"), thumbnail: Optional(MarvelComicsApp.Image(path: Optional("http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available"), extension0: Optional("jpg")))), MarvelComicsApp.Character(id: Optional(1009240), name: Optional("Albert Cleary"), thumbnail: Optional(MarvelComicsApp.Image(path: Optional("http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available"), extension0: Optional("jpg")))), MarvelComicsApp.Character(id: Optional(1011120), name: Optional("Albion"), thumbnail: Optional(MarvelComicsApp.Image(path: Optional("http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available"), extension0: Optional("jpg")))), MarvelComicsApp.Character(id: Optional(1010836), name: Optional("Alex Power"), thumbnail: Optional(MarvelComicsApp.Image(path: Optional("http://i.annihil.us/u/prod/marvel/i/mg/9/50/4ce5a385a2e82"), extension0: Optional("jpg")))), MarvelComicsApp.Character(id: Optional(1010755), name: Optional("Alex Wilder"), thumbnail: Optional(MarvelComicsApp.Image(path: Optional("http://i.annihil.us/u/prod/marvel/i/mg/2/c0/4c00377144d5a"), extension0: Optional("jpg")))), MarvelComicsApp.Character(id: Optional(1011214), name: Optional("Alexa Mendez"), thumbnail: Optional(MarvelComicsApp.Image(path: Optional("http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available"), extension0: Optional("jpg")))), MarvelComicsApp.Character(id: Optional(1009497), name: Optional("Alexander Pierce"), thumbnail: Optional(MarvelComicsApp.Image(path: Optional("http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available"), extension0: Optional("jpg")))), MarvelComicsApp.Character(id: Optional(1014990), name: Optional("Alice"), thumbnail: Optional(MarvelComicsApp.Image(path: Optional("http://i.annihil.us/u/prod/marvel/i/mg/6/70/4cd061e6d6573"), extension0: Optional("jpg")))), MarvelComicsApp.Character(id: Optional(1009435), name: Optional("Alicia Masters"), thumbnail: Optional(MarvelComicsApp.Image(path: Optional("http://i.annihil.us/u/prod/marvel/i/mg/b/40/4c003d40ac7ae"), extension0: Optional("jpg")))), MarvelComicsApp.Character(id: Optional(1010370), name: Optional("Alpha Flight"), thumbnail: Optional(MarvelComicsApp.Image(path: Optional("http://i.annihil.us/u/prod/marvel/i/mg/1/60/52695277ee088"), extension0: Optional("jpg")))), MarvelComicsApp.Character(id: Optional(1011324), name: Optional("Alpha Flight (Ultimate)"), thumbnail: Optional(MarvelComicsApp.Image(path: Optional("http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available"), extension0: Optional("jpg")))), MarvelComicsApp.Character(id: Optional(1011164), name: Optional("Alvin Maker"), thumbnail: Optional(MarvelComicsApp.Image(path: Optional("http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available"), extension0: Optional("jpg")))), MarvelComicsApp.Character(id: Optional(1011227), name: Optional("Amadeus Cho"), thumbnail: Optional(MarvelComicsApp.Image(path: Optional("http://i.annihil.us/u/prod/marvel/i/mg/3/80/520288b9cb581"), extension0: Optional("jpg")))), MarvelComicsApp.Character(id: Optional(1009567), name: Optional("Amanda Sefton"), thumbnail: Optional(MarvelComicsApp.Image(path: Optional("http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available"), extension0: Optional("jpg")))), MarvelComicsApp.Character(id: Optional(1011382), name: Optional("Amazoness"), thumbnail: Optional(MarvelComicsApp.Image(path: Optional("http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available"), extension0: Optional("jpg")))), MarvelComicsApp.Character(id: Optional(1011361), name: Optional("American Eagle (Jason Strongbow)"), thumbnail: Optional(MarvelComicsApp.Image(path: Optional("http://i.annihil.us/u/prod/marvel/i/mg/f/80/4ce5a6d8b8f2a"), extension0: Optional("jpg")))), MarvelComicsApp.Character(id: Optional(1009151), name: Optional("Amiko"), thumbnail: Optional(MarvelComicsApp.Image(path: Optional("http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available"), extension0: Optional("jpg"))))]
+final class Networking: NSObject {
+
+    // MARK: - Private functions
+    private static func getData(url: URL,
+                                completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
+        URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
+    }
+
+    // MARK: - Public function
+
+    /// downloadImage function will download the thumbnail images
+    /// returns Result<Data> as completion handler
+    public static func downloadImage(url: URL,
+                                     completion: @escaping (Result<Data>) -> Void) {
+        Networking.getData(url: url) { data, response, error in
+
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+
+            guard let data = data, error == nil else {
+                return
+            }
+
+            DispatchQueue.main.async() {
+                completion(.success(data))
+            }
+        }
+    }
+}

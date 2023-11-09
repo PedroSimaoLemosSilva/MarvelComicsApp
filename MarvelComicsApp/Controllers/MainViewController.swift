@@ -12,6 +12,14 @@ class MainViewController: UIViewController {
 
     private let webservice = MainWebservice()
 
+    private let footerView = UIView()
+
+    private let indicatorView = IndicatorView()
+
+    private let loadIndicator = UIActivityIndicatorView()
+
+    private let loadButton = UIButton()
+
     lazy var characterThumbnails: [CharacterThumbnail] = []
 
     override func viewDidLoad() {
@@ -20,8 +28,11 @@ class MainViewController: UIViewController {
 
         Task {
 
+            configureLoadingView()
+            indicatorView.showSpinner()
             tableView.reloadData()
             await dataLoad()
+            indicatorView.hideSpinner()
             addSubviews()
             defineSubviewConstraints()
             configureSubviews()
@@ -36,6 +47,22 @@ class MainViewController: UIViewController {
 
 private extension MainViewController {
 
+    func configureLoadingView() {
+
+        indicatorView.setupViews()
+        indicatorView.setupConstraints()
+
+        self.view.addSubview(self.indicatorView)
+
+        self.indicatorView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.indicatorView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            self.indicatorView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            self.indicatorView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+            self.indicatorView.topAnchor.constraint(equalTo: self.view.topAnchor)
+        ])
+    }
+
     func addSubviews() {
 
         self.view.addSubview(self.tableView)
@@ -48,7 +75,7 @@ private extension MainViewController {
             self.tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             self.tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             self.tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            self.tableView.topAnchor.constraint(equalTo: view.topAnchor)
+            self.tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
         ])
     }
 
@@ -64,17 +91,35 @@ private extension MainViewController {
 
     func configureFooterTableView() {
 
-        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width , height: 100))
+        footerView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width , height: 100)
+        loadIndicator.frame = CGRect(x: 0, y: 0, width: self.view.frame.width , height: 100)
+
         footerView.backgroundColor = .clear
 
-        let loadButton = UIButton(frame: CGRect(x: 30, y: 30, width: self.view.frame.width - 60, height: 40))
+        loadButton.frame = CGRect(x: 30, y: 30, width: self.view.frame.width - 60, height: 40)
         loadButton.backgroundColor = .systemGray
         loadButton.isUserInteractionEnabled = true
         loadButton.setTitle("Load More", for: .normal)
         loadButton.addTarget(self, action: #selector(self.dataLoadMore), for: .touchUpInside)
 
+        footerView.addSubview(loadIndicator)
         footerView.addSubview(loadButton)
         self.tableView.tableFooterView = footerView
+
+    }
+
+    private func showSpinner() {
+
+        loadButton.isHidden = true
+        loadIndicator.startAnimating()
+        loadIndicator.isHidden = false
+    }
+
+    private func hideSpinner() {
+
+        loadButton.isHidden = false
+        loadIndicator.stopAnimating()
+        loadIndicator.isHidden = true
 
     }
 
@@ -85,7 +130,7 @@ private extension MainViewController {
             guard let characterDataWrapper = try await webservice.fetchCharactersInfo(),
                   let charactersData = characterDataWrapper.data?.results else { return }
 
-            charactersData.forEach { character in
+            for character in charactersData {
 
                 guard let id = character.id,
                       let name = character.name,
@@ -94,7 +139,9 @@ private extension MainViewController {
 
                 let imageUrl = path + "." + ext
 
-                let characterThumbnail = CharacterThumbnail(id: id, name: name, imageUrl: imageUrl)
+                let imageData = try await webservice.fetchCharactersImageData(name: name,url: imageUrl)
+
+                let characterThumbnail = CharacterThumbnail(id: id, name: name, imageData: imageData)
 
                 characterThumbnails.append(characterThumbnail)
             }
@@ -106,7 +153,9 @@ private extension MainViewController {
 
         Task {
 
+            self.showSpinner()
             await dataLoad()
+            self.hideSpinner()
             tableView.reloadData()
         }
     }
@@ -145,7 +194,7 @@ extension MainViewController: UITableViewDataSource {
 
     func configureCell(for cell: CharacterThumbnailCell, with item: CharacterThumbnail) {
 
-        cell.transferThumbnailData(id: item.id, name: item.name, imageUrl: item.imageUrl)
+        cell.transferThumbnailData(id: item.id, name: item.name, imageData: item.imageData)
         
     }
 }
