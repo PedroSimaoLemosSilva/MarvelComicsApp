@@ -7,8 +7,11 @@
 
 import Foundation
 import UIKit
+import Combine
 
 class MainViewModel {
+
+    private(set) var currentState: PassthroughSubject<AppState, Never> = PassthroughSubject()
 
     private let webservice = MainWebservice()
 
@@ -30,8 +33,9 @@ class MainViewModel {
 
     func dataLoad() async {
 
-        do {
 
+        do {
+            self.currentState.send(.loading)
             guard let characterDataWrapper = try await webservice.fetchCharactersInfo(),
                   let charactersData = characterDataWrapper.data?.results else { return }
 
@@ -52,6 +56,13 @@ class MainViewModel {
 
                 characterThumbnails.append(characterThumbnail)
             }
+            self.currentState.send(.loaded)
         } catch { print(error) }
     }
+}
+
+enum AppState: Equatable {
+
+    case loading
+    case loaded
 }

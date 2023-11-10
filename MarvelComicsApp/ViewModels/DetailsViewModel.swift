@@ -46,7 +46,7 @@ class DetailsViewModel {
 
                 characterDetails["Stories"] = storiesData
             } else { characterDetails["Stories"] = nil  }
-            print(characterDetails)
+            
         } catch { print(error) }
     }
 

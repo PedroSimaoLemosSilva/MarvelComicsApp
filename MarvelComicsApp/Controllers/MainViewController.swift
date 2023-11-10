@@ -174,9 +174,9 @@ extension MainViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
-        let (id, name, image) = mainViewModel.characterForRowAt(indexPath: indexPath)
+        let item = mainViewModel.characterForRowAt(indexPath: indexPath)
 
-        let detailsViewController = DetailsViewController(id: id, name: name, image: image)
+        let detailsViewController = DetailsViewController(id: item.0, name: item.1, image: item.2)
         navigationController?.pushViewController(detailsViewController, animated: false)
     }
 }
