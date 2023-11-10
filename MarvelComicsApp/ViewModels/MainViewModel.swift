@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 class MainViewModel {
 
@@ -18,9 +19,13 @@ class MainViewModel {
         return self.characterThumbnails.count
     }
 
-    func characterForRowAt(indexPath: IndexPath) -> CharacterThumbnail {
+    func characterForRowAt(indexPath: IndexPath) -> (Int, String, UIImage) {
 
-        return characterThumbnails[indexPath.row]
+        let id = characterThumbnails[indexPath.row].id
+        let name = characterThumbnails[indexPath.row].name
+        let image = characterThumbnails[indexPath.row].image
+
+        return (id, name, image)
     }
 
     func dataLoad() async {
@@ -41,7 +46,9 @@ class MainViewModel {
 
                 let imageData = try await webservice.fetchCharactersImageData(name: name,url: imageUrl)
 
-                let characterThumbnail = CharacterThumbnail(id: id, name: name, imageData: imageData)
+                guard let image = UIImage(data: imageData) else { return }
+
+                let characterThumbnail = CharacterThumbnail(id: id, name: name, image: image)
 
                 characterThumbnails.append(characterThumbnail)
             }

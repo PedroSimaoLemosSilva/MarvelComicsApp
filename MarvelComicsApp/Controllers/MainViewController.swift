@@ -12,9 +12,9 @@ class MainViewController: UIViewController {
 
     private let tableView = UITableView()
 
-    private let footerView = UIView()
-
     private let indicatorView = IndicatorView()
+
+    private let footerView = UIView()
 
     private let loadIndicator = UIActivityIndicatorView()
 
@@ -153,8 +153,8 @@ extension MainViewController: UITableViewDataSource {
 
         cell.selectionStyle = .none
 
-        let item = mainViewModel.characterForRowAt(indexPath: indexPath)
-        cell.transferThumbnailData(id: item.id, name: item.name, imageData: item.imageData)
+        let (id, name, image) = mainViewModel.characterForRowAt(indexPath: indexPath)
+        cell.transferThumbnailData(id: id, name: name, image: image)
 
         return cell
     }
@@ -174,9 +174,9 @@ extension MainViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
-        let item = mainViewModel.characterForRowAt(indexPath: indexPath)
+        let (id, name, image) = mainViewModel.characterForRowAt(indexPath: indexPath)
 
-        let detailsViewController = DetailsViewController(characterThumbnail: item)
+        let detailsViewController = DetailsViewController(id: id, name: name, image: image)
         navigationController?.pushViewController(detailsViewController, animated: false)
     }
 }

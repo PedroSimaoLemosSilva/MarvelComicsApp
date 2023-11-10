@@ -22,13 +22,13 @@ class DetailsCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func transferDetailsData(detail: Detail) {
+    func transferDetailsData(title: String, description: String) {
 
         self.setupViews()
         self.setupConstraints()
 
-        title.text = detail.title
-        textDescription.text = detail.description
+        self.title.text = title
+        self.textDescription.text = description
     }
 }
 

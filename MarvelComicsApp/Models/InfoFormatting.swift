@@ -6,30 +6,32 @@
 //
 
 import Foundation
+import UIKit
 
 struct CharacterThumbnail {
 
     let id: Int //The unique ID of the character resource
     let name: String //Character's name
-    let imageData: Data //The full URL of the image
+    let image: UIImage //The full URL of the image
 
     init() {
+
         self.id = 0
         self.name = ""
-        self.imageData = Data()
+        self.image = UIImage()
     }
 
-    init(id: Int,  name: String, imageData: Data) {
+    init(id: Int,  name: String, image: UIImage) {
 
         self.id = id
         self.name = name
-        self.imageData = imageData
+        self.image = image
     }
 
     init(character: CharacterThumbnail) {
 
         self.id = character.id
         self.name = character.name
-        self.imageData = character.imageData
+        self.image = character.image
     }
 }

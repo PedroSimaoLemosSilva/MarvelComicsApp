@@ -13,49 +13,17 @@ class DetailsViewController: UIViewController {
 
     private let indicatorView = IndicatorView()
 
-    private let webservice = DetailsWebservice()
+    private let detailsViewModel = DetailsViewModel()
 
-    private var characterThumbnail: CharacterThumbnail = CharacterThumbnail()
-
-    lazy var characterDetails: [String: [Detail]] = [:]
-
-    enum ProfileSection: Int {
-
-        case Time, WarmUp, CoolDown, Count
-
-        static var count = {
-
-            return ProfileSection.Count.rawValue
-        }
-
-        static let sectionTitles = [
-
-            Time: "Time",
-            WarmUp: "Warm Up",
-            CoolDown: "Cool Down"
-        ]
-
-        func sectionTitle() -> String {
-
-            if let sectionTitle = ProfileSection.sectionTitles[self] {
-
-                return sectionTitle
-            } else {
-
-                return ""
-            }
-        }
-    }
-
-
-    init(characterThumbnail: CharacterThumbnail) {
+    init(id: Int, name: String, image: UIImage) {
 
         super.init(nibName: nil, bundle: nil)
     
-        self.characterThumbnail = characterThumbnail
+        detailsViewModel.setCharacterThumbnail(id: id, name: name, image: image)
     }
 
     required init?(coder: NSCoder) {
+
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -69,7 +37,7 @@ class DetailsViewController: UIViewController {
 
             indicatorView.showSpinner()
 
-            await dataFormatting()
+            await detailsViewModel.dataFormatting()
 
             indicatorView.hideSpinner()
 
@@ -126,40 +94,6 @@ private extension DetailsViewController {
         self.tableView.dataSource = self
         self.tableView.separatorStyle = .none
     }
-
-    func dataFormatting() async {
-
-        do {
-
-            guard let comicsDataWrapper = try await webservice.fetchComics(id: characterThumbnail.id),
-                  let eventsDataWrapper = try await webservice.fetchEvents(id: characterThumbnail.id),
-                  let seriesDataWrapper = try await webservice.fetchSeries(id: characterThumbnail.id),
-                  let storiesDataWrapper = try await webservice.fetchStories(id: characterThumbnail.id) else { return }
-
-            characterDetails["Character"] = [Detail(title: "", description: "")]
-
-            if let comicsData = comicsDataWrapper.data?.results {
-
-                characterDetails["Comics"] = comicsData
-            } else { characterDetails["Comics"] = nil }
-
-            if let eventsData = eventsDataWrapper.data?.results {
-
-                characterDetails["Events"] = eventsData
-            } else { characterDetails["Events"] = nil }
-
-            if let seriesData = seriesDataWrapper.data?.results {
-
-                characterDetails["Series"] = seriesData
-            } else { characterDetails["Series"] = nil  }
-
-            if let storiesData = storiesDataWrapper.data?.results {
-
-                characterDetails["Stories"] = storiesData
-            } else { characterDetails["Stories"] = nil  }
-
-        } catch { print(error) }
-    }
 }
 
 extension DetailsViewController: UITableViewDataSource {
@@ -174,7 +108,7 @@ extension DetailsViewController: UITableViewDataSource {
             }
 
             cell.selectionStyle = .none
-            let item = characterThumbnail
+            let item = detailsViewModel.getCharacterThumbnail()
             configureThumbnailCell(for: cell, with: item)
 
             return cell
@@ -186,17 +120,14 @@ extension DetailsViewController: UITableViewDataSource {
             }
 
             //Naming the keys in alphabetic order to sort them the same way as the sections
-            let sectionsNames = Array(characterDetails.keys).map { String($0) }.sorted { $0 < $1 }
+            let sectionsNames = detailsViewModel.getCharacterDetailsKeys()
 
             let key = sectionsNames[indexPath.section]
 
-            let item = characterDetails[key]?[indexPath.row]
+            let item = detailsViewModel.characterForRowAtSectionAt(indexPath: indexPath, key: key)
             cell.selectionStyle = .none
 
-            if let item = item {
-
-                configureDetailsCell(for: cell, with: item)
-            }
+            configureDetailsCell(for: cell, with: item)
 
             return cell
         }
@@ -204,19 +135,18 @@ extension DetailsViewController: UITableViewDataSource {
 
     func numberOfSections(in tableView: UITableView) -> Int {
 
-        return characterDetails.count
+        return detailsViewModel.numberOfSections()
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
-        //Naming the keys in alphabetic order to sort them the same way as the sections
-        let sectionsNames = Array(characterDetails.keys).map { String($0) }.sorted { $0 < $1 }
+        let sectionsNames = detailsViewModel.getCharacterDetailsKeys()
 
         let sectionName = sectionsNames[section]
 
-        if let sectionList = characterDetails[sectionName] {
+        if let sectionSize = detailsViewModel.numberOfRowsInSection(section: sectionName) {
 
-            return sectionList.count
+            return sectionSize
         } else {
 
             return 0
@@ -253,16 +183,14 @@ extension DetailsViewController: UITableViewDataSource {
         return 1
     }
 
-    func configureThumbnailCell(for cell: CharacterThumbnailCell, with item: CharacterThumbnail) {
+    func configureThumbnailCell(for cell: CharacterThumbnailCell, with item: (Int, String, UIImage)) {
 
-        cell.transferThumbnailData(id: item.id, name: item.name, imageData: item.imageData)
-
+        cell.transferThumbnailData(id: item.0, name: item.1, image: item.2)
     }
 
+    func configureDetailsCell(for cell: DetailsCell, with item: (String, String)) {
 
-    func configureDetailsCell(for cell: DetailsCell, with item: Detail) {
-
-        cell.transferDetailsData(detail: item)
+        cell.transferDetailsData(title: item.0, description: item.1)
 
     }
 }
