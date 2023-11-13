@@ -12,11 +12,9 @@ class MainViewController: UIViewController {
 
     private let tableView = UITableView()
 
-    private let indicatorView = IndicatorView()
+    private let loadingScreen = IndicatorView()
 
-    private let footerView = UIView()
-
-    private let loadIndicator = UIActivityIndicatorView()
+    private let loadingMore = IndicatorView()
 
     private let loadButton = UIButton()
 
@@ -29,11 +27,11 @@ class MainViewController: UIViewController {
             self.view.backgroundColor = .white
 
             configureLoadingView()
-            indicatorView.showSpinner()
+            loadingScreen.showSpinner()
 
             await mainViewModel.dataLoad()
 
-            indicatorView.hideSpinner()
+            loadingScreen.hideSpinner()
 
             tableView.reloadData()
             addTableView()
@@ -52,17 +50,17 @@ private extension MainViewController {
 
     func configureLoadingView() {
 
-        indicatorView.setupViews()
-        indicatorView.setupConstraints()
+        loadingScreen.setupViews()
+        loadingScreen.setupConstraints()
 
-        self.view.addSubview(self.indicatorView)
+        self.view.addSubview(self.loadingScreen)
 
-        self.indicatorView.translatesAutoresizingMaskIntoConstraints = false
+        self.loadingScreen.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.indicatorView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-            self.indicatorView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-            self.indicatorView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
-            self.indicatorView.topAnchor.constraint(equalTo: self.view.topAnchor)
+            self.loadingScreen.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            self.loadingScreen.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            self.loadingScreen.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+            self.loadingScreen.topAnchor.constraint(equalTo: self.view.topAnchor)
         ])
     }
 
@@ -92,10 +90,12 @@ private extension MainViewController {
 
     func configureTableViewFooter() {
 
-        footerView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width , height: 100)
-        loadIndicator.frame = CGRect(x: 0, y: 0, width: self.view.frame.width , height: 100)
+        loadingMore.setupViews()
+        loadingMore.setupConstraints()
 
-        footerView.backgroundColor = .clear
+        loadingMore.frame = CGRect(x: 0, y: 0, width: self.view.frame.width , height: 100)
+
+        loadingMore.backgroundColor = .clear
 
         loadButton.frame = CGRect(x: 30, y: 30, width: self.view.frame.width - 60, height: 40)
         loadButton.backgroundColor = .systemGray
@@ -103,24 +103,8 @@ private extension MainViewController {
         loadButton.setTitle("Load More", for: .normal)
         loadButton.addTarget(self, action: #selector(self.dataLoadMore), for: .touchUpInside)
 
-        footerView.addSubview(loadIndicator)
-        footerView.addSubview(loadButton)
-        self.tableView.tableFooterView = footerView
-
-    }
-
-    private func showSpinner() {
-
-        loadButton.isHidden = true
-        loadIndicator.startAnimating()
-        loadIndicator.isHidden = false
-    }
-
-    private func hideSpinner() {
-
-        loadButton.isHidden = false
-        loadIndicator.stopAnimating()
-        loadIndicator.isHidden = true
+        loadingMore.addSubview(loadButton)
+        self.tableView.tableFooterView = loadingMore
 
     }
 
@@ -129,9 +113,11 @@ private extension MainViewController {
 
         Task {
 
-            self.showSpinner()
+            loadButton.isHidden = true
+            loadingMore.showSpinner()
             await mainViewModel.dataLoad()
-            self.hideSpinner()
+            loadButton.isHidden = false
+            loadingMore.hideSpinner()
             tableView.reloadData()
         }
     }

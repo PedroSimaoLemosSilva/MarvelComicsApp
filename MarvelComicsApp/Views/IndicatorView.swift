@@ -10,7 +10,6 @@ import UIKit
 class IndicatorView: UIView {
 
     private let loadIndicator = UIActivityIndicatorView()
-
 }
 
 extension IndicatorView {
@@ -37,13 +36,13 @@ extension IndicatorView {
 
     func showSpinner() {
 
+        loadIndicator.isHidden = false
         loadIndicator.startAnimating()
-        self.isHidden = false
     }
 
     func hideSpinner() {
 
         loadIndicator.stopAnimating()
-        self.isHidden = true
+        loadIndicator.isHidden = true
     }
 }

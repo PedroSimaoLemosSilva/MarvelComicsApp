@@ -13,7 +13,6 @@ class MainWebservice {
 
     private var urls = Urls()
 
-    private var cache = NSCache<NSString, NSData>()
     // fetches the characters names and thumbnail images into a sorted dictionary
     // where the names are the keys and the full image paths are the values
     func fetchCharactersInfo() async throws -> CharactersDataWrapper? {
@@ -46,22 +45,13 @@ class MainWebservice {
 
     func fetchCharactersImageData(name: String, url imageUrl: String) async throws -> Data {
 
+        var data = Data()
 
-        if let data = cache.object(forKey: NSString(string: name)) {
+        guard let url = URL(string: imageUrl) else { return(data) }
 
-            return Data(referencing: data)
-        } else {
+        (data, _) = try await URLSession.shared.data(from: url)
 
-            var data = Data()
-
-            guard let url = URL(string: imageUrl) else { return(data) }
-
-            (data, _) = try await URLSession.shared.data(from: url)
-
-            cache.setObject(NSData(data: data), forKey: NSString(string: name))
-
-            return data
-        }
+        return data
     }
 }
 
