@@ -7,7 +7,7 @@
 
 import Foundation
 
-class MainWebservice {
+class MainWebservice: MainWebserviceProtocol {
 
     private var offset = 0
 
@@ -43,11 +43,11 @@ class MainWebservice {
         return characterDataWrapper
     }
 
-    func fetchCharactersImageData(name: String, url imageUrl: String) async throws -> Data {
+    func fetchCharactersImageData(name: String, url imageUrl: String) async throws -> Data? {
 
         var data = Data()
 
-        guard let url = URL(string: imageUrl) else { return(data) }
+        guard let url = URL(string: imageUrl) else { return nil }
 
         (data, _) = try await URLSession.shared.data(from: url)
 

@@ -11,11 +11,15 @@ import Combine
 
 class MainViewModel {
 
-    private(set) var currentState: PassthroughSubject<AppState, Never> = PassthroughSubject()
-
-    private let webservice = MainWebservice()
+    private let webservice: MainWebserviceProtocol
 
     lazy var characterThumbnails: [CharacterThumbnail] = []
+
+    init(webservice: MainWebserviceProtocol = MainWebservice(), characterThumbnails: [CharacterThumbnail] = []) {
+
+        self.webservice = webservice
+        self.characterThumbnails = characterThumbnails
+    }
 
     func numberOfRows() -> Int {
 
@@ -33,9 +37,8 @@ class MainViewModel {
 
     func dataLoad() async {
 
-
         do {
-            self.currentState.send(.loading)
+
             guard let characterDataWrapper = try await webservice.fetchCharactersInfo(),
                   let charactersData = characterDataWrapper.data?.results else { return }
 
@@ -48,7 +51,7 @@ class MainViewModel {
 
                 let imageUrl = path + "." + ext
 
-                let imageData = try await webservice.fetchCharactersImageData(name: name,url: imageUrl)
+                guard let imageData = try await webservice.fetchCharactersImageData(name: name,url: imageUrl) else { return }
 
                 guard let image = UIImage(data: imageData) else { return }
 
@@ -56,13 +59,7 @@ class MainViewModel {
 
                 characterThumbnails.append(characterThumbnail)
             }
-            self.currentState.send(.loaded)
+            
         } catch { print(error) }
     }
-}
-
-enum AppState: Equatable {
-
-    case loading
-    case loaded
 }

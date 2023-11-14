@@ -18,6 +18,12 @@
 		685E440D2AEAAF2500D19541 /* MainWebservice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 685E440C2AEAAF2500D19541 /* MainWebservice.swift */; };
 		685EF20A2AF3FE4400A84556 /* InfoFormatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 685EF2092AF3FE4400A84556 /* InfoFormatting.swift */; };
 		686E1F0F2AFC0161002D05A4 /* IndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 686E1F0E2AFC0160002D05A4 /* IndicatorView.swift */; };
+		6878E1392B02465000A76282 /* DetailsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6878E1382B02465000A76282 /* DetailsViewModelTests.swift */; };
+		6878E13B2B024AA400A76282 /* MockedMainWebservice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6878E13A2B024AA400A76282 /* MockedMainWebservice.swift */; };
+		6878E13E2B024C0D00A76282 /* MockedDetailsWebservice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6878E13D2B024C0D00A76282 /* MockedDetailsWebservice.swift */; };
+		6878E1412B024C5D00A76282 /* MainWebserviceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6878E1402B024C5D00A76282 /* MainWebserviceProtocol.swift */; };
+		6878E1432B024C8100A76282 /* DetailsWebserviceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6878E1422B024C8100A76282 /* DetailsWebserviceProtocol.swift */; };
+		6878E1482B026D4900A76282 /* MainViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6878E1362B02462E00A76282 /* MainViewModelTests.swift */; };
 		687A309C2AF5060600AAD283 /* CharacterThumbnailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 687A309B2AF5060600AAD283 /* CharacterThumbnailCell.swift */; };
 		687A309E2AF55DE700AAD283 /* APIDetailsInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 687A309D2AF55DE700AAD283 /* APIDetailsInfo.swift */; };
 		68843B262AF8F40A00138215 /* DetailsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68843B252AF8F40A00138215 /* DetailsCell.swift */; };
@@ -51,6 +57,12 @@
 		685E440C2AEAAF2500D19541 /* MainWebservice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWebservice.swift; sourceTree = "<group>"; };
 		685EF2092AF3FE4400A84556 /* InfoFormatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoFormatting.swift; sourceTree = "<group>"; };
 		686E1F0E2AFC0160002D05A4 /* IndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndicatorView.swift; sourceTree = "<group>"; };
+		6878E1362B02462E00A76282 /* MainViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModelTests.swift; sourceTree = "<group>"; };
+		6878E1382B02465000A76282 /* DetailsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewModelTests.swift; sourceTree = "<group>"; };
+		6878E13A2B024AA400A76282 /* MockedMainWebservice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockedMainWebservice.swift; sourceTree = "<group>"; };
+		6878E13D2B024C0D00A76282 /* MockedDetailsWebservice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockedDetailsWebservice.swift; sourceTree = "<group>"; };
+		6878E1402B024C5D00A76282 /* MainWebserviceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWebserviceProtocol.swift; sourceTree = "<group>"; };
+		6878E1422B024C8100A76282 /* DetailsWebserviceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsWebserviceProtocol.swift; sourceTree = "<group>"; };
 		687A309B2AF5060600AAD283 /* CharacterThumbnailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterThumbnailCell.swift; sourceTree = "<group>"; };
 		687A309D2AF55DE700AAD283 /* APIDetailsInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIDetailsInfo.swift; sourceTree = "<group>"; };
 		68843B252AF8F40A00138215 /* DetailsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsCell.swift; sourceTree = "<group>"; };
@@ -86,6 +98,8 @@
 				68179A232AFCEABF0075C2A8 /* MarvelComicsAppTests.swift */,
 				68179A2A2AFCF48F0075C2A8 /* MainControllerViewTests.swift */,
 				68179A2C2AFCF4C80075C2A8 /* DetailsViewControllerTests.swift */,
+				6878E1362B02462E00A76282 /* MainViewModelTests.swift */,
+				6878E1382B02465000A76282 /* DetailsViewModelTests.swift */,
 			);
 			path = MarvelComicsAppTests;
 			sourceTree = "<group>";
@@ -119,6 +133,8 @@
 		685E440B2AEAAECF00D19541 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				6878E13F2B024C3300A76282 /* Protocols */,
+				6878E13C2B024BE200A76282 /* Mocks */,
 				685E440C2AEAAF2500D19541 /* MainWebservice.swift */,
 				68CD2C442AFAA51B00FB60A9 /* DetailsWebservice.swift */,
 			);
@@ -161,6 +177,24 @@
 				68073B5D2AEBCD7400CA4C16 /* Directions.JSON */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		6878E13C2B024BE200A76282 /* Mocks */ = {
+			isa = PBXGroup;
+			children = (
+				6878E13A2B024AA400A76282 /* MockedMainWebservice.swift */,
+				6878E13D2B024C0D00A76282 /* MockedDetailsWebservice.swift */,
+			);
+			path = Mocks;
+			sourceTree = "<group>";
+		};
+		6878E13F2B024C3300A76282 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				6878E1402B024C5D00A76282 /* MainWebserviceProtocol.swift */,
+				6878E1422B024C8100A76282 /* DetailsWebserviceProtocol.swift */,
+			);
+			path = Protocols;
 			sourceTree = "<group>";
 		};
 		68C58A4F2AE822B600C473FA = {
@@ -296,7 +330,9 @@
 			files = (
 				68179A2D2AFCF4C80075C2A8 /* DetailsViewControllerTests.swift in Sources */,
 				68179A242AFCEABF0075C2A8 /* MarvelComicsAppTests.swift in Sources */,
+				6878E1392B02465000A76282 /* DetailsViewModelTests.swift in Sources */,
 				68179A2B2AFCF48F0075C2A8 /* MainControllerViewTests.swift in Sources */,
+				6878E1482B026D4900A76282 /* MainViewModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -315,10 +351,14 @@
 				68179A2F2AFD324A0075C2A8 /* MainViewModel.swift in Sources */,
 				68C58A5C2AE822B600C473FA /* AppDelegate.swift in Sources */,
 				68CD2C452AFAA51B00FB60A9 /* DetailsWebservice.swift in Sources */,
+				6878E13B2B024AA400A76282 /* MockedMainWebservice.swift in Sources */,
 				685E44082AEA6F5700D19541 /* APICharacterInfo.swift in Sources */,
 				68C58A5E2AE822B600C473FA /* SceneDelegate.swift in Sources */,
+				6878E1432B024C8100A76282 /* DetailsWebserviceProtocol.swift in Sources */,
 				685E44062AEA6BB100D19541 /* Urls.swift in Sources */,
 				685DE4472AF121FE00688E3A /* DetailsViewController.swift in Sources */,
+				6878E13E2B024C0D00A76282 /* MockedDetailsWebservice.swift in Sources */,
+				6878E1412B024C5D00A76282 /* MainWebserviceProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

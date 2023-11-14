@@ -23,6 +23,8 @@ struct CharacterInfo: Decodable {
 struct CharactersDataWrapper: Decodable, Encodable {
 
     let data: CharactersDataContainer? //The results returned by the call.
+
+    
 }
 
 struct CharactersDataContainer: Decodable, Encodable {
