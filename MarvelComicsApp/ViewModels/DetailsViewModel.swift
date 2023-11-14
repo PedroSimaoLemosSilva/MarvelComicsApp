@@ -10,11 +10,18 @@ import UIKit
 
 class DetailsViewModel {
 
-    private let webservice = DetailsWebservice()
+    private let webservice: DetailsWebserviceProtocol
 
-    private lazy var characterDetails: [String: [Detail]] = [:]
+    lazy var characterDetails: [String: [Detail]] = [:]
 
     private var characterThumbnail: CharacterThumbnail = CharacterThumbnail()
+
+    init(webservice: DetailsWebserviceProtocol = DetailsWebservice(), characterDetails: [String: [Detail]]  = [:], characterThumbnail: CharacterThumbnail = CharacterThumbnail()) {
+
+        self.webservice = webservice
+        self.characterDetails = characterDetails
+        self.characterThumbnail = characterThumbnail
+    }
 
     func dataFormatting() async {
 

@@ -7,7 +7,7 @@
 
 import Foundation
 
-class DetailsWebservice {
+class DetailsWebservice: DetailsWebserviceProtocol {
 
     private let id = 0
 

@@ -21,12 +21,12 @@ class MainViewModel {
         self.characterThumbnails = characterThumbnails
     }
 
-    func numberOfRows() -> Int {
+    func numberOfRows() -> Int? {
 
         return self.characterThumbnails.count
     }
 
-    func characterForRowAt(indexPath: IndexPath) -> (Int, String, UIImage) {
+    func characterForRowAt(indexPath: IndexPath) -> (Int, String, UIImage)? {
 
         let id = characterThumbnails[indexPath.row].id
         let name = characterThumbnails[indexPath.row].name
@@ -59,7 +59,6 @@ class MainViewModel {
 
                 characterThumbnails.append(characterThumbnail)
             }
-            
         } catch { print(error) }
     }
 }

@@ -127,7 +127,14 @@ extension MainViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
-        return mainViewModel.numberOfRows()
+        if let numberOfRows = mainViewModel.numberOfRows() {
+
+            return numberOfRows
+        } else {
+
+            return 0
+        }
+
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -139,7 +146,7 @@ extension MainViewController: UITableViewDataSource {
 
         cell.selectionStyle = .none
 
-        let (id, name, image) = mainViewModel.characterForRowAt(indexPath: indexPath)
+        guard let (id, name, image) = mainViewModel.characterForRowAt(indexPath: indexPath) else { return UITableViewCell() }
         cell.transferThumbnailData(id: id, name: name, image: image)
 
         return cell
@@ -160,7 +167,10 @@ extension MainViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
-        let item = mainViewModel.characterForRowAt(indexPath: indexPath)
+        guard let item = mainViewModel.characterForRowAt(indexPath: indexPath) else {
+
+            return
+        }
 
         let detailsViewController = DetailsViewController(id: item.0, name: item.1, image: item.2)
         navigationController?.pushViewController(detailsViewController, animated: false)

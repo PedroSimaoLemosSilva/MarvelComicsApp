@@ -10,7 +10,13 @@ import UIKit
 
 protocol DetailsWebserviceProtocol {
 
-    func dataFormatting()
+    func fetchComics(id: Int) async throws -> DetailsDataWrapper?
 
-    func getCharacterThumbnail() -> (Int, String, UIImage)
+    func fetchEvents(id: Int) async throws -> DetailsDataWrapper?
+
+    func fetchSeries(id: Int) async throws -> DetailsDataWrapper?
+
+    func fetchStories(id: Int) async throws -> DetailsDataWrapper?
+
+    func fetchData(url: URL) async throws -> DetailsDataWrapper? 
 }
