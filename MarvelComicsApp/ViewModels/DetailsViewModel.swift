@@ -66,9 +66,9 @@ class DetailsViewModel {
         return (id, name, image)
     }
 
-    func setCharacterThumbnail(id: Int, name: String, image: UIImage) {
+    func setCharacterThumbnail(id: Int, name: String, image: UIImage, favourite: Bool) {
 
-        self.characterThumbnail = CharacterThumbnail(id: id, name: name, image: image)
+        self.characterThumbnail = CharacterThumbnail(id: id, name: name, image: image, favourite: favourite)
     }
 
     func getCharacterDetailsKeys() -> [String] {
@@ -94,5 +94,24 @@ class DetailsViewModel {
         let numberOfRowsInSection = characterDetails[section]?.count
 
         return numberOfRowsInSection
+    }
+
+    @objc
+    func favouriteChanged() -> Bool {
+        
+        characterThumbnail.favourite.toggle()
+        return self.characterThumbnail.favourite
+    }
+
+    func getIconImage() -> UIImage? {
+
+        if self.characterThumbnail.favourite == true {
+
+            return UIImage(named: "icons8-heart-50 (1).png")
+        } else {
+
+            return UIImage(named: "icons8-heart-50.png")
+        }
+
     }
 }

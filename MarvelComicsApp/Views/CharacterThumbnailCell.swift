@@ -72,11 +72,4 @@ extension CharacterThumbnailCell {
             label.heightAnchor.constraint(equalToConstant: 100)
         ])
     }
-
-    override func prepareForReuse() {
-
-        super.prepareForReuse()
-
-        self.image.image = nil
-    }
 }

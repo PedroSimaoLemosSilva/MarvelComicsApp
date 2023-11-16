@@ -39,7 +39,11 @@ class MainViewController: UIViewController {
             configureTableView()
             configureTableViewFooter()
 
+            let favouriteBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(self.sendFavouriteCharacters))
+            self.navigationItem.rightBarButtonItem = favouriteBarButtonItem
+
             navigationItem.title = "Marvel Comics"
+
 
             tableView.register(CharacterThumbnailCell.self, forCellReuseIdentifier: "TableViewCell")
         }
@@ -121,6 +125,22 @@ private extension MainViewController {
             tableView.reloadData()
         }
     }
+
+    @objc
+    func sendFavouriteCharacters() {
+
+        self.tableView.reloadData()
+    }
+}
+
+extension MainViewController: DetailsViewControllerDelegate {
+
+    func sendFavouriteSelected(id: Int ,favourite: Bool) {
+        
+        mainViewModel.changeFavourite(id: id ,favourite: favourite)
+
+        self.tableView.reloadData()
+    }
 }
 
 extension MainViewController: UITableViewDataSource {
@@ -146,8 +166,19 @@ extension MainViewController: UITableViewDataSource {
 
         cell.selectionStyle = .none
 
-        guard let (id, name, image) = mainViewModel.characterForRowAt(indexPath: indexPath) else { return UITableViewCell() }
+        let heartIcon = UIImageView(frame: CGRectMake(0, 0, 15, 15))
+        cell.accessoryView = heartIcon
+
+        guard let (id, name, image, favourite) = mainViewModel.characterForRowAt(indexPath: indexPath) else { return UITableViewCell() }
         cell.transferThumbnailData(id: id, name: name, image: image)
+
+        if favourite {
+
+            heartIcon.image = UIImage(named: "icons8-heart-50 (1).png")
+        } else {
+
+            heartIcon.image = UIImage(named: "icons8-heart-50.png")
+        }
 
         return cell
     }
@@ -172,7 +203,8 @@ extension MainViewController: UITableViewDelegate {
             return
         }
 
-        let detailsViewController = DetailsViewController(id: item.0, name: item.1, image: item.2)
+        let detailsViewController = DetailsViewController(id: item.0, name: item.1, image: item.2, favourite: item.3)
+        detailsViewController.delegate = self
         navigationController?.pushViewController(detailsViewController, animated: false)
     }
 }

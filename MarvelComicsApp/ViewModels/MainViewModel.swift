@@ -26,17 +26,47 @@ class MainViewModel {
         return self.characterThumbnails.count
     }
 
-    func characterForRowAt(indexPath: IndexPath) -> (Int, String, UIImage)? {
+    func characterForRowAt(indexPath: IndexPath) -> (Int, String, UIImage, Bool)? {
 
         let id = characterThumbnails[indexPath.row].id
         let name = characterThumbnails[indexPath.row].name
         let image = characterThumbnails[indexPath.row].image
+        let favourite = characterThumbnails[indexPath.row].favourite
 
-        return (id, name, image)
+        return (id, name, image, favourite)
+    }
+
+    func toggleChecked(indexPath: IndexPath) {
+
+        characterThumbnails[indexPath.row].favourite = !characterThumbnails[indexPath.row].favourite
+    }
+
+    func changeFavourite(id: Int ,favourite: Bool) {
+
+        if let characterThumbnail = characterThumbnails.first(where: {$0.id == id}) {
+
+            characterThumbnail.favourite = favourite
+        }
+    }
+
+    func favouriteCharacterThumbnails() -> [CharacterThumbnail] {
+
+        let favouriteCharacterThumbnailIds = characterThumbnails.filter { characterThumbnail in
+
+            if characterThumbnail.favourite {
+
+                return true
+            } else {
+
+                return false
+            }
+        }
+
+        return favouriteCharacterThumbnailIds
     }
 
     func dataLoad() async {
-
+        
         do {
 
             guard let characterDataWrapper = try await webservice.fetchCharactersInfo(),
@@ -55,7 +85,7 @@ class MainViewModel {
 
                 guard let image = UIImage(data: imageData) else { return }
 
-                let characterThumbnail = CharacterThumbnail(id: id, name: name, image: image)
+                let characterThumbnail = CharacterThumbnail(id: id, name: name, image: image, favourite: false)
 
                 characterThumbnails.append(characterThumbnail)
             }

@@ -22,7 +22,7 @@ final class DetailsViewModelTests: XCTestCase {
 
         try super.setUpWithError()
         self.service = MockedDetailsWebservice()
-        self.characterThumbnail = CharacterThumbnail(id: 1, name: "Capitão Falcão" , image: UIImage())
+        self.characterThumbnail = CharacterThumbnail(id: 1, name: "Capitão Falcão" , image: UIImage(), favourite: false)
         self.characterDetails = ["Ano": [Detail(title: "123", description: "abc")], "Literatura": [Detail(title: "Livro", description: "Letras")]]
         self.viewModel = DetailsViewModel(webservice: service, characterDetails: characterDetails, characterThumbnail: characterThumbnail)
     }
@@ -76,9 +76,9 @@ final class DetailsViewModelTests: XCTestCase {
 
     func testSetCharacterThumbnail() {
 
-        let expected = (id: 100, name: "Blank", image: UIImage())
+        let expected = (id: 100, name: "Blank", image: UIImage(), favourite: true)
 
-        viewModel.setCharacterThumbnail(id: 100, name: "Blank", image: UIImage())
+        viewModel.setCharacterThumbnail(id: 100, name: "Blank", image: UIImage(), favourite: true)
 
         XCTAssertEqual(viewModel.getCharacterThumbnail().0, expected.id)
         XCTAssertEqual(viewModel.getCharacterThumbnail().1, expected.name)

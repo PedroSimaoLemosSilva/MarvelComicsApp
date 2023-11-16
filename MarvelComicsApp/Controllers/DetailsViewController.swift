@@ -9,17 +9,21 @@ import UIKit
 
 class DetailsViewController: UIViewController {
 
+    var delegate: DetailsViewControllerDelegate?
+
     private let tableView = UITableView()
 
     private let indicatorView = IndicatorView()
 
     private let detailsViewModel = DetailsViewModel()
 
-    init(id: Int, name: String, image: UIImage) {
+    //private var heartIcon = UIImage(named: "icons8-heart-50.png")
+
+    init(id: Int, name: String, image: UIImage, favourite: Bool) {
 
         super.init(nibName: nil, bundle: nil)
     
-        detailsViewModel.setCharacterThumbnail(id: id, name: name, image: image)
+        detailsViewModel.setCharacterThumbnail(id: id, name: name, image: image, favourite: favourite)
     }
 
     required init?(coder: NSCoder) {
@@ -44,6 +48,9 @@ class DetailsViewController: UIViewController {
             addSubviews()
             defineSubviewConstraints()
             configureSubviews()
+
+            let favouriteBarButtonItem = UIBarButtonItem(image: detailsViewModel.getIconImage(), style: .plain, target: self, action: #selector(self.favouriteSelected))
+            self.navigationItem.rightBarButtonItem = favouriteBarButtonItem
         }
 
         tableView.register(CharacterThumbnailCell.self, forCellReuseIdentifier: "ThumbnailCell")
@@ -93,6 +100,30 @@ private extension DetailsViewController {
         self.tableView.backgroundColor = .white
         self.tableView.dataSource = self
         self.tableView.separatorStyle = .none
+    }
+
+    @objc
+    func favouriteSelected() {
+
+        self.navigationItem.rightBarButtonItem?.image = toggleIcon()
+        delegate?.sendFavouriteSelected(id: detailsViewModel.getCharacterThumbnail().0,favourite: detailsViewModel.favouriteChanged())
+    }
+
+    func toggleIcon() -> UIImage? {
+
+        guard let filledHeart = UIImage(named: "icons8-heart-50 (1).png"),
+           let emptyHeart = UIImage(named: "icons8-heart-50.png") else {
+            return UIImage()
+        }
+        guard let icon = self.navigationItem.rightBarButtonItem?.image?.pngData() else { return emptyHeart }
+
+        if icon == emptyHeart.pngData()! {
+
+            return filledHeart
+        } else {
+
+            return emptyHeart
+        }
     }
 }
 
@@ -195,3 +226,7 @@ extension DetailsViewController: UITableViewDataSource {
     }
 }
 
+protocol DetailsViewControllerDelegate {
+
+    func sendFavouriteSelected(id: Int, favourite: Bool)
+}
