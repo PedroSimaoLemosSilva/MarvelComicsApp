@@ -36,11 +36,6 @@ class MainViewModel {
         return (id, name, image, favourite)
     }
 
-    func toggleChecked(indexPath: IndexPath) {
-
-        characterThumbnails[indexPath.row].favourite = !characterThumbnails[indexPath.row].favourite
-    }
-
     func changeFavourite(id: Int ,favourite: Bool) {
 
         if let characterThumbnail = characterThumbnails.first(where: {$0.id == id}) {
@@ -90,5 +85,25 @@ class MainViewModel {
                 characterThumbnails.append(characterThumbnail)
             }
         } catch { print(error) }
+    }
+
+    func filterFavourites() -> FavouritesViewController {
+
+        var favouriteThumbnails: [CharacterThumbnail] = []
+
+        favouriteThumbnails = characterThumbnails.filter { characterThumbnail in
+
+            if characterThumbnail.favourite {
+
+                return true
+            } else {
+
+                return false
+            }
+        }
+
+        let favouritesViewController = FavouritesViewController(favouriteThumbnails: favouriteThumbnails)
+        
+        return favouritesViewController
     }
 }

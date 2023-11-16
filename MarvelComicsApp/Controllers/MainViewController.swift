@@ -38,12 +38,9 @@ class MainViewController: UIViewController {
             defineTableViewConstraints()
             configureTableView()
             configureTableViewFooter()
-
-            let favouriteBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(self.sendFavouriteCharacters))
-            self.navigationItem.rightBarButtonItem = favouriteBarButtonItem
+            configureBarButton()
 
             navigationItem.title = "Marvel Comics"
-
 
             tableView.register(CharacterThumbnailCell.self, forCellReuseIdentifier: "TableViewCell")
         }
@@ -112,6 +109,13 @@ private extension MainViewController {
 
     }
 
+    func configureBarButton() {
+
+        let favouriteBarButtonItem = UIBarButtonItem(image: UIImage(named: "icons8-heart-50 (1).png"), style: .plain, target: self, action: #selector(self.changeToFavouritesViewController))
+        
+        self.navigationItem.rightBarButtonItem = favouriteBarButtonItem
+    }
+
     @objc
     func dataLoadMore() {
 
@@ -131,12 +135,30 @@ private extension MainViewController {
 
         self.tableView.reloadData()
     }
+
+    @objc
+    func changeToFavouritesViewController() {
+
+        let favouritesViewController = mainViewModel.filterFavourites()
+        favouritesViewController.delegate = self
+        navigationController?.pushViewController(favouritesViewController, animated: false)
+    }
 }
 
 extension MainViewController: DetailsViewControllerDelegate {
 
     func sendFavouriteSelected(id: Int ,favourite: Bool) {
         
+        mainViewModel.changeFavourite(id: id ,favourite: favourite)
+
+        self.tableView.reloadData()
+    }
+}
+
+extension MainViewController: FavouritesViewControllerDelegate {
+
+    func sendFavouriteToMain(id: Int,favourite: Bool) {
+
         mainViewModel.changeFavourite(id: id ,favourite: favourite)
 
         self.tableView.reloadData()

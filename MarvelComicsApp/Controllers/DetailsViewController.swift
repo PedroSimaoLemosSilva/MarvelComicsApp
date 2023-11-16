@@ -117,7 +117,7 @@ private extension DetailsViewController {
         }
         guard let icon = self.navigationItem.rightBarButtonItem?.image?.pngData() else { return emptyHeart }
 
-        if icon == emptyHeart.pngData()! {
+        if icon == emptyHeart.pngData() {
 
             return filledHeart
         } else {

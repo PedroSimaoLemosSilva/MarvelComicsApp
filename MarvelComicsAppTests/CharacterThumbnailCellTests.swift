@@ -12,8 +12,13 @@ final class CharacterThumbnailCellTest: XCTestCase {
 
     func testCharacterThumbnailCell() {
 
-        let ctct = CharacterThumbnailCell()
+        let frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 100)
 
-        assertSnapshot(of: ctct, as: .image)
+        let view = CharacterThumbnailCell(frame: frame)
+
+        let image = UIImage()
+        view.transferThumbnailData(id: 1, name: "Capitão Falcão", image: image)
+
+        assertSnapshot(of: view, as: .image)
     }
 }
