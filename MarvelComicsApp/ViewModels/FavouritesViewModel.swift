@@ -19,11 +19,14 @@ class FavouritesViewModel {
 
     var favouritesIdNotLoaded: [Int] = []
 
-    init(webservice: FavouritesWebserviceProtocol = FavouritesWebservice(), characterThumbnails: [CharacterThumbnail] = [], favouritesId: [Int] = []) {
+    init(webservice: FavouritesWebserviceProtocol = FavouritesWebservice(), characterThumbnails: [CharacterThumbnail] = [],
+         characterThumbnailsDeleted: [CharacterThumbnail] = [], favouritesId: [Int] = [], favouritesIdNotLoaded: [Int] = []) {
 
         self.webservice = webservice
         self.characterThumbnails = characterThumbnails
+        self.characterThumbnailsDeleted = characterThumbnailsDeleted
         self.favouritesId = favouritesId
+        self.favouritesIdNotLoaded = favouritesIdNotLoaded
     }
 
     func numberOfRows() -> Int? {
@@ -60,6 +63,7 @@ class FavouritesViewModel {
             if let characterThumbnail = characterThumbnailsDeleted.first(where: {$0.id == id}) {
 
                 characterThumbnails.append(characterThumbnail)
+                characterThumbnails.sort(by: { $0.name < $1.name })
                 if let indexOfCharacterThumbnailDeleted = characterThumbnailsDeleted.firstIndex(where: {$0.id == id}) {
 
                     characterThumbnailsDeleted.remove(at: Int(indexOfCharacterThumbnailDeleted))
@@ -70,15 +74,7 @@ class FavouritesViewModel {
 
     func saveChanges() {
 
-        do {
-
-            let encoder = JSONEncoder()
-            let data = try encoder.encode(favouritesId)
-            UserDefaults.standard.set(data, forKey: "favouriteId")
-        } catch {
-
-            print(error)
-        }
+        UserDefaults.standard.set(favouritesId, forKey: "favouriteId")
     }
 
     func setCharacterThumbnails(characterThumbnails: [CharacterThumbnail]) {

@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		68179A242AFCEABF0075C2A8 /* MarvelComicsAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68179A232AFCEABF0075C2A8 /* MarvelComicsAppTests.swift */; };
+		680B47332B0B6AE90086C445 /* MockedFavouritesWebservice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 680B47322B0B6AE90086C445 /* MockedFavouritesWebservice.swift */; };
+		680B47352B0B6CFD0086C445 /* FavouritesViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 680B47342B0B6CFD0086C445 /* FavouritesViewModelTests.swift */; };
 		68179A2F2AFD324A0075C2A8 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68179A2E2AFD324A0075C2A8 /* MainViewModel.swift */; };
 		68179A312AFD32630075C2A8 /* DetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68179A302AFD32630075C2A8 /* DetailsViewModel.swift */; };
 		682E47CA2B03D79E006E15D2 /* CharacterThumbnailCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 682E47C92B03D79E006E15D2 /* CharacterThumbnailCellTests.swift */; };
@@ -51,8 +52,9 @@
 
 /* Begin PBXFileReference section */
 		68073B5D2AEBCD7400CA4C16 /* Directions.JSON */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Directions.JSON; sourceTree = "<group>"; };
+		680B47322B0B6AE90086C445 /* MockedFavouritesWebservice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockedFavouritesWebservice.swift; sourceTree = "<group>"; };
+		680B47342B0B6CFD0086C445 /* FavouritesViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouritesViewModelTests.swift; sourceTree = "<group>"; };
 		68179A212AFCEABF0075C2A8 /* MarvelComicsAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MarvelComicsAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		68179A232AFCEABF0075C2A8 /* MarvelComicsAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarvelComicsAppTests.swift; sourceTree = "<group>"; };
 		68179A2E2AFD324A0075C2A8 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		68179A302AFD32630075C2A8 /* DetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewModel.swift; sourceTree = "<group>"; };
 		682E47C92B03D79E006E15D2 /* CharacterThumbnailCellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterThumbnailCellTests.swift; sourceTree = "<group>"; };
@@ -107,10 +109,10 @@
 		68179A222AFCEABF0075C2A8 /* MarvelComicsAppTests */ = {
 			isa = PBXGroup;
 			children = (
-				68179A232AFCEABF0075C2A8 /* MarvelComicsAppTests.swift */,
 				6878E1362B02462E00A76282 /* MainViewModelTests.swift */,
 				6878E1382B02465000A76282 /* DetailsViewModelTests.swift */,
 				682E47C92B03D79E006E15D2 /* CharacterThumbnailCellTests.swift */,
+				680B47342B0B6CFD0086C445 /* FavouritesViewModelTests.swift */,
 			);
 			path = MarvelComicsAppTests;
 			sourceTree = "<group>";
@@ -199,6 +201,7 @@
 			children = (
 				6878E13A2B024AA400A76282 /* MockedMainWebservice.swift */,
 				6878E13D2B024C0D00A76282 /* MockedDetailsWebservice.swift */,
+				680B47322B0B6AE90086C445 /* MockedFavouritesWebservice.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -362,8 +365,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				680B47352B0B6CFD0086C445 /* FavouritesViewModelTests.swift in Sources */,
 				682E47CA2B03D79E006E15D2 /* CharacterThumbnailCellTests.swift in Sources */,
-				68179A242AFCEABF0075C2A8 /* MarvelComicsAppTests.swift in Sources */,
 				6878E1392B02465000A76282 /* DetailsViewModelTests.swift in Sources */,
 				6878E1482B026D4900A76282 /* MainViewModelTests.swift in Sources */,
 			);
@@ -383,6 +386,7 @@
 				685EF20A2AF3FE4400A84556 /* InfoFormatting.swift in Sources */,
 				68C58A602AE822B600C473FA /* MainViewController.swift in Sources */,
 				68F89B9C2B065F8000E1525C /* FavouritesViewController.swift in Sources */,
+				680B47332B0B6AE90086C445 /* MockedFavouritesWebservice.swift in Sources */,
 				68179A2F2AFD324A0075C2A8 /* MainViewModel.swift in Sources */,
 				68C58A5C2AE822B600C473FA /* AppDelegate.swift in Sources */,
 				68EE823F2B07CE5900687096 /* FavouritesWebservice.swift in Sources */,

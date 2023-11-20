@@ -39,10 +39,12 @@ class FavouritesViewController: UIViewController {
             
             configureLoadingView()
             loadingScreen.showSpinner()
+            tableView.isHidden = true
             
             favouritesViewModel.checkFavouriteInList()
             await favouritesViewModel.dataLoad()
-            
+
+            tableView.isHidden = false
             loadingScreen.hideSpinner()
             
             tableView.reloadData()
@@ -97,19 +99,14 @@ class FavouritesViewController: UIViewController {
     }
 }
 
-extension FavouritesViewController: DetailsViewControllerDelegate{
+extension FavouritesViewController: DetailsViewControllerDelegate {
 
     func sendFavouriteSelected(id: Int, favourite: Bool) {
-
-        self.loadingScreen.showSpinner()
-        self.tableView.isHidden = true
 
         favouritesViewModel.changeFavourite(id: id ,favourite: favourite)
         favouritesViewModel.saveChanges()
 
         self.tableView.reloadData()
-        self.tableView.isHidden = false
-        self.loadingScreen.hideSpinner()
 
         delegate?.sendFavouriteToMain(id: id,favourite: favourite)
     }

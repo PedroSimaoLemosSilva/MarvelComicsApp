@@ -17,10 +17,11 @@ class MainViewModel {
 
     var favouritesId: [Int] = []
 
-    init(webservice: MainWebserviceProtocol = MainWebservice(), characterThumbnails: [CharacterThumbnail] = []) {
+    init(webservice: MainWebserviceProtocol = MainWebservice(), characterThumbnails: [CharacterThumbnail] = [], favouriteId: [Int] = []) {
 
         self.webservice = webservice
         self.characterThumbnails = characterThumbnails
+        self.favouritesId = favouriteId
     }
 
     func numberOfRows() -> Int? {
@@ -56,24 +57,7 @@ class MainViewModel {
             }
         }
     }
-
-    func favouriteCharacterThumbnails() -> [CharacterThumbnail] {
-
-        let favouriteCharacterThumbnailIds = characterThumbnails.filter { characterThumbnail in
-
-            if characterThumbnail.favourite {
-
-
-                return true
-            } else {
-
-                return false
-            }
-        }
-
-        return favouriteCharacterThumbnailIds
-    }
-
+    
     func dataLoad() async {
         
         do {
@@ -120,18 +104,11 @@ class MainViewModel {
 
     func loadAllFavourites() {
         
-        guard let data = UserDefaults.standard.data(forKey: "favouriteId") else {
+        guard let auxfFavouritesId = UserDefaults.standard.object(forKey: "favouriteId") as? [Int] else {
+
             return
         }
-
-        do {
-
-            let decoder = JSONDecoder()
-            favouritesId = try decoder.decode([Int].self, from: data)
-        } catch {
-
-            print(error)
-        }
+        favouritesId = auxfFavouritesId
 
         setAllFavourites()
     }
@@ -149,14 +126,7 @@ class MainViewModel {
 
     func saveChanges() {
 
-        do {
+        UserDefaults.standard.set(favouritesId, forKey: "favouriteId")
 
-            let encoder = JSONEncoder()
-            let data = try encoder.encode(favouritesId)
-            UserDefaults.standard.set(data, forKey: "favouriteId")
-        } catch {
-
-            print(error)
-        }
     }
 }

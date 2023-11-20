@@ -1,21 +1,21 @@
 //
-//  MockedMainService.swift
+//  MockedFavouritesWebservice.swift
 //  MarvelComicsApp
 //
-//  Created by Pedro Lemos Silva on 13/11/2023.
+//  Created by Pedro Lemos Silva on 20/11/2023.
 //
 
 import Foundation
 
-class MockedMainWebservice: MainWebserviceProtocol {
+class MockedFavouritesWebservice: FavouritesWebserviceProtocol {
 
-    var fetchCharactersInfoMockResult: CharactersDataWrapper?
+    var fetchCharactersMockResult: CharactersDataWrapper?
 
     var fetchCharactersImageData: Data?
 
-    func fetchCharactersInfo() async throws -> CharactersDataWrapper? {
+    func fetchCharacter(id: Int) async throws -> CharactersDataWrapper? {
 
-        if let result = fetchCharactersInfoMockResult {
+        if let result = fetchCharactersMockResult {
 
             return result
         } else {

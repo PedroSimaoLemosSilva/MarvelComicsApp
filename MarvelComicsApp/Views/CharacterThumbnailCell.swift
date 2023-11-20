@@ -40,7 +40,7 @@ extension CharacterThumbnailCell {
 
     func setupViews() {
 
-        image.layer.cornerRadius = 15
+        //image.layer.cornerRadius = 15
         image.clipsToBounds = true
         image.contentMode = .scaleAspectFill
 
