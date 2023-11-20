@@ -122,6 +122,8 @@ class FavouritesViewModel {
                 }
             } catch { print(error) }
         }
+        
+        characterThumbnails.sort(by: { $0.name < $1.name })
     }
 }
 

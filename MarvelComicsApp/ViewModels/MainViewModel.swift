@@ -53,7 +53,17 @@ class MainViewModel {
                 if let indexOfId = favouritesId.firstIndex(where: {$0 == id}) {
 
                     favouritesId.remove(at: Int(indexOfId))
+
+                    print(favouritesId)
                 }
+            }
+        } else {
+
+            if let indexOfId = favouritesId.firstIndex(where: {$0 == id}) {
+
+                favouritesId.remove(at: Int(indexOfId))
+
+                print(favouritesId)
             }
         }
     }

@@ -161,7 +161,7 @@ extension MainViewController: DetailsViewControllerDelegate {
 extension MainViewController: FavouritesViewControllerDelegate {
 
     func sendFavouriteToMain(id: Int,favourite: Bool) {
-
+        
         mainViewModel.changeFavourite(id: id ,favourite: favourite)
 
         self.tableView.reloadData()
