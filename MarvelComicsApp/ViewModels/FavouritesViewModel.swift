@@ -9,11 +9,21 @@ import UIKit
 
 class FavouritesViewModel {
 
-    lazy var characterThumbnails: [CharacterThumbnail] = []
+    private let webservice: FavouritesWebserviceProtocol
 
-    init(characterThumbnails: [CharacterThumbnail] = []) {
+    var characterThumbnails: [CharacterThumbnail] = []
 
+    var characterThumbnailsDeleted: [CharacterThumbnail] = []
+
+    var favouritesId: [Int] = []
+
+    var favouritesIdNotLoaded: [Int] = []
+
+    init(webservice: FavouritesWebserviceProtocol = FavouritesWebservice(), characterThumbnails: [CharacterThumbnail] = [], favouritesId: [Int] = []) {
+
+        self.webservice = webservice
         self.characterThumbnails = characterThumbnails
+        self.favouritesId = favouritesId
     }
 
     func numberOfRows() -> Int? {
@@ -32,20 +42,90 @@ class FavouritesViewModel {
     }
 
     func changeFavourite(id: Int ,favourite: Bool) {
-
+        
         if let characterThumbnail = characterThumbnails.first(where: {$0.id == id}) {
 
             characterThumbnail.favourite = favourite
-            if let indexOfCharacterThumbnail = characterThumbnails.firstIndex(where: {$0.id == id}) {
+            if let indexOfCharacterThumbnail = characterThumbnails.firstIndex(where: {$0.id == id}),
+               let indexOfId = favouritesId.firstIndex(where: {$0 == id}),
+               characterThumbnail.favourite == false {
 
                 characterThumbnails.remove(at: Int(indexOfCharacterThumbnail))
+                characterThumbnailsDeleted.append(characterThumbnail)
+                favouritesId.remove(at: Int(indexOfId))
             }
+        } else {
+
+            favouritesId.append(id)
+            if let characterThumbnail = characterThumbnailsDeleted.first(where: {$0.id == id}) {
+
+                characterThumbnails.append(characterThumbnail)
+                if let indexOfCharacterThumbnailDeleted = characterThumbnailsDeleted.firstIndex(where: {$0.id == id}) {
+
+                    characterThumbnailsDeleted.remove(at: Int(indexOfCharacterThumbnailDeleted))
+                }
+            }
+        }
+    }
+
+    func saveChanges() {
+
+        do {
+
+            let encoder = JSONEncoder()
+            let data = try encoder.encode(favouritesId)
+            UserDefaults.standard.set(data, forKey: "favouriteId")
+        } catch {
+
+            print(error)
         }
     }
 
     func setCharacterThumbnails(characterThumbnails: [CharacterThumbnail]) {
 
         self.characterThumbnails = characterThumbnails
+    }
+
+    func checkFavouriteInList() {
+
+        favouritesId.forEach { id in
+
+            if let characterThumbnail = characterThumbnails.first(where: {$0.id == id}) {}
+            else {
+
+                favouritesIdNotLoaded.append(id)
+            }
+        }
+    }
+
+    func dataLoad() async {
+
+        for id in favouritesIdNotLoaded {
+
+            do {
+
+                guard let characterDataWrapper = try await webservice.fetchCharacter(id: id),
+                      let charactersData = characterDataWrapper.data?.results else { return }
+
+                for character in charactersData {
+
+                    guard let id = character.id,
+                          let name = character.name,
+                          let path = character.thumbnail?.path,
+                          let ext = character.thumbnail?.extension0 else { return }
+
+                    let imageUrl = path + "." + ext
+
+                    guard let imageData = try await webservice.fetchCharactersImageData(name: name,url: imageUrl) else { return }
+
+                    guard let image = UIImage(data: imageData) else { return }
+
+                    let characterThumbnail = CharacterThumbnail(id: id, name: name, image: image, favourite: true)
+
+                    characterThumbnails.append(characterThumbnail)
+                }
+            } catch { print(error) }
+        }
     }
 }
 

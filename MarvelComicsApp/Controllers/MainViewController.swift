@@ -30,6 +30,7 @@ class MainViewController: UIViewController {
             loadingScreen.showSpinner()
 
             await mainViewModel.dataLoad()
+            mainViewModel.loadAllFavourites()
 
             loadingScreen.hideSpinner()
 
@@ -124,6 +125,7 @@ private extension MainViewController {
             loadButton.isHidden = true
             loadingMore.showSpinner()
             await mainViewModel.dataLoad()
+            mainViewModel.setAllFavourites()
             loadButton.isHidden = false
             loadingMore.hideSpinner()
             tableView.reloadData()
@@ -139,7 +141,7 @@ private extension MainViewController {
     @objc
     func changeToFavouritesViewController() {
 
-        let favouritesViewController = mainViewModel.filterFavourites()
+        let favouritesViewController = FavouritesViewController(favouriteThumbnails: mainViewModel.filterFavourites(), favouritesId: mainViewModel.favouritesId)
         favouritesViewController.delegate = self
         navigationController?.pushViewController(favouritesViewController, animated: false)
     }
@@ -150,6 +152,7 @@ extension MainViewController: DetailsViewControllerDelegate {
     func sendFavouriteSelected(id: Int ,favourite: Bool) {
         
         mainViewModel.changeFavourite(id: id ,favourite: favourite)
+        mainViewModel.saveChanges()
 
         self.tableView.reloadData()
     }

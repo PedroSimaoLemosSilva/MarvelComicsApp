@@ -24,6 +24,12 @@ class Urls {
         return url
     }
 
+    func getCharacter(id: Int) -> URL? {
+
+        let url = URL(string: "https://gateway.marvel.com/v1/public/characters/\(id)?limit=3&ts=\(Urls.apiTime)&apikey=\(Urls.apiPublicKey)&hash=\(Urls.apiHash)")
+        return url
+    }
+
     func getComicsUrl(id: Int) -> URL? {
 
         let url = URL(string: "https://gateway.marvel.com/v1/public/characters/\(id)/comics?limit=3&ts=\(Urls.apiTime)&apikey=\(Urls.apiPublicKey)&hash=\(Urls.apiHash)")

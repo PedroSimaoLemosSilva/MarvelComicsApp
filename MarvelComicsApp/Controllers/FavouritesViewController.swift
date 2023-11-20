@@ -17,11 +17,13 @@ class FavouritesViewController: UIViewController {
 
     private let loadingScreen = IndicatorView()
 
-    init(favouriteThumbnails: [CharacterThumbnail]) {
+    init(favouriteThumbnails: [CharacterThumbnail], favouritesId: [Int]) {
 
         super.init(nibName: nil, bundle: nil)
 
         favouritesViewModel.setCharacterThumbnails(characterThumbnails: favouriteThumbnails)
+
+        favouritesViewModel.favouritesId = favouritesId
     }
     
     required init?(coder: NSCoder) {
@@ -31,16 +33,27 @@ class FavouritesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.view.backgroundColor = .white
-
-        tableView.reloadData()
-        addTableView()
-        defineTableViewConstraints()
-        configureTableView()
-
-        navigationItem.title = "Favourites"
-
-        tableView.register(CharacterThumbnailCell.self, forCellReuseIdentifier: "TableViewCell")
+        Task {
+            
+            self.view.backgroundColor = .white
+            
+            configureLoadingView()
+            loadingScreen.showSpinner()
+            
+            favouritesViewModel.checkFavouriteInList()
+            await favouritesViewModel.dataLoad()
+            
+            loadingScreen.hideSpinner()
+            
+            tableView.reloadData()
+            addTableView()
+            defineTableViewConstraints()
+            configureTableView()
+            
+            navigationItem.title = "Favourites"
+            
+            tableView.register(CharacterThumbnailCell.self, forCellReuseIdentifier: "TableViewCell")
+        }
     }
 
     func addTableView() {
@@ -66,16 +79,39 @@ class FavouritesViewController: UIViewController {
         self.tableView.delegate = self
         self.tableView.separatorStyle = .none
     }
+
+    func configureLoadingView() {
+
+        loadingScreen.setupViews()
+        loadingScreen.setupConstraints()
+
+        self.view.addSubview(self.loadingScreen)
+
+        self.loadingScreen.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.loadingScreen.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            self.loadingScreen.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            self.loadingScreen.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+            self.loadingScreen.topAnchor.constraint(equalTo: self.view.topAnchor)
+        ])
+    }
 }
 
 extension FavouritesViewController: DetailsViewControllerDelegate{
 
     func sendFavouriteSelected(id: Int, favourite: Bool) {
 
+        self.loadingScreen.showSpinner()
+        self.tableView.isHidden = true
+
         favouritesViewModel.changeFavourite(id: id ,favourite: favourite)
-        delegate?.sendFavouriteToMain(id: id,favourite: favourite)
+        favouritesViewModel.saveChanges()
 
         self.tableView.reloadData()
+        self.tableView.isHidden = false
+        self.loadingScreen.hideSpinner()
+
+        delegate?.sendFavouriteToMain(id: id,favourite: favourite)
     }
 }
 

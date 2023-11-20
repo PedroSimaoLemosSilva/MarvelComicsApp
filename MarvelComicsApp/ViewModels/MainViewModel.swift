@@ -15,6 +15,8 @@ class MainViewModel {
 
     lazy var characterThumbnails: [CharacterThumbnail] = []
 
+    var favouritesId: [Int] = []
+
     init(webservice: MainWebserviceProtocol = MainWebservice(), characterThumbnails: [CharacterThumbnail] = []) {
 
         self.webservice = webservice
@@ -41,6 +43,17 @@ class MainViewModel {
         if let characterThumbnail = characterThumbnails.first(where: {$0.id == id}) {
 
             characterThumbnail.favourite = favourite
+
+            if characterThumbnail.favourite == true {
+
+                favouritesId.append(id)
+            } else {
+
+                if let indexOfId = favouritesId.firstIndex(where: {$0 == id}) {
+
+                    favouritesId.remove(at: Int(indexOfId))
+                }
+            }
         }
     }
 
@@ -49,6 +62,7 @@ class MainViewModel {
         let favouriteCharacterThumbnailIds = characterThumbnails.filter { characterThumbnail in
 
             if characterThumbnail.favourite {
+
 
                 return true
             } else {
@@ -87,11 +101,9 @@ class MainViewModel {
         } catch { print(error) }
     }
 
-    func filterFavourites() -> FavouritesViewController {
+    func filterFavourites() -> [CharacterThumbnail] {
 
-        var favouriteThumbnails: [CharacterThumbnail] = []
-
-        favouriteThumbnails = characterThumbnails.filter { characterThumbnail in
+        let favouriteThumbnails = characterThumbnails.filter { characterThumbnail in
 
             if characterThumbnail.favourite {
 
@@ -102,8 +114,49 @@ class MainViewModel {
             }
         }
 
-        let favouritesViewController = FavouritesViewController(favouriteThumbnails: favouriteThumbnails)
+        return favouriteThumbnails
+    }
+
+
+    func loadAllFavourites() {
         
-        return favouritesViewController
+        guard let data = UserDefaults.standard.data(forKey: "favouriteId") else {
+            return
+        }
+
+        do {
+
+            let decoder = JSONDecoder()
+            favouritesId = try decoder.decode([Int].self, from: data)
+        } catch {
+
+            print(error)
+        }
+
+        setAllFavourites()
+    }
+
+    func setAllFavourites() {
+
+        favouritesId.forEach { id in
+
+            if let characterThumbnail = characterThumbnails.first(where: {$0.id == id}) {
+
+                characterThumbnail.favourite = true
+            }
+        }
+    }
+
+    func saveChanges() {
+
+        do {
+
+            let encoder = JSONEncoder()
+            let data = try encoder.encode(favouritesId)
+            UserDefaults.standard.set(data, forKey: "favouriteId")
+        } catch {
+
+            print(error)
+        }
     }
 }
