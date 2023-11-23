@@ -17,8 +17,6 @@ class DetailsViewController: UIViewController {
 
     private let detailsViewModel = DetailsViewModel()
 
-    //private var heartIcon = UIImage(named: "icons8-heart-50.png")
-
     init(id: Int, name: String, image: UIImage, favourite: Bool) {
 
         super.init(nibName: nil, bundle: nil)
@@ -106,7 +104,8 @@ private extension DetailsViewController {
     func favouriteSelected() {
 
         self.navigationItem.rightBarButtonItem?.image = toggleIcon()
-        delegate?.sendFavouriteSelected(id: detailsViewModel.getCharacterThumbnail().0,favourite: detailsViewModel.favouriteChanged())
+        tableView.reloadData()
+        delegate?.sendFavouriteSelected(id: detailsViewModel.getCharacterThumbnail().0)
     }
 
     func toggleIcon() -> UIImage? {
@@ -214,9 +213,9 @@ extension DetailsViewController: UITableViewDataSource {
         return 1
     }
 
-    func configureThumbnailCell(for cell: CharacterThumbnailCell, with item: (Int, String, UIImage)) {
+    func configureThumbnailCell(for cell: CharacterThumbnailCell, with item: (Int, String, UIImage, UIImage)) {
 
-        cell.transferThumbnailData(id: item.0, name: item.1, image: item.2)
+        cell.transferThumbnailData(id: item.0, name: item.1, thumbnailImage: item.2, heartImage: item.3)
     }
 
     func configureDetailsCell(for cell: DetailsCell, with item: (String, String)) {
@@ -228,5 +227,5 @@ extension DetailsViewController: UITableViewDataSource {
 
 protocol DetailsViewControllerDelegate {
 
-    func sendFavouriteSelected(id: Int, favourite: Bool)
+    func sendFavouriteSelected(id: Int)
 }

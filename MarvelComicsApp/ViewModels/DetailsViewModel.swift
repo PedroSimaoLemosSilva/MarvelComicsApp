@@ -57,13 +57,24 @@ class DetailsViewModel {
         } catch { print(error) }
     }
 
-    func getCharacterThumbnail() -> (Int, String, UIImage) {
+    func getCharacterThumbnail() -> (Int, String, UIImage, UIImage) {
 
         let id = characterThumbnail.id
         let name = characterThumbnail.name
         let image = characterThumbnail.image
+        if characterThumbnail.favourite {
 
-        return (id, name, image)
+            if let heart = UIImage(named: "icons8-heart-50 (1).png") {
+
+                return (id, name, image, heart)
+            } else { return (id, name, image, UIImage()) }
+        } else {
+
+            if let heart = UIImage(named: "icons8-heart-50.png") {
+
+                return (id, name, image, heart)
+            } else { return (id, name, image, UIImage()) }
+        }
     }
 
     func setCharacterThumbnail(id: Int, name: String, image: UIImage, favourite: Bool) {

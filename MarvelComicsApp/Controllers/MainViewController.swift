@@ -113,7 +113,6 @@ private extension MainViewController {
     func configureBarButton() {
 
         let favouriteBarButtonItem = UIBarButtonItem(image: UIImage(named: "icons8-heart-50 (1).png"), style: .plain, target: self, action: #selector(self.changeToFavouritesViewController))
-        
         self.navigationItem.rightBarButtonItem = favouriteBarButtonItem
     }
 
@@ -141,7 +140,7 @@ private extension MainViewController {
     @objc
     func changeToFavouritesViewController() {
 
-        let favouritesViewController = FavouritesViewController(favouriteThumbnails: mainViewModel.filterFavourites(), favouritesId: mainViewModel.favouritesId)
+        let favouritesViewController = FavouritesViewController(favouriteThumbnails: mainViewModel.filterFavourites(), favouritesId: mainViewModel.getFavourites())
         favouritesViewController.delegate = self
         navigationController?.pushViewController(favouritesViewController, animated: false)
     }
@@ -149,22 +148,32 @@ private extension MainViewController {
 
 extension MainViewController: DetailsViewControllerDelegate {
 
-    func sendFavouriteSelected(id: Int ,favourite: Bool) {
-        
-        mainViewModel.changeFavourite(id: id ,favourite: favourite)
-        mainViewModel.saveChanges()
+    func sendFavouriteSelected(id: Int) {
 
+        mainViewModel.changeFavourite(id: id)
+        mainViewModel.saveChanges()
+        
         self.tableView.reloadData()
     }
 }
 
 extension MainViewController: FavouritesViewControllerDelegate {
 
-    func sendFavouriteToMain(id: Int,favourite: Bool) {
+    func sendFavouriteToMain(id: Int) {
         
-        mainViewModel.changeFavourite(id: id ,favourite: favourite)
+        mainViewModel.modifyFavouriteId(id: id)
 
         self.tableView.reloadData()
+    }
+}
+
+extension MainViewController: CharacterThumbnailCellDelegate {
+
+    func sendCharacterClickedMain(id: Int) {
+
+        mainViewModel.changeFavourite(id: id)
+        mainViewModel.saveChanges()
+        tableView.reloadData()
     }
 }
 
@@ -190,21 +199,17 @@ extension MainViewController: UITableViewDataSource {
         }
 
         cell.selectionStyle = .none
+        cell.delegate = self
 
-        let heartIcon = UIImageView(frame: CGRectMake(0, 0, 15, 15))
-        cell.accessoryView = heartIcon
+        guard let (id, name, image, heart) = mainViewModel.characterForRowAtImage(indexPath: indexPath) else { return UITableViewCell() }
 
-        guard let (id, name, image, favourite) = mainViewModel.characterForRowAt(indexPath: indexPath) else { return UITableViewCell() }
-        cell.transferThumbnailData(id: id, name: name, image: image)
+        cell.transferThumbnailData(id: id, name: name, thumbnailImage: image, heartImage: heart)
 
-        if favourite {
+        if indexPath.row == mainViewModel.characterThumbnails.count - 1 {
 
-            heartIcon.image = UIImage(named: "icons8-heart-50 (1).png")
-        } else {
-
-            heartIcon.image = UIImage(named: "icons8-heart-50.png")
+            self.dataLoadMore()
         }
-
+        
         return cell
     }
 

@@ -17,7 +17,7 @@ final class CharacterThumbnailCellTest: XCTestCase {
         let view = CharacterThumbnailCell(frame: frame)
 
         let image = UIImage()
-        view.transferThumbnailData(id: 1, name: "Capitão Falcão", image: image)
+        view.transferThumbnailData(id: 1, name: "Capitão Falcão", thumbnailImage: UIImage(), heartImage: UIImage())
 
         assertSnapshot(of: view, as: .image)
     }

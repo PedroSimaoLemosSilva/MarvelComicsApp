@@ -15,12 +15,14 @@ class FavouritesViewModel {
 
     var characterThumbnailsDeleted: [CharacterThumbnail] = []
 
-    var favouritesId: [Int] = []
+    var favouritesId: Set<Int> = []
 
-    var favouritesIdNotLoaded: [Int] = []
+    var favouritesIdNotLoaded: Set<Int> = []
+
+    var cache = NSCache<NSString, UIImage>()
 
     init(webservice: FavouritesWebserviceProtocol = FavouritesWebservice(), characterThumbnails: [CharacterThumbnail] = [],
-         characterThumbnailsDeleted: [CharacterThumbnail] = [], favouritesId: [Int] = [], favouritesIdNotLoaded: [Int] = []) {
+         characterThumbnailsDeleted: [CharacterThumbnail] = [], favouritesId: Set<Int> = [], favouritesIdNotLoaded: Set<Int> = []) {
 
         self.webservice = webservice
         self.characterThumbnails = characterThumbnails
@@ -44,22 +46,98 @@ class FavouritesViewModel {
         return (id, name, image, favourite)
     }
 
-    func changeFavourite(id: Int ,favourite: Bool) {
-        
+    func characterForRowAtImage(indexPath: IndexPath) -> (Int, String, UIImage, UIImage)? {
+
+        let id = characterThumbnails[indexPath.row].id
+        let name = characterThumbnails[indexPath.row].name
+        let image = characterThumbnails[indexPath.row].image
+
+        if characterThumbnails[indexPath.row].favourite {
+
+            guard let newHeart = UIImage(named: "icons8-heart-50 (1).png") else { return nil }
+
+            if let heart = cache.object(forKey: NSString(string: name)) {
+
+                if heart.pngData() == newHeart.pngData() {
+
+                    return (id, name, image, heart)
+                } else {
+
+                    cache.setObject(newHeart, forKey: NSString(string: name))
+                    return (id, name, image, newHeart)
+                }
+            } else {
+
+                cache.setObject(newHeart, forKey: NSString(string: name))
+
+                return (id, name, image, newHeart)
+            }
+        } else {
+
+            guard let newHeart = UIImage(named: "icons8-heart-50.png") else { return nil }
+
+            if let heart = cache.object(forKey: NSString(string: name)) {
+
+                if heart.pngData() == newHeart.pngData() {
+
+                    return (id, name, image, heart)
+                } else {
+
+                    cache.setObject(newHeart, forKey: NSString(string: name))
+                    return (id, name, image, newHeart)
+                }
+            } else {
+
+                cache.setObject(newHeart, forKey: NSString(string: name))
+
+                return (id, name, image, newHeart)
+            }
+        }
+    }
+
+    func changeFavourite(id: Int) {
+
         if let characterThumbnail = characterThumbnails.first(where: {$0.id == id}) {
 
-            characterThumbnail.favourite = favourite
+            characterThumbnail.favourite.toggle()
             if let indexOfCharacterThumbnail = characterThumbnails.firstIndex(where: {$0.id == id}),
-               let indexOfId = favouritesId.firstIndex(where: {$0 == id}),
                characterThumbnail.favourite == false {
 
                 characterThumbnails.remove(at: Int(indexOfCharacterThumbnail))
                 characterThumbnailsDeleted.append(characterThumbnail)
-                favouritesId.remove(at: Int(indexOfId))
+                favouritesId.remove(id)
             }
         } else {
 
-            favouritesId.append(id)
+            favouritesId.insert(id)
+            if let characterThumbnail = characterThumbnailsDeleted.first(where: {$0.id == id}) {
+
+                characterThumbnail.favourite.toggle()
+
+                characterThumbnails.append(characterThumbnail)
+                characterThumbnails.sort(by: { $0.name < $1.name })
+                if let indexOfCharacterThumbnailDeleted = characterThumbnailsDeleted.firstIndex(where: {$0.id == id}) {
+
+                    characterThumbnailsDeleted.remove(at: Int(indexOfCharacterThumbnailDeleted))
+                }
+            }
+        }
+    }
+
+    func modifyFavouriteId(id: Int) {
+
+        if let characterThumbnail = characterThumbnails.first(where: {$0.id == id}) {
+
+            if let indexOfCharacterThumbnail = characterThumbnails.firstIndex(where: {$0.id == id}),
+               characterThumbnail.favourite == false {
+
+                characterThumbnails.remove(at: Int(indexOfCharacterThumbnail))
+                characterThumbnailsDeleted.append(characterThumbnail)
+                favouritesId.remove(id)
+            }
+        } else {
+
+            favouritesId.insert(id)
             if let characterThumbnail = characterThumbnailsDeleted.first(where: {$0.id == id}) {
 
                 characterThumbnails.append(characterThumbnail)
@@ -74,7 +152,8 @@ class FavouritesViewModel {
 
     func saveChanges() {
 
-        UserDefaults.standard.set(favouritesId, forKey: "favouriteId")
+        let array = Array(favouritesId)
+        UserDefaults.standard.set(array, forKey: "favouriteId")
     }
 
     func setCharacterThumbnails(characterThumbnails: [CharacterThumbnail]) {
@@ -89,7 +168,7 @@ class FavouritesViewModel {
             if let characterThumbnail = characterThumbnails.first(where: {$0.id == id}) {}
             else {
 
-                favouritesIdNotLoaded.append(id)
+                favouritesIdNotLoaded.insert(id)
             }
         }
     }

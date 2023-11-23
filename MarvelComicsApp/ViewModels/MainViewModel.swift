@@ -13,15 +13,19 @@ class MainViewModel {
 
     private let webservice: MainWebserviceProtocol
 
+    private let favourites: FavouritesSet
+
     lazy var characterThumbnails: [CharacterThumbnail] = []
 
-    var favouritesId: [Int] = []
+    //var favouritesId: Set<Int> = []
 
-    init(webservice: MainWebserviceProtocol = MainWebservice(), characterThumbnails: [CharacterThumbnail] = [], favouriteId: [Int] = []) {
+    var cache = NSCache<NSString, UIImage>()
+
+    init(webservice: MainWebserviceProtocol = MainWebservice(), favourites: FavouritesSet = FavouritesSet(), characterThumbnails: [CharacterThumbnail] = []) {
 
         self.webservice = webservice
+        self.favourites = favourites
         self.characterThumbnails = characterThumbnails
-        self.favouritesId = favouriteId
     }
 
     func numberOfRows() -> Int? {
@@ -39,31 +43,99 @@ class MainViewModel {
         return (id, name, image, favourite)
     }
 
-    func changeFavourite(id: Int ,favourite: Bool) {
+    func characterForRowAtImage(indexPath: IndexPath) -> (Int, String, UIImage, UIImage)? {
 
-        if let characterThumbnail = characterThumbnails.first(where: {$0.id == id}) {
+        let id = characterThumbnails[indexPath.row].id
+        let name = characterThumbnails[indexPath.row].name
+        let image = characterThumbnails[indexPath.row].image
 
-            characterThumbnail.favourite = favourite
+        if characterThumbnails[indexPath.row].favourite {
 
-            if characterThumbnail.favourite == true {
+            guard let newHeart = UIImage(named: "icons8-heart-50 (1).png") else { return nil }
 
-                favouritesId.append(id)
+            if let heart = cache.object(forKey: NSString(string: name)) {
+
+                if heart.pngData() == newHeart.pngData() {
+
+                    return (id, name, image, heart)
+                } else {
+
+                    cache.setObject(newHeart, forKey: NSString(string: name))
+                    return (id, name, image, newHeart)
+                }
             } else {
 
-                if let indexOfId = favouritesId.firstIndex(where: {$0 == id}) {
+                cache.setObject(newHeart, forKey: NSString(string: name))
 
-                    favouritesId.remove(at: Int(indexOfId))
-
-                    print(favouritesId)
-                }
+                return (id, name, image, newHeart)
             }
         } else {
 
-            if let indexOfId = favouritesId.firstIndex(where: {$0 == id}) {
+            guard let newHeart = UIImage(named: "icons8-heart-50.png") else { return nil }
 
-                favouritesId.remove(at: Int(indexOfId))
+            if let heart = cache.object(forKey: NSString(string: name)) {
 
-                print(favouritesId)
+                if heart.pngData() == newHeart.pngData() {
+
+                    return (id, name, image, heart)
+                } else {
+
+                    cache.setObject(newHeart, forKey: NSString(string: name))
+                    return (id, name, image, newHeart)
+                }
+            } else {
+
+                cache.setObject(newHeart, forKey: NSString(string: name))
+
+                return (id, name, image, newHeart)
+            }
+        }
+    }
+
+    func changeFavourite(id: Int) {
+
+        if let characterThumbnail = characterThumbnails.first(where: {$0.id == id}) {
+
+            characterThumbnail.favourite.toggle()
+
+            if characterThumbnail.favourite {
+
+                favourites.addFavourite(id: id)
+            } else {
+
+                favourites.removeFavourite(id: id)
+            }
+        } else {
+
+            if favourites.containsFavourite(id: id) {
+
+                favourites.addFavourite(id: id)
+            } else {
+
+                favourites.removeFavourite(id: id)
+            }
+        }
+    }
+
+    func modifyFavouriteId(id: Int) {
+
+        if let characterThumbnail = characterThumbnails.first(where: {$0.id == id}) {
+
+            if characterThumbnail.favourite {
+
+                favourites.addFavourite(id: id)
+            } else {
+
+                favourites.removeFavourite(id: id)
+            }
+        } else {
+
+            if favourites.containsFavourite(id: id) {
+
+                favourites.removeFavourite(id: id)
+            } else {
+
+                favourites.addFavourite(id: id)
             }
         }
     }
@@ -118,14 +190,15 @@ class MainViewModel {
 
             return
         }
-        favouritesId = auxfFavouritesId
+
+        favourites.setFavourites(favourites: Set(auxfFavouritesId))
 
         setAllFavourites()
     }
 
     func setAllFavourites() {
 
-        favouritesId.forEach { id in
+        favourites.getFavourites().forEach { id in
 
             if let characterThumbnail = characterThumbnails.first(where: {$0.id == id}) {
 
@@ -136,7 +209,12 @@ class MainViewModel {
 
     func saveChanges() {
 
-        UserDefaults.standard.set(favouritesId, forKey: "favouriteId")
+        let array = Array(favourites.getFavourites())
+        UserDefaults.standard.set(array, forKey: "favouriteId")
+    }
 
+    func getFavourites() -> Set<Int> {
+
+        return self.favourites.getFavourites()
     }
 }

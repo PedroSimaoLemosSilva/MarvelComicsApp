@@ -17,7 +17,7 @@ class FavouritesViewController: UIViewController {
 
     private let loadingScreen = IndicatorView()
 
-    init(favouriteThumbnails: [CharacterThumbnail], favouritesId: [Int]) {
+    init(favouriteThumbnails: [CharacterThumbnail], favouritesId: Set<Int>) {
 
         super.init(nibName: nil, bundle: nil)
 
@@ -101,14 +101,27 @@ class FavouritesViewController: UIViewController {
 
 extension FavouritesViewController: DetailsViewControllerDelegate {
 
-    func sendFavouriteSelected(id: Int, favourite: Bool) {
+    func sendFavouriteSelected(id: Int) {
 
-        favouritesViewModel.changeFavourite(id: id ,favourite: favourite)
+        favouritesViewModel.changeFavourite(id: id)
         favouritesViewModel.saveChanges()
 
         self.tableView.reloadData()
 
-        delegate?.sendFavouriteToMain(id: id,favourite: favourite)
+        delegate?.sendFavouriteToMain(id: id)
+    }
+}
+
+extension FavouritesViewController: CharacterThumbnailCellDelegate {
+
+    func sendCharacterClickedMain(id: Int) {
+
+        favouritesViewModel.changeFavourite(id: id)
+        favouritesViewModel.saveChanges()
+
+        tableView.reloadData()
+
+        delegate?.sendFavouriteToMain(id: id)
     }
 }
 
@@ -134,15 +147,16 @@ extension FavouritesViewController: UITableViewDataSource {
         }
 
         cell.selectionStyle = .none
+        cell.delegate = self
 
         let heartIcon = UIImageView(frame: CGRectMake(0, 0, 15, 15))
         cell.accessoryView = heartIcon
 
-        guard let (id, name, image, _) = favouritesViewModel.characterForRowAt(indexPath: indexPath) else { return
+        guard let (id, name, thumbnailImage, heartImage) = favouritesViewModel.characterForRowAtImage(indexPath: indexPath) else { return
 
             UITableViewCell()
         }
-        cell.transferThumbnailData(id: id, name: name, image: image)
+        cell.transferThumbnailData(id: id, name: name, thumbnailImage: thumbnailImage, heartImage: heartImage)
 
         return cell
     }
@@ -175,5 +189,5 @@ extension FavouritesViewController: UITableViewDelegate {
 
 protocol FavouritesViewControllerDelegate {
 
-    func sendFavouriteToMain(id: Int, favourite: Bool)
+    func sendFavouriteToMain(id: Int)
 }
