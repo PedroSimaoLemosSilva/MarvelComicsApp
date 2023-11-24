@@ -15,19 +15,18 @@ class FavouritesViewModel {
 
     var characterThumbnailsDeleted: [CharacterThumbnail] = []
 
-    var favouritesId: Set<Int> = []
+    var favouriteIds: FavouritesSet = FavouritesSet.sharedInstance
 
     var favouritesIdNotLoaded: Set<Int> = []
 
     var cache = NSCache<NSString, UIImage>()
 
     init(webservice: FavouritesWebserviceProtocol = FavouritesWebservice(), characterThumbnails: [CharacterThumbnail] = [],
-         characterThumbnailsDeleted: [CharacterThumbnail] = [], favouritesId: Set<Int> = [], favouritesIdNotLoaded: Set<Int> = []) {
+         characterThumbnailsDeleted: [CharacterThumbnail] = [], favouritesIdNotLoaded: Set<Int> = []) {
 
         self.webservice = webservice
         self.characterThumbnails = characterThumbnails
         self.characterThumbnailsDeleted = characterThumbnailsDeleted
-        self.favouritesId = favouritesId
         self.favouritesIdNotLoaded = favouritesIdNotLoaded
     }
 
@@ -105,11 +104,11 @@ class FavouritesViewModel {
 
                 characterThumbnails.remove(at: Int(indexOfCharacterThumbnail))
                 characterThumbnailsDeleted.append(characterThumbnail)
-                favouritesId.remove(id)
+                favouriteIds.removeFavourite(id: id)
             }
         } else {
 
-            favouritesId.insert(id)
+            favouriteIds.addFavourite(id: id)
             if let characterThumbnail = characterThumbnailsDeleted.first(where: {$0.id == id}) {
 
                 characterThumbnail.favourite.toggle()
@@ -133,11 +132,11 @@ class FavouritesViewModel {
 
                 characterThumbnails.remove(at: Int(indexOfCharacterThumbnail))
                 characterThumbnailsDeleted.append(characterThumbnail)
-                favouritesId.remove(id)
+                favouriteIds.removeFavourite(id: id)
             }
         } else {
 
-            favouritesId.insert(id)
+            favouriteIds.addFavourite(id: id)
             if let characterThumbnail = characterThumbnailsDeleted.first(where: {$0.id == id}) {
 
                 characterThumbnails.append(characterThumbnail)
@@ -152,7 +151,7 @@ class FavouritesViewModel {
 
     func saveChanges() {
 
-        let array = Array(favouritesId)
+        let array = Array(favouriteIds.getFavourites())
         UserDefaults.standard.set(array, forKey: "favouriteId")
     }
 
@@ -163,7 +162,7 @@ class FavouritesViewModel {
 
     func checkFavouriteInList() {
 
-        favouritesId.forEach { id in
+        favouriteIds.getFavourites().forEach { id in
 
             if let characterThumbnail = characterThumbnails.first(where: {$0.id == id}) {}
             else {

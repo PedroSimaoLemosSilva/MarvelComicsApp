@@ -17,13 +17,11 @@ class FavouritesViewController: UIViewController {
 
     private let loadingScreen = IndicatorView()
 
-    init(favouriteThumbnails: [CharacterThumbnail], favouritesId: Set<Int>) {
+    init(favouriteThumbnails: [CharacterThumbnail]) {
 
         super.init(nibName: nil, bundle: nil)
 
         favouritesViewModel.setCharacterThumbnails(characterThumbnails: favouriteThumbnails)
-
-        favouritesViewModel.favouritesId = favouritesId
     }
     
     required init?(coder: NSCoder) {
@@ -115,13 +113,13 @@ extension FavouritesViewController: DetailsViewControllerDelegate {
 extension FavouritesViewController: CharacterThumbnailCellDelegate {
 
     func sendCharacterClickedMain(id: Int) {
-
+        
         favouritesViewModel.changeFavourite(id: id)
         favouritesViewModel.saveChanges()
 
         tableView.reloadData()
 
-        delegate?.sendFavouriteToMain(id: id)
+        //delegate?.sendFavouriteToMain(id: id)
     }
 }
 
@@ -148,9 +146,6 @@ extension FavouritesViewController: UITableViewDataSource {
 
         cell.selectionStyle = .none
         cell.delegate = self
-
-        let heartIcon = UIImageView(frame: CGRectMake(0, 0, 15, 15))
-        cell.accessoryView = heartIcon
 
         guard let (id, name, thumbnailImage, heartImage) = favouritesViewModel.characterForRowAtImage(indexPath: indexPath) else { return
 

@@ -23,6 +23,8 @@ class DetailsViewModel {
         self.characterThumbnail = characterThumbnail
     }
 
+    var cache = NSCache<NSString, UIImage>()
+
     func dataFormatting() async {
 
         do {
@@ -57,23 +59,51 @@ class DetailsViewModel {
         } catch { print(error) }
     }
 
-    func getCharacterThumbnail() -> (Int, String, UIImage, UIImage) {
+    func getCharacterThumbnail() -> (Int, String, UIImage, UIImage)? {
 
         let id = characterThumbnail.id
         let name = characterThumbnail.name
         let image = characterThumbnail.image
-        if characterThumbnail.favourite {
+        if FavouritesSet.sharedInstance.containsFavourite(id: id) {
 
-            if let heart = UIImage(named: "icons8-heart-50 (1).png") {
+            guard let newHeart = UIImage(named: "icons8-heart-50 (1).png") else { return nil }
 
-                return (id, name, image, heart)
-            } else { return (id, name, image, UIImage()) }
+            if let heart = cache.object(forKey: NSString(string: name)) {
+
+                if heart.pngData() == newHeart.pngData() {
+
+                    return (id, name, image, heart)
+                } else {
+
+                    cache.setObject(newHeart, forKey: NSString(string: name))
+                    return (id, name, image, newHeart)
+                }
+            } else {
+
+                cache.setObject(newHeart, forKey: NSString(string: name))
+
+                return (id, name, image, newHeart)
+            }
         } else {
 
-            if let heart = UIImage(named: "icons8-heart-50.png") {
+            guard let newHeart = UIImage(named: "icons8-heart-50.png") else { return nil }
 
-                return (id, name, image, heart)
-            } else { return (id, name, image, UIImage()) }
+            if let heart = cache.object(forKey: NSString(string: name)) {
+
+                if heart.pngData() == newHeart.pngData() {
+
+                    return (id, name, image, heart)
+                } else {
+
+                    cache.setObject(newHeart, forKey: NSString(string: name))
+                    return (id, name, image, newHeart)
+                }
+            } else {
+
+                cache.setObject(newHeart, forKey: NSString(string: name))
+
+                return (id, name, image, newHeart)
+            }
         }
     }
 
@@ -124,5 +154,22 @@ class DetailsViewModel {
             return UIImage(named: "icons8-heart-50.png")
         }
 
+    }
+
+    func changeFavourite(id: Int) {
+
+        if FavouritesSet.sharedInstance.containsFavourite(id: id) {
+
+            FavouritesSet.sharedInstance.removeFavourite(id: id)
+        } else {
+
+            FavouritesSet.sharedInstance.addFavourite(id: id)
+        }
+    }
+
+    func saveChanges() {
+
+        let array = Array(FavouritesSet.sharedInstance.getFavourites())
+        UserDefaults.standard.set(array, forKey: "favouriteId")
     }
 }

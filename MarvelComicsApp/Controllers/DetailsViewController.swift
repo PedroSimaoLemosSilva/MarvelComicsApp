@@ -43,12 +43,10 @@ class DetailsViewController: UIViewController {
 
             indicatorView.hideSpinner()
 
+            tableView.reloadData()
             addSubviews()
             defineSubviewConstraints()
             configureSubviews()
-
-            let favouriteBarButtonItem = UIBarButtonItem(image: detailsViewModel.getIconImage(), style: .plain, target: self, action: #selector(self.favouriteSelected))
-            self.navigationItem.rightBarButtonItem = favouriteBarButtonItem
         }
 
         tableView.register(CharacterThumbnailCell.self, forCellReuseIdentifier: "ThumbnailCell")
@@ -99,30 +97,18 @@ private extension DetailsViewController {
         self.tableView.dataSource = self
         self.tableView.separatorStyle = .none
     }
+}
 
-    @objc
-    func favouriteSelected() {
+extension DetailsViewController: CharacterThumbnailCellDelegate {
 
-        self.navigationItem.rightBarButtonItem?.image = toggleIcon()
+    func sendCharacterClickedMain(id: Int) {
+        
+        detailsViewModel.changeFavourite(id: id)
+        detailsViewModel.saveChanges()
+
         tableView.reloadData()
-        delegate?.sendFavouriteSelected(id: detailsViewModel.getCharacterThumbnail().0)
-    }
 
-    func toggleIcon() -> UIImage? {
-
-        guard let filledHeart = UIImage(named: "icons8-heart-50 (1).png"),
-           let emptyHeart = UIImage(named: "icons8-heart-50.png") else {
-            return UIImage()
-        }
-        guard let icon = self.navigationItem.rightBarButtonItem?.image?.pngData() else { return emptyHeart }
-
-        if icon == emptyHeart.pngData() {
-
-            return filledHeart
-        } else {
-
-            return emptyHeart
-        }
+        delegate?.sendFavouriteSelected(id: id)
     }
 }
 
@@ -138,9 +124,11 @@ extension DetailsViewController: UITableViewDataSource {
             }
 
             cell.selectionStyle = .none
-            let item = detailsViewModel.getCharacterThumbnail()
+            cell.delegate = self
+            
+            guard let item = detailsViewModel.getCharacterThumbnail() else { return UITableViewCell()}
             configureThumbnailCell(for: cell, with: item)
-
+            
             return cell
         } else {
 

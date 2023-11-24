@@ -140,7 +140,7 @@ private extension MainViewController {
     @objc
     func changeToFavouritesViewController() {
 
-        let favouritesViewController = FavouritesViewController(favouriteThumbnails: mainViewModel.filterFavourites(), favouritesId: mainViewModel.getFavourites())
+        let favouritesViewController = FavouritesViewController(favouriteThumbnails: mainViewModel.filterFavourites())
         favouritesViewController.delegate = self
         navigationController?.pushViewController(favouritesViewController, animated: false)
     }
@@ -235,7 +235,7 @@ extension MainViewController: UITableViewDelegate {
 
         let detailsViewController = DetailsViewController(id: item.0, name: item.1, image: item.2, favourite: item.3)
         detailsViewController.delegate = self
-        navigationController?.pushViewController(detailsViewController, animated: false)
+        navigationController?.pushViewController(detailsViewController, animated: true)
     }
 }
 

@@ -42,6 +42,7 @@ class CharacterThumbnailCell: UITableViewCell {
         let tap = UITapGestureRecognizer(target: self, action: #selector(heartClicked))
         heart.addGestureRecognizer(tap)
         heart.isUserInteractionEnabled = true
+        
     }
 }
 
@@ -59,18 +60,18 @@ extension CharacterThumbnailCell {
 
         heart.backgroundColor = .white
 
-        self.addSubview(image)
-        self.addSubview(label)
-        self.addSubview(heart)
+        self.contentView.addSubview(image)
+        self.contentView.addSubview(label)
+        self.contentView.addSubview(heart)
     }
 
     func setupConstraints() {
 
         image.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            image.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            image.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            image.topAnchor.constraint(equalTo: self.topAnchor),
+            image.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
+            image.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor),
+            image.topAnchor.constraint(equalTo: self.contentView.topAnchor),
             image.widthAnchor.constraint(equalToConstant: 150),
             image.heightAnchor.constraint(equalToConstant: 100)
         ])
@@ -78,8 +79,8 @@ extension CharacterThumbnailCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             label.leadingAnchor.constraint(equalTo: image.trailingAnchor, constant: 10),
-            label.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            label.topAnchor.constraint(equalTo: self.topAnchor),
+            label.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor),
+            label.topAnchor.constraint(equalTo: self.contentView.topAnchor),
             label.widthAnchor.constraint(equalToConstant: 210),
             label.heightAnchor.constraint(equalToConstant: 100)
         ])
@@ -87,9 +88,9 @@ extension CharacterThumbnailCell {
         heart.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             heart.leadingAnchor.constraint(equalTo: label.trailingAnchor, constant: 10),
-            heart.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10),
-            heart.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -30),
-            heart.topAnchor.constraint(equalTo: self.topAnchor, constant: 30),
+            heart.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -10),
+            heart.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -30),
+            heart.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 30),
         ])
     }
 

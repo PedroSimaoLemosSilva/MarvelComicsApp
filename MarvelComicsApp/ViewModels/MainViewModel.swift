@@ -13,18 +13,15 @@ class MainViewModel {
 
     private let webservice: MainWebserviceProtocol
 
-    private let favourites: FavouritesSet
+    private let favouriteIds: FavouritesSet = FavouritesSet.sharedInstance
 
     lazy var characterThumbnails: [CharacterThumbnail] = []
 
-    //var favouritesId: Set<Int> = []
-
     var cache = NSCache<NSString, UIImage>()
 
-    init(webservice: MainWebserviceProtocol = MainWebservice(), favourites: FavouritesSet = FavouritesSet(), characterThumbnails: [CharacterThumbnail] = []) {
+    init(webservice: MainWebserviceProtocol = MainWebservice(), characterThumbnails: [CharacterThumbnail] = []) {
 
         self.webservice = webservice
-        self.favourites = favourites
         self.characterThumbnails = characterThumbnails
     }
 
@@ -100,19 +97,19 @@ class MainViewModel {
 
             if characterThumbnail.favourite {
 
-                favourites.addFavourite(id: id)
+                favouriteIds.addFavourite(id: id)
             } else {
 
-                favourites.removeFavourite(id: id)
+                favouriteIds.removeFavourite(id: id)
             }
         } else {
 
-            if favourites.containsFavourite(id: id) {
+            if favouriteIds.containsFavourite(id: id) {
 
-                favourites.addFavourite(id: id)
+                favouriteIds.addFavourite(id: id)
             } else {
 
-                favourites.removeFavourite(id: id)
+                favouriteIds.removeFavourite(id: id)
             }
         }
     }
@@ -123,19 +120,19 @@ class MainViewModel {
 
             if characterThumbnail.favourite {
 
-                favourites.addFavourite(id: id)
+                favouriteIds.addFavourite(id: id)
             } else {
 
-                favourites.removeFavourite(id: id)
+                favouriteIds.removeFavourite(id: id)
             }
         } else {
 
-            if favourites.containsFavourite(id: id) {
+            if favouriteIds.containsFavourite(id: id) {
 
-                favourites.removeFavourite(id: id)
+                favouriteIds.removeFavourite(id: id)
             } else {
 
-                favourites.addFavourite(id: id)
+                favouriteIds.addFavourite(id: id)
             }
         }
     }
@@ -191,14 +188,14 @@ class MainViewModel {
             return
         }
 
-        favourites.setFavourites(favourites: Set(auxfFavouritesId))
+        favouriteIds.setFavourites(favourites: Set(auxfFavouritesId))
 
         setAllFavourites()
     }
 
     func setAllFavourites() {
 
-        favourites.getFavourites().forEach { id in
+        favouriteIds.getFavourites().forEach { id in
 
             if let characterThumbnail = characterThumbnails.first(where: {$0.id == id}) {
 
@@ -209,12 +206,12 @@ class MainViewModel {
 
     func saveChanges() {
 
-        let array = Array(favourites.getFavourites())
+        let array = Array(favouriteIds.getFavourites())
         UserDefaults.standard.set(array, forKey: "favouriteId")
     }
 
     func getFavourites() -> Set<Int> {
 
-        return self.favourites.getFavourites()
+        return self.favouriteIds.getFavourites()
     }
 }
