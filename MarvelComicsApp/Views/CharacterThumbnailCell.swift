@@ -52,6 +52,7 @@ extension CharacterThumbnailCell {
 
         self.backgroundColor = .white
         image.clipsToBounds = true
+        image.layer.cornerRadius = 7
         image.contentMode = .scaleAspectFill
 
         label.backgroundColor = .white
@@ -72,7 +73,7 @@ extension CharacterThumbnailCell {
             image.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
             image.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor),
             image.topAnchor.constraint(equalTo: self.contentView.topAnchor),
-            image.widthAnchor.constraint(equalToConstant: 150),
+            image.widthAnchor.constraint(equalToConstant: 125),
             image.heightAnchor.constraint(equalToConstant: 100)
         ])
 
@@ -81,16 +82,16 @@ extension CharacterThumbnailCell {
             label.leadingAnchor.constraint(equalTo: image.trailingAnchor, constant: 10),
             label.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor),
             label.topAnchor.constraint(equalTo: self.contentView.topAnchor),
-            label.widthAnchor.constraint(equalToConstant: 210),
+            label.trailingAnchor.constraint(equalTo: heart.leadingAnchor, constant: -10),
             label.heightAnchor.constraint(equalToConstant: 100)
         ])
 
         heart.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            heart.leadingAnchor.constraint(equalTo: label.trailingAnchor, constant: 10),
             heart.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -10),
             heart.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -30),
             heart.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 30),
+            heart.widthAnchor.constraint(equalToConstant: 40)
         ])
     }
 

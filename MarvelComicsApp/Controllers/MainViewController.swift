@@ -16,8 +16,6 @@ class MainViewController: UIViewController {
 
     private let loadingMore = IndicatorView()
 
-    private let loadButton = UIButton()
-
     override func viewDidLoad() {
 
         super.viewDidLoad()
@@ -25,7 +23,8 @@ class MainViewController: UIViewController {
         Task {
 
             self.view.backgroundColor = .white
-
+            self.navigationController?.navigationBar.tintColor = UIColor.black
+           
             configureLoadingView()
             loadingScreen.showSpinner()
 
@@ -87,7 +86,7 @@ private extension MainViewController {
         self.tableView.backgroundColor = .white
         self.tableView.dataSource = self
         self.tableView.delegate = self
-        self.tableView.separatorStyle = .none
+        self.tableView.separatorStyle = .singleLine
     }
 
     func configureTableViewFooter() {
@@ -98,14 +97,7 @@ private extension MainViewController {
         loadingMore.frame = CGRect(x: 0, y: 0, width: self.view.frame.width , height: 100)
 
         loadingMore.backgroundColor = .clear
-
-        loadButton.frame = CGRect(x: 30, y: 30, width: self.view.frame.width - 60, height: 40)
-        loadButton.backgroundColor = .systemGray
-        loadButton.isUserInteractionEnabled = true
-        loadButton.setTitle("Load More", for: .normal)
-        loadButton.addTarget(self, action: #selector(self.dataLoadMore), for: .touchUpInside)
-
-        loadingMore.addSubview(loadButton)
+        
         self.tableView.tableFooterView = loadingMore
 
     }
@@ -113,7 +105,7 @@ private extension MainViewController {
     func configureBarButton() {
 
         let favouriteBarButtonItem = UIBarButtonItem(image: UIImage(named: "icons8-heart-50 (1).png"), style: .plain, target: self, action: #selector(self.changeToFavouritesViewController))
-        self.navigationItem.rightBarButtonItem = favouriteBarButtonItem
+        self.navigationItem.leftBarButtonItem = favouriteBarButtonItem
     }
 
     @objc
@@ -121,11 +113,9 @@ private extension MainViewController {
 
         Task {
 
-            loadButton.isHidden = true
             loadingMore.showSpinner()
             await mainViewModel.dataLoad()
             mainViewModel.setAllFavourites()
-            loadButton.isHidden = false
             loadingMore.hideSpinner()
             tableView.reloadData()
         }
