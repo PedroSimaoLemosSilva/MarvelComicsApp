@@ -147,11 +147,8 @@ extension FavouritesViewController: UITableViewDataSource {
         cell.selectionStyle = .none
         cell.delegate = self
 
-        guard let (id, name, thumbnailImage, heartImage) = favouritesViewModel.characterForRowAtImage(indexPath: indexPath) else { return
-
-            UITableViewCell()
-        }
-        cell.transferThumbnailData(id: id, name: name, thumbnailImage: thumbnailImage, heartImage: heartImage)
+        let (id, name, thumbnailImage, favourite) = favouritesViewModel.characterForRowAtImage(indexPath: indexPath)
+        cell.transferThumbnailData(id: id, name: name, thumbnailImage: thumbnailImage, favourite: favourite)
 
         return cell
     }

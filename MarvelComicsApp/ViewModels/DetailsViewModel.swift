@@ -59,11 +59,15 @@ class DetailsViewModel {
         } catch { print(error) }
     }
 
-    func getCharacterThumbnail() -> (Int, String, UIImage, UIImage)? {
+    func getCharacterThumbnail() -> (Int, String, UIImage, Bool) {
 
         let id = characterThumbnail.id
         let name = characterThumbnail.name
         let image = characterThumbnail.image
+        let favourite = characterThumbnail.favourite
+        
+        return (id, name, image, favourite)
+        /*
         if FavouritesSet.sharedInstance.containsFavourite(id: id) {
 
             guard let newHeart = UIImage(named: "icons8-heart-50 (1).png") else { return nil }
@@ -104,7 +108,7 @@ class DetailsViewModel {
 
                 return (id, name, image, newHeart)
             }
-        }
+        }*/
     }
 
     func setCharacterThumbnail(id: Int, name: String, image: UIImage, favourite: Bool) {
@@ -158,6 +162,8 @@ class DetailsViewModel {
 
     func changeFavourite(id: Int) {
 
+        characterThumbnail.favourite.toggle()
+        
         if FavouritesSet.sharedInstance.containsFavourite(id: id) {
 
             FavouritesSet.sharedInstance.removeFavourite(id: id)

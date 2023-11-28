@@ -29,7 +29,7 @@ class CharacterThumbnailCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func transferThumbnailData(id: Int, name: String, thumbnailImage: UIImage, heartImage: UIImage) {
+    func transferThumbnailData(id: Int, name: String, thumbnailImage: UIImage, favourite: Bool) {
 
         self.setupViews()
         self.setupConstraints()
@@ -37,7 +37,13 @@ class CharacterThumbnailCell: UITableViewCell {
         self.id = id
         self.label.text = name
         self.image.image = thumbnailImage
-        self.heart.image = heartImage
+        if favourite {
+            
+            self.heart.image = UIImage(named: "icons8-heart-50 (1).png")
+        } else {
+            
+            self.heart.image = UIImage(named: "icons8-heart-50.png") 
+        }
 
         let tap = UITapGestureRecognizer(target: self, action: #selector(heartClicked))
         heart.addGestureRecognizer(tap)

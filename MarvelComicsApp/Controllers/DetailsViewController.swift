@@ -105,7 +105,7 @@ extension DetailsViewController: CharacterThumbnailCellDelegate {
         
         detailsViewModel.changeFavourite(id: id)
         detailsViewModel.saveChanges()
-
+       
         tableView.reloadData()
 
         delegate?.sendFavouriteSelected(id: id)
@@ -117,7 +117,7 @@ extension DetailsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
         if indexPath.section == 0 {
-
+            print("hello")
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "ThumbnailCell", for: indexPath) as? CharacterThumbnailCell else {
 
                 return UITableViewCell()
@@ -126,7 +126,7 @@ extension DetailsViewController: UITableViewDataSource {
             cell.selectionStyle = .none
             cell.delegate = self
             
-            guard let item = detailsViewModel.getCharacterThumbnail() else { return UITableViewCell()}
+            let item = detailsViewModel.getCharacterThumbnail()
             configureThumbnailCell(for: cell, with: item)
             
             return cell
@@ -201,9 +201,9 @@ extension DetailsViewController: UITableViewDataSource {
         return 1
     }
 
-    func configureThumbnailCell(for cell: CharacterThumbnailCell, with item: (Int, String, UIImage, UIImage)) {
+    func configureThumbnailCell(for cell: CharacterThumbnailCell, with item: (Int, String, UIImage, Bool)) {
 
-        cell.transferThumbnailData(id: item.0, name: item.1, thumbnailImage: item.2, heartImage: item.3)
+        cell.transferThumbnailData(id: item.0, name: item.1, thumbnailImage: item.2, favourite: item.3)
     }
 
     func configureDetailsCell(for cell: DetailsCell, with item: (String, String)) {

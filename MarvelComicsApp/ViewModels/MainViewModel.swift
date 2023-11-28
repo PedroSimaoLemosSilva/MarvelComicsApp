@@ -40,12 +40,15 @@ class MainViewModel {
         return (id, name, image, favourite)
     }
 
-    func characterForRowAtImage(indexPath: IndexPath) -> (Int, String, UIImage, UIImage)? {
-
+    func characterForRowAtImage(indexPath: IndexPath) -> (Int, String, UIImage, Bool) {
+        
         let id = characterThumbnails[indexPath.row].id
         let name = characterThumbnails[indexPath.row].name
         let image = characterThumbnails[indexPath.row].image
-
+        let favourite = characterThumbnails[indexPath.row].favourite
+        
+        return (id, name, image, favourite)
+        /*
         if characterThumbnails[indexPath.row].favourite {
 
             guard let newHeart = UIImage(named: "icons8-heart-50 (1).png") else { return nil }
@@ -86,7 +89,7 @@ class MainViewModel {
 
                 return (id, name, image, newHeart)
             }
-        }
+        } */
     }
 
     func changeFavourite(id: Int) {

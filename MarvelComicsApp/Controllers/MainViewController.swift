@@ -192,9 +192,9 @@ extension MainViewController: UITableViewDataSource {
         cell.selectionStyle = .none
         cell.delegate = self
 
-        guard let (id, name, image, heart) = mainViewModel.characterForRowAtImage(indexPath: indexPath) else { return UITableViewCell() }
+        let (id, name, image, favourite) = mainViewModel.characterForRowAtImage(indexPath: indexPath)
 
-        cell.transferThumbnailData(id: id, name: name, thumbnailImage: image, heartImage: heart)
+        cell.transferThumbnailData(id: id, name: name, thumbnailImage: image, favourite: favourite)
 
         if indexPath.row == mainViewModel.characterThumbnails.count - 1 {
 
