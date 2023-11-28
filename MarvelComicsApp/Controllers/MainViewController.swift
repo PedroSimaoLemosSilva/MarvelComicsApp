@@ -15,6 +15,8 @@ class MainViewController: UIViewController {
     private let loadingScreen = IndicatorView()
 
     private let loadingMore = IndicatorView()
+    
+    private let searchBar = UISearchBar()
 
     override func viewDidLoad() {
 
@@ -23,7 +25,9 @@ class MainViewController: UIViewController {
         Task {
 
             self.view.backgroundColor = .white
-            self.navigationController?.navigationBar.tintColor = UIColor.black
+            
+            configureSearchBar()
+            configureBarButton()
            
             configureLoadingView()
             loadingScreen.showSpinner()
@@ -38,9 +42,6 @@ class MainViewController: UIViewController {
             defineTableViewConstraints()
             configureTableView()
             configureTableViewFooter()
-            configureBarButton()
-
-            navigationItem.title = "Marvel Comics"
 
             tableView.register(CharacterThumbnailCell.self, forCellReuseIdentifier: "TableViewCell")
         }
@@ -105,7 +106,7 @@ private extension MainViewController {
     func configureBarButton() {
 
         let favouriteBarButtonItem = UIBarButtonItem(image: UIImage(named: "icons8-heart-50 (1).png"), style: .plain, target: self, action: #selector(self.changeToFavouritesViewController))
-        self.navigationItem.leftBarButtonItem = favouriteBarButtonItem
+        self.navigationItem.rightBarButtonItem = favouriteBarButtonItem
     }
 
     @objc
@@ -151,7 +152,7 @@ extension MainViewController: FavouritesViewControllerDelegate {
 
     func sendFavouriteToMain(id: Int) {
         
-        mainViewModel.modifyFavouriteId(id: id)
+        //mainViewModel.modifyFavouriteId(id: id)
 
         self.tableView.reloadData()
     }
@@ -229,5 +230,33 @@ extension MainViewController: UITableViewDelegate {
     }
 }
 
-
+extension MainViewController: UISearchBarDelegate {
+    
+    func configureSearchBar() {
+        
+        self.navigationController?.navigationBar.tintColor = UIColor.black
+        navigationItem.titleView = searchBar
+        searchBar.delegate = self
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        
+        searchBar.text = ""
+        searchBar.showsCancelButton = false
+        self.searchBar.endEditing(true)
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
+        self.searchBar.endEditing(true)
+        print(searchBar.text)
+    }
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        
+        searchBar.showsCancelButton = true
+    }
+    
+    
+}
 

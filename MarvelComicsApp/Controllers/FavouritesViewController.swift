@@ -119,7 +119,7 @@ extension FavouritesViewController: CharacterThumbnailCellDelegate {
 
         tableView.reloadData()
 
-        //delegate?.sendFavouriteToMain(id: id)
+        delegate?.sendFavouriteToMain(id: id)
     }
 }
 
