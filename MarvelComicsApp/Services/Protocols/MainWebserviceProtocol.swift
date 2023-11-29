@@ -10,6 +10,8 @@ import Foundation
 protocol MainWebserviceProtocol {
 
     func fetchCharactersInfo() async throws -> CharactersDataWrapper?
+    
+    func fetchCharactersInfoSearch(text: String) async throws -> CharactersDataWrapper?
 
     func fetchCharactersImageData(name: String, url imageUrl: String) async throws -> Data?
 }

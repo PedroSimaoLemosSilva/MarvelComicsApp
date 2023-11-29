@@ -109,19 +109,34 @@ private extension MainViewController {
         self.navigationItem.rightBarButtonItem = favouriteBarButtonItem
     }
 
-    @objc
     func dataLoadMore() {
 
         Task {
 
             loadingMore.showSpinner()
+                
             await mainViewModel.dataLoad()
             mainViewModel.setAllFavourites()
+            
             loadingMore.hideSpinner()
             tableView.reloadData()
         }
     }
 
+    func dataLoadMoreSearch(text: String) {
+
+        Task {
+
+            loadingMore.showSpinner()
+                
+            await mainViewModel.dataLoadSearch(text: text)
+            mainViewModel.setAllFavourites()
+            
+            loadingMore.hideSpinner()
+            tableView.reloadData()
+        }
+    }
+    
     @objc
     func sendFavouriteCharacters() {
 
@@ -151,8 +166,7 @@ extension MainViewController: DetailsViewControllerDelegate {
 extension MainViewController: FavouritesViewControllerDelegate {
 
     func sendFavouriteToMain(id: Int) {
-        
-        //mainViewModel.modifyFavouriteId(id: id)
+    
 
         self.tableView.reloadData()
     }
@@ -192,13 +206,18 @@ extension MainViewController: UITableViewDataSource {
         cell.selectionStyle = .none
         cell.delegate = self
 
-        let (id, name, image, favourite) = mainViewModel.characterForRowAtImage(indexPath: indexPath)
+        let (id, name, image, favourite) = mainViewModel.characterForRowAt(indexPath: indexPath)
 
         cell.transferThumbnailData(id: id, name: name, thumbnailImage: image, favourite: favourite)
 
-        if indexPath.row == mainViewModel.characterThumbnails.count - 1 {
+        if indexPath.row == mainViewModel.characterThumbnails.count - 1 && mainViewModel.getState() == false {
 
             self.dataLoadMore()
+        }
+        
+        if indexPath.row == mainViewModel.characterThumbnailsSearch.count - 1 && mainViewModel.getState() {
+
+            self.dataLoadMoreSearch(text: "ant")
         }
         
         return cell
@@ -219,10 +238,7 @@ extension MainViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
-        guard let item = mainViewModel.characterForRowAt(indexPath: indexPath) else {
-
-            return
-        }
+        let item = mainViewModel.characterForRowAt(indexPath: indexPath)
 
         let detailsViewController = DetailsViewController(id: item.0, name: item.1, image: item.2, favourite: item.3)
         detailsViewController.delegate = self
@@ -247,9 +263,19 @@ extension MainViewController: UISearchBarDelegate {
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        
-        self.searchBar.endEditing(true)
-        print(searchBar.text)
+        Task {
+            
+            self.searchBar.endEditing(true)
+            loadingMore.showSpinner()
+            self.tableView.isHidden = true
+            self.mainViewModel.changeState()
+            if let text = searchBar.text {
+                await self.mainViewModel.dataLoadSearch(text: text)
+            }
+            loadingMore.hideSpinner()
+            self.tableView.isHidden = false
+            self.tableView.reloadData()
+        }
     }
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {

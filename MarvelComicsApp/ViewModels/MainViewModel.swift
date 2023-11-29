@@ -16,8 +16,12 @@ class MainViewModel {
     private let favouriteIds: FavouritesSet = FavouritesSet.sharedInstance
 
     lazy var characterThumbnails: [CharacterThumbnail] = []
+    
+    lazy var characterThumbnailsSearch: [CharacterThumbnail] = []
+    
+    private var searchState: Bool = false
 
-    var cache = NSCache<NSString, UIImage>()
+    //var cache = NSCache<NSString, UIImage>()
 
     init(webservice: MainWebserviceProtocol = MainWebservice(), characterThumbnails: [CharacterThumbnail] = []) {
 
@@ -26,75 +30,51 @@ class MainViewModel {
     }
 
     func numberOfRows() -> Int? {
-
-        return self.characterThumbnails.count
-    }
-
-    func characterForRowAt(indexPath: IndexPath) -> (Int, String, UIImage, Bool)? {
-
-        let id = characterThumbnails[indexPath.row].id
-        let name = characterThumbnails[indexPath.row].name
-        let image = characterThumbnails[indexPath.row].image
-        let favourite = characterThumbnails[indexPath.row].favourite
-
-        return (id, name, image, favourite)
-    }
-
-    func characterForRowAtImage(indexPath: IndexPath) -> (Int, String, UIImage, Bool) {
         
-        let id = characterThumbnails[indexPath.row].id
-        let name = characterThumbnails[indexPath.row].name
-        let image = characterThumbnails[indexPath.row].image
-        let favourite = characterThumbnails[indexPath.row].favourite
-        
-        return (id, name, image, favourite)
-        /*
-        if characterThumbnails[indexPath.row].favourite {
-
-            guard let newHeart = UIImage(named: "icons8-heart-50 (1).png") else { return nil }
-
-            if let heart = cache.object(forKey: NSString(string: name)) {
-
-                if heart.pngData() == newHeart.pngData() {
-
-                    return (id, name, image, heart)
-                } else {
-
-                    cache.setObject(newHeart, forKey: NSString(string: name))
-                    return (id, name, image, newHeart)
-                }
-            } else {
-
-                cache.setObject(newHeart, forKey: NSString(string: name))
-
-                return (id, name, image, newHeart)
-            }
+        if searchState {
+            
+            return self.characterThumbnailsSearch.count
         } else {
+            
+            return self.characterThumbnails.count
+        }
+    }
 
-            guard let newHeart = UIImage(named: "icons8-heart-50.png") else { return nil }
-
-            if let heart = cache.object(forKey: NSString(string: name)) {
-
-                if heart.pngData() == newHeart.pngData() {
-
-                    return (id, name, image, heart)
-                } else {
-
-                    cache.setObject(newHeart, forKey: NSString(string: name))
-                    return (id, name, image, newHeart)
-                }
-            } else {
-
-                cache.setObject(newHeart, forKey: NSString(string: name))
-
-                return (id, name, image, newHeart)
-            }
-        } */
+    func characterForRowAt(indexPath: IndexPath) -> (Int, String, UIImage, Bool) {
+        
+        if searchState {
+            
+            return getCharacterForRowAt(indexPath: indexPath, array: characterThumbnailsSearch)
+        } else {
+            
+            return getCharacterForRowAt(indexPath: indexPath, array: characterThumbnails)
+        }
+    }
+    
+    func getCharacterForRowAt(indexPath: IndexPath, array: [CharacterThumbnail]) -> (Int, String, UIImage, Bool) {
+        
+        let id = array[indexPath.row].id
+        let name = array[indexPath.row].name
+        let image = array[indexPath.row].image
+        let favourite = array[indexPath.row].favourite
+        
+        return (id, name, image, favourite)
     }
 
     func changeFavourite(id: Int) {
 
-        if let characterThumbnail = characterThumbnails.first(where: {$0.id == id}) {
+        if searchState {
+            
+            self.changeFavouriteForArray(id: id, array: characterThumbnailsSearch)
+        } else {
+            
+            self.changeFavouriteForArray(id: id, array: characterThumbnails)
+        }
+    }
+    
+    func changeFavouriteForArray(id: Int, array: [CharacterThumbnail]) {
+        
+        if let characterThumbnail = array.first(where: {$0.id == id}) {
 
             characterThumbnail.favourite.toggle()
 
@@ -113,29 +93,6 @@ class MainViewModel {
             } else {
 
                 favouriteIds.removeFavourite(id: id)
-            }
-        }
-    }
-
-    func modifyFavouriteId(id: Int) {
-
-        if let characterThumbnail = characterThumbnails.first(where: {$0.id == id}) {
-
-            if characterThumbnail.favourite {
-
-                favouriteIds.addFavourite(id: id)
-            } else {
-
-                favouriteIds.removeFavourite(id: id)
-            }
-        } else {
-
-            if favouriteIds.containsFavourite(id: id) {
-
-                favouriteIds.removeFavourite(id: id)
-            } else {
-
-                favouriteIds.addFavourite(id: id)
             }
         }
     }
@@ -162,15 +119,69 @@ class MainViewModel {
 
                 let characterThumbnail = CharacterThumbnail(id: id, name: name, image: image, favourite: false)
 
-                characterThumbnails.append(characterThumbnail)
+                if searchState {
+                    
+                    self.characterThumbnailsSearch.append(characterThumbnail)
+                } else {
+                    
+                    self.characterThumbnails.append(characterThumbnail)
+                }
+            }
+        } catch { print(error) }
+    }
+    
+    func dataLoadSearch(text: String) async {
+        
+        do {
+
+            guard let characterDataWrapper = try await webservice.fetchCharactersInfoSearch(text: text),
+                  let charactersData = characterDataWrapper.data?.results else { return }
+
+            for character in charactersData {
+
+                guard let id = character.id,
+                      let name = character.name,
+                      let path = character.thumbnail?.path,
+                      let ext = character.thumbnail?.extension0 else { return }
+
+                let imageUrl = path + "." + ext
+
+                guard let imageData = try await webservice.fetchCharactersImageData(name: name,url: imageUrl) else { return }
+
+                guard let image = UIImage(data: imageData) else { return }
+
+                let characterThumbnail = CharacterThumbnail(id: id, name: name, image: image, favourite: false)
+
+                if searchState {
+                    
+                    self.characterThumbnailsSearch.append(characterThumbnail)
+                } else {
+                    
+                    self.characterThumbnails.append(characterThumbnail)
+                }
             }
         } catch { print(error) }
     }
 
     func filterFavourites() -> [CharacterThumbnail] {
 
-        let favouriteThumbnails = characterThumbnails.filter { characterThumbnail in
+        var favouriteThumbnails = filterFavouritesFromArray(array: characterThumbnails)
+        
+        var favouriteThumbnailsSearch: [CharacterThumbnail] = []
+        if searchState {
+            
+            favouriteThumbnailsSearch = filterFavouritesFromArray(array: characterThumbnailsSearch)
+        }
+        
+        favouriteThumbnails.append(contentsOf: favouriteThumbnailsSearch)
+        
+        return favouriteThumbnails
+    }
 
+    func filterFavouritesFromArray(array: [CharacterThumbnail]) -> [CharacterThumbnail] {
+        
+        return array.filter { characterThumbnail in
+            
             if characterThumbnail.favourite {
 
                 return true
@@ -179,10 +190,7 @@ class MainViewModel {
                 return false
             }
         }
-
-        return favouriteThumbnails
     }
-
 
     func loadAllFavourites() {
         
@@ -199,10 +207,19 @@ class MainViewModel {
     func setAllFavourites() {
 
         favouriteIds.getFavourites().forEach { id in
+            
+            if searchState {
+                
+                if let characterThumbnail = characterThumbnailsSearch.first(where: {$0.id == id}) {
 
-            if let characterThumbnail = characterThumbnails.first(where: {$0.id == id}) {
+                    characterThumbnail.favourite = true
+                }
+            } else {
+                
+                if let characterThumbnail = characterThumbnails.first(where: {$0.id == id}) {
 
-                characterThumbnail.favourite = true
+                    characterThumbnail.favourite = true
+                }
             }
         }
     }
@@ -216,5 +233,15 @@ class MainViewModel {
     func getFavourites() -> Set<Int> {
 
         return self.favouriteIds.getFavourites()
+    }
+    
+    func changeState() {
+        
+        self.searchState.toggle()
+    }
+    
+    func getState() -> Bool {
+        
+        return self.searchState
     }
 }

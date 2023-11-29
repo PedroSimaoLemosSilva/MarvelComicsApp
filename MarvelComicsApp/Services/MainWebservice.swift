@@ -10,29 +10,39 @@ import Foundation
 class MainWebservice: MainWebserviceProtocol {
 
     private var offset = 0
+    
+    private var searchOffset = 0
 
     private var urls = Urls()
 
-    // fetches the characters names and thumbnail images into a sorted dictionary
-    // where the names are the keys and the full image paths are the values
     func fetchCharactersInfo() async throws -> CharactersDataWrapper? {
 
         let url: URL
-        if self.offset == 0 {
 
-            guard let newUrl = Urls.charactersFirstLoadUrl else {
+        guard let newUrl = urls.getCharactersUrl(offset: self.offset) else {
 
-                return nil
-            }
-            url = newUrl
-        } else {
-
-            guard let newUrl = urls.getCharactersLoadMoreUrl(offset: self.offset) else {
-
-                return nil
-            }
-            url = newUrl
+            return nil
         }
+        url = newUrl
+
+        let (data, _) = try await URLSession.shared.data(from: url)
+
+        let characterDataWrapper = try? JSONDecoder().decode(CharactersDataWrapper.self, from: data)
+
+        self.offset += 20
+
+        return characterDataWrapper
+    }
+    
+    func fetchCharactersInfoSearch(text: String) async throws -> CharactersDataWrapper? {
+        
+        let url: URL
+
+        guard let newUrl = urls.getCharactersUrlSearch(text: text, offset: self.searchOffset) else {
+
+            return nil
+        }
+        url = newUrl
 
         let (data, _) = try await URLSession.shared.data(from: url)
 

@@ -18,9 +18,15 @@ class Urls {
 
     static let charactersFirstLoadUrl: URL? = URL(string: "https://gateway.marvel.com/v1/public/characters?limit=20&ts=\(apiTime)&apikey=\(apiPublicKey)&hash=\(apiHash)")
 
-    func getCharactersLoadMoreUrl(offset: Int) -> URL? {
+    func getCharactersUrl(offset: Int) -> URL? {
 
         let url = URL(string: "https://gateway.marvel.com/v1/public/characters?limit=20&offset=\(offset)&ts=\(Urls.apiTime)&apikey=\(Urls.apiPublicKey)&hash=\(Urls.apiHash)")
+        return url
+    }
+    
+    func getCharactersUrlSearch(text: String,offset: Int) -> URL? {
+
+        let url = URL(string: "https://gateway.marvel.com/v1/public/characters?nameStartsWith=\(text)&limit=20&offset=\(offset)&ts=\(Urls.apiTime)&apikey=\(Urls.apiPublicKey)&hash=\(Urls.apiHash)")
         return url
     }
 
