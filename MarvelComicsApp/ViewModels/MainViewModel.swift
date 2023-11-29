@@ -19,6 +19,8 @@ class MainViewModel {
     
     lazy var characterThumbnailsSearch: [CharacterThumbnail] = []
     
+    private var text: String = ""
+    
     private var searchState: Bool = false
 
     //var cache = NSCache<NSString, UIImage>()
@@ -100,10 +102,10 @@ class MainViewModel {
     func dataLoad() async {
         
         do {
-
+            
             guard let characterDataWrapper = try await webservice.fetchCharactersInfo(),
                   let charactersData = characterDataWrapper.data?.results else { return }
-
+            
             for character in charactersData {
 
                 guard let id = character.id,
@@ -130,11 +132,11 @@ class MainViewModel {
         } catch { print(error) }
     }
     
-    func dataLoadSearch(text: String) async {
+    func dataLoadSearch() async {
         
         do {
 
-            guard let characterDataWrapper = try await webservice.fetchCharactersInfoSearch(text: text),
+            guard let characterDataWrapper = try await webservice.fetchCharactersInfoSearch(text: self.text),
                   let charactersData = characterDataWrapper.data?.results else { return }
 
             for character in charactersData {
@@ -244,4 +246,10 @@ class MainViewModel {
         
         return self.searchState
     }
+    
+    func setText(text: String) {
+        
+        self.text = text
+    }
 }
+

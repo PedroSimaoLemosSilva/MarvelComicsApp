@@ -123,13 +123,13 @@ private extension MainViewController {
         }
     }
 
-    func dataLoadMoreSearch(text: String) {
+    func dataLoadMoreSearch() {
 
         Task {
 
             loadingMore.showSpinner()
                 
-            await mainViewModel.dataLoadSearch(text: text)
+            await mainViewModel.dataLoadSearch()
             mainViewModel.setAllFavourites()
             
             loadingMore.hideSpinner()
@@ -166,7 +166,6 @@ extension MainViewController: DetailsViewControllerDelegate {
 extension MainViewController: FavouritesViewControllerDelegate {
 
     func sendFavouriteToMain(id: Int) {
-    
 
         self.tableView.reloadData()
     }
@@ -217,7 +216,7 @@ extension MainViewController: UITableViewDataSource {
         
         if indexPath.row == mainViewModel.characterThumbnailsSearch.count - 1 && mainViewModel.getState() {
 
-            self.dataLoadMoreSearch(text: "ant")
+            self.dataLoadMoreSearch()
         }
         
         return cell
@@ -265,14 +264,17 @@ extension MainViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         Task {
             
+            self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .redo, target: self, action: #selector(self.changeToFavouritesViewController))
+            
             self.searchBar.endEditing(true)
-            loadingMore.showSpinner()
+            loadingScreen.showSpinner()
             self.tableView.isHidden = true
             self.mainViewModel.changeState()
             if let text = searchBar.text {
-                await self.mainViewModel.dataLoadSearch(text: text)
+                self.mainViewModel.setText(text: text)
+                await self.mainViewModel.dataLoadSearch()
             }
-            loadingMore.hideSpinner()
+            loadingScreen.hideSpinner()
             self.tableView.isHidden = false
             self.tableView.reloadData()
         }
@@ -282,7 +284,5 @@ extension MainViewController: UISearchBarDelegate {
         
         searchBar.showsCancelButton = true
     }
-    
-    
 }
 

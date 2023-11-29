@@ -24,13 +24,13 @@ class MainWebservice: MainWebserviceProtocol {
             return nil
         }
         url = newUrl
-
+        
         let (data, _) = try await URLSession.shared.data(from: url)
 
         let characterDataWrapper = try? JSONDecoder().decode(CharactersDataWrapper.self, from: data)
 
         self.offset += 20
-
+        
         return characterDataWrapper
     }
     
@@ -48,7 +48,7 @@ class MainWebservice: MainWebserviceProtocol {
 
         let characterDataWrapper = try? JSONDecoder().decode(CharactersDataWrapper.self, from: data)
 
-        self.offset += 20
+        self.searchOffset += 20
 
         return characterDataWrapper
     }
