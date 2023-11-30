@@ -135,10 +135,10 @@ class MainViewModel {
     func dataLoadSearch() async {
         
         do {
-
+            
             guard let characterDataWrapper = try await webservice.fetchCharactersInfoSearch(text: self.text),
                   let charactersData = characterDataWrapper.data?.results else { return }
-
+            
             for character in charactersData {
 
                 guard let id = character.id,
@@ -211,10 +211,11 @@ class MainViewModel {
         favouriteIds.getFavourites().forEach { id in
             
             if searchState {
-                
+                print(characterThumbnailsSearch)
                 if let characterThumbnail = characterThumbnailsSearch.first(where: {$0.id == id}) {
-
+                    
                     characterThumbnail.favourite = true
+                    
                 }
             } else {
                 
@@ -250,6 +251,12 @@ class MainViewModel {
     func setText(text: String) {
         
         self.text = text
+    }
+    
+    func resetCharacterThumbnailsSearch() {
+        
+        self.characterThumbnailsSearch = []
+        self.webservice.resetSearchOffset()
     }
 }
 

@@ -14,6 +14,10 @@ class MockedMainWebservice: MainWebserviceProtocol {
     var fetchCharactersInfoSearchMockResult: CharactersDataWrapper?
 
     var fetchCharactersImageData: Data?
+    
+    func resetSearchOffset() {
+        
+    }
 
     func fetchCharactersInfo() async throws -> CharactersDataWrapper? {
 

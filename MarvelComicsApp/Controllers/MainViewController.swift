@@ -150,6 +150,14 @@ private extension MainViewController {
         favouritesViewController.delegate = self
         navigationController?.pushViewController(favouritesViewController, animated: false)
     }
+    
+    @objc
+    func exitSearchTable() {
+
+        self.mainViewModel.changeState()
+        self.mainViewModel.resetCharacterThumbnailsSearch()
+        self.tableView.reloadData()
+    }
 }
 
 extension MainViewController: DetailsViewControllerDelegate {
@@ -264,7 +272,7 @@ extension MainViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         Task {
             
-            self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .redo, target: self, action: #selector(self.changeToFavouritesViewController))
+            self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .undo, target: self, action: #selector(self.exitSearchTable))
             
             self.searchBar.endEditing(true)
             loadingScreen.showSpinner()
@@ -273,6 +281,7 @@ extension MainViewController: UISearchBarDelegate {
             if let text = searchBar.text {
                 self.mainViewModel.setText(text: text)
                 await self.mainViewModel.dataLoadSearch()
+                self.mainViewModel.setAllFavourites()
             }
             loadingScreen.hideSpinner()
             self.tableView.isHidden = false

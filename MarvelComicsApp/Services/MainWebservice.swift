@@ -15,6 +15,11 @@ class MainWebservice: MainWebserviceProtocol {
 
     private var urls = Urls()
 
+    func resetSearchOffset() {
+        
+        self.searchOffset = 0
+    }
+    
     func fetchCharactersInfo() async throws -> CharactersDataWrapper? {
 
         let url: URL

@@ -8,6 +8,8 @@
 import Foundation
 
 protocol MainWebserviceProtocol {
+    
+    func resetSearchOffset()
 
     func fetchCharactersInfo() async throws -> CharactersDataWrapper?
     
