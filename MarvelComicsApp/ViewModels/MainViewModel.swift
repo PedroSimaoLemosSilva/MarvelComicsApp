@@ -23,6 +23,10 @@ class MainViewModel {
     
     private var searchState: Bool = false
 
+    private var doneLoaded: Bool = false
+
+    private var doneLoadedSearch: Bool = false
+
     //var cache = NSCache<NSString, UIImage>()
 
     init(webservice: MainWebserviceProtocol = MainWebservice(), characterThumbnails: [CharacterThumbnail] = []) {
@@ -48,7 +52,7 @@ class MainViewModel {
             
             return getCharacterForRowAt(indexPath: indexPath, array: characterThumbnailsSearch)
         } else {
-            
+
             return getCharacterForRowAt(indexPath: indexPath, array: characterThumbnails)
         }
     }
@@ -105,7 +109,27 @@ class MainViewModel {
             
             guard let characterDataWrapper = try await webservice.fetchCharactersInfo(),
                   let charactersData = characterDataWrapper.data?.results else { return }
-            
+
+            if searchState {
+
+                if charactersData.count == 0 {
+
+                    self.doneLoadedSearch = true
+                } else {
+
+                    self.doneLoadedSearch = false
+                }
+            } else {
+
+                if charactersData.count == 0 {
+
+                    self.doneLoaded = true
+                } else {
+
+                    self.doneLoaded = false
+                }
+            }
+
             for character in charactersData {
 
                 guard let id = character.id,
@@ -114,12 +138,24 @@ class MainViewModel {
                       let ext = character.thumbnail?.extension0 else { return }
 
                 let imageUrl = path + "." + ext
+                
+                var auxImage = UIImage()
 
-                guard let imageData = try await webservice.fetchCharactersImageData(name: name,url: imageUrl) else { return }
+                if imageUrl == "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg" {
 
-                guard let image = UIImage(data: imageData) else { return }
+                    guard let image = UIImage(named: "place-holder") else { return }
 
-                let characterThumbnail = CharacterThumbnail(id: id, name: name, image: image, favourite: false)
+                    auxImage = image
+                } else {
+
+                    guard let imageData = try await webservice.fetchCharactersImageData(name: name,url: imageUrl) else { return }
+
+                    guard let image = UIImage(data: imageData) else { return }
+
+                    auxImage = image
+                }
+
+                let characterThumbnail = CharacterThumbnail(id: id, name: name, image: auxImage, favourite: false)
 
                 if searchState {
                     
@@ -138,7 +174,28 @@ class MainViewModel {
             
             guard let characterDataWrapper = try await webservice.fetchCharactersInfoSearch(text: self.text),
                   let charactersData = characterDataWrapper.data?.results else { return }
-            
+
+            if searchState {
+
+                if charactersData.count == 0 {
+                    
+                    self.doneLoadedSearch = true
+                
+                } else {
+
+                    self.doneLoadedSearch = false
+                }
+            } else {
+
+                if charactersData.count == 0 {
+
+                    self.doneLoaded = true
+                } else {
+
+                    self.doneLoaded = false
+                }
+            }
+            //print(charactersData)
             for character in charactersData {
 
                 guard let id = character.id,
@@ -148,11 +205,23 @@ class MainViewModel {
 
                 let imageUrl = path + "." + ext
 
-                guard let imageData = try await webservice.fetchCharactersImageData(name: name,url: imageUrl) else { return }
+                var auxImage = UIImage()
 
-                guard let image = UIImage(data: imageData) else { return }
+                if imageUrl == "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg" {
 
-                let characterThumbnail = CharacterThumbnail(id: id, name: name, image: image, favourite: false)
+                    guard let image = UIImage(named: "place-holder") else { return }
+
+                    auxImage = image
+                } else {
+
+                    guard let imageData = try await webservice.fetchCharactersImageData(name: name,url: imageUrl) else { return }
+
+                    guard let image = UIImage(data: imageData) else { return }
+
+                    auxImage = image
+                }
+
+                let characterThumbnail = CharacterThumbnail(id: id, name: name, image: auxImage, favourite: false)
 
                 if searchState {
                     
@@ -211,7 +280,7 @@ class MainViewModel {
         favouriteIds.getFavourites().forEach { id in
             
             if searchState {
-                print(characterThumbnailsSearch)
+                //print(characterThumbnailsSearch)
                 if let characterThumbnail = characterThumbnailsSearch.first(where: {$0.id == id}) {
                     
                     characterThumbnail.favourite = true
@@ -257,6 +326,26 @@ class MainViewModel {
         
         self.characterThumbnailsSearch = []
         self.webservice.resetSearchOffset()
+    }
+
+    func getDoneLoaded() -> Bool {
+
+        return self.doneLoaded
+    }
+
+    func getDoneLoadedSearch() -> Bool {
+
+        return self.doneLoadedSearch
+    }
+
+    func setDoneLoaded(doneLoaded: Bool){
+
+        self.doneLoaded = doneLoaded
+    }
+
+    func setDoneLoadedSearch(doneLoadedSearch: Bool) {
+
+         self.doneLoadedSearch = doneLoadedSearch
     }
 }
 

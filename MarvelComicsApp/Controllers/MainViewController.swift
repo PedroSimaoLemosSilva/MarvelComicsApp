@@ -18,6 +18,8 @@ class MainViewController: UIViewController {
     
     private let searchBar = UISearchBar()
 
+    var searchTimer: Timer? = Timer()
+
     override func viewDidLoad() {
 
         super.viewDidLoad()
@@ -27,7 +29,7 @@ class MainViewController: UIViewController {
             self.view.backgroundColor = .white
             
             configureSearchBar()
-            configureBarButton()
+            configureBarButtons()
            
             configureLoadingView()
             loadingScreen.showSpinner()
@@ -103,10 +105,12 @@ private extension MainViewController {
 
     }
 
-    func configureBarButton() {
+    func configureBarButtons() {
 
         let favouriteBarButtonItem = UIBarButtonItem(image: UIImage(named: "icons8-heart-50 (1).png"), style: .plain, target: self, action: #selector(self.changeToFavouritesViewController))
         self.navigationItem.rightBarButtonItem = favouriteBarButtonItem
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .undo, target: self, action: #selector(self.exitSearchTable))
+        self.navigationItem.leftBarButtonItem?.isEnabled = false
     }
 
     func dataLoadMore() {
@@ -124,7 +128,7 @@ private extension MainViewController {
     }
 
     func dataLoadMoreSearch() {
-
+        
         Task {
 
             loadingMore.showSpinner()
@@ -155,7 +159,9 @@ private extension MainViewController {
     func exitSearchTable() {
 
         self.mainViewModel.changeState()
+        self.mainViewModel.setDoneLoadedSearch(doneLoadedSearch: false)
         self.mainViewModel.resetCharacterThumbnailsSearch()
+        self.navigationItem.leftBarButtonItem?.isEnabled = false
         self.tableView.reloadData()
     }
 }
@@ -217,12 +223,12 @@ extension MainViewController: UITableViewDataSource {
 
         cell.transferThumbnailData(id: id, name: name, thumbnailImage: image, favourite: favourite)
 
-        if indexPath.row == mainViewModel.characterThumbnails.count - 1 && mainViewModel.getState() == false {
-
+        if indexPath.row == mainViewModel.characterThumbnails.count - 1 && mainViewModel.getState() == false && mainViewModel.getDoneLoaded() == false {
+            
             self.dataLoadMore()
         }
         
-        if indexPath.row == mainViewModel.characterThumbnailsSearch.count - 1 && mainViewModel.getState() {
+        if indexPath.row == mainViewModel.characterThumbnailsSearch.count - 1 && mainViewModel.getState() && mainViewModel.getDoneLoadedSearch() == false {
 
             self.dataLoadMoreSearch()
         }
@@ -270,19 +276,26 @@ extension MainViewController: UISearchBarDelegate {
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+
         Task {
-            
-            self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .undo, target: self, action: #selector(self.exitSearchTable))
-            
+
+            self.searchTimer?.invalidate()
+            self.navigationItem.leftBarButtonItem?.isEnabled = true
             self.searchBar.endEditing(true)
             loadingScreen.showSpinner()
             self.tableView.isHidden = true
-            self.mainViewModel.changeState()
+            if self.mainViewModel.getState() == false {
+
+                self.mainViewModel.changeState()
+            }
             if let text = searchBar.text {
+
+                self.mainViewModel.resetCharacterThumbnailsSearch()
                 self.mainViewModel.setText(text: text)
                 await self.mainViewModel.dataLoadSearch()
                 self.mainViewModel.setAllFavourites()
             }
+            
             loadingScreen.hideSpinner()
             self.tableView.isHidden = false
             self.tableView.reloadData()
@@ -292,6 +305,30 @@ extension MainViewController: UISearchBarDelegate {
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         
         searchBar.showsCancelButton = true
+    }
+
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+
+        self.searchTimer?.invalidate()
+        self.navigationItem.leftBarButtonItem?.isEnabled = true
+        searchTimer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false, block: { [weak self] (timer) in
+        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
+
+
+            if self?.mainViewModel.getState() == false {
+
+                self?.mainViewModel.changeState()
+            }
+            Task {
+                
+                self?.mainViewModel.resetCharacterThumbnailsSearch()
+                self?.mainViewModel.setText(text: searchText)
+                await self?.mainViewModel.dataLoadSearch()
+                self?.mainViewModel.setAllFavourites()
+                self?.tableView.reloadData()
+            }
+        }
+        })
     }
 }
 
