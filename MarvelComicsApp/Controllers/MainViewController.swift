@@ -277,7 +277,13 @@ extension MainViewController: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
 
-        Task {
+        if let task = self.mainViewModel.task {
+
+            task.cancel()
+            self.mainViewModel.task = nil
+        }
+
+        self.mainViewModel.task = Task {
 
             self.searchTimer?.invalidate()
             self.navigationItem.leftBarButtonItem?.isEnabled = true
@@ -312,22 +318,30 @@ extension MainViewController: UISearchBarDelegate {
         self.searchTimer?.invalidate()
         self.navigationItem.leftBarButtonItem?.isEnabled = true
         searchTimer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false, block: { [weak self] (timer) in
-        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
+            DispatchQueue.main.async { [weak self] in
 
+                print(Thread.current)
+                if self?.mainViewModel.getState() == false {
 
-            if self?.mainViewModel.getState() == false {
+                    self?.mainViewModel.changeState()
+                }
 
-                self?.mainViewModel.changeState()
+                if let task = self?.mainViewModel.task {
+
+                    task.cancel()
+                    self?.mainViewModel.task = nil
+                }
+
+                self?.mainViewModel.task = Task {
+
+                    self?.mainViewModel.resetCharacterThumbnailsSearch()
+                    self?.mainViewModel.setText(text: searchText)
+                    await self?.mainViewModel.dataLoadSearch()
+                    print("loaded")
+                    self?.mainViewModel.setAllFavourites()
+                    self?.tableView.reloadData()
+                }
             }
-            Task {
-                
-                self?.mainViewModel.resetCharacterThumbnailsSearch()
-                self?.mainViewModel.setText(text: searchText)
-                await self?.mainViewModel.dataLoadSearch()
-                self?.mainViewModel.setAllFavourites()
-                self?.tableView.reloadData()
-            }
-        }
         })
     }
 }

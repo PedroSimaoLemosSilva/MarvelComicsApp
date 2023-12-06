@@ -27,6 +27,8 @@ class MainViewModel {
 
     private var doneLoadedSearch: Bool = false
 
+    var task: Task<(), Never>? = nil
+
     //var cache = NSCache<NSString, UIImage>()
 
     init(webservice: MainWebserviceProtocol = MainWebservice(), characterThumbnails: [CharacterThumbnail] = []) {
@@ -166,8 +168,11 @@ class MainViewModel {
                 }
             }
         } catch { print(error) }
+
+        //characterThumbnails.sort(by: { $0.name < $1.name })
     }
-    
+
+    @MainActor
     func dataLoadSearch() async {
         
         do {
@@ -232,6 +237,8 @@ class MainViewModel {
                 }
             }
         } catch { print(error) }
+
+        //characterThumbnails.sort(by: { $0.name < $1.name })
     }
 
     func filterFavourites() -> [CharacterThumbnail] {
@@ -323,9 +330,10 @@ class MainViewModel {
     }
     
     func resetCharacterThumbnailsSearch() {
-        
+
         self.characterThumbnailsSearch = []
         self.webservice.resetSearchOffset()
+        print("reset")
     }
 
     func getDoneLoaded() -> Bool {
@@ -346,6 +354,24 @@ class MainViewModel {
     func setDoneLoadedSearch(doneLoadedSearch: Bool) {
 
          self.doneLoadedSearch = doneLoadedSearch
+    }
+
+    func runLoad(text: String) {
+
+        if let task = self.task {
+
+            task.cancel()
+            self.task = nil
+        }
+
+        self.task = Task {
+
+            self.resetCharacterThumbnailsSearch()
+            self.setText(text: text)
+            await self.dataLoadSearch()
+            print("loaded")
+            self.setAllFavourites()
+        }
     }
 }
 
