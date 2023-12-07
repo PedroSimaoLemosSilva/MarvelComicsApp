@@ -38,8 +38,9 @@ class MainViewController: UIViewController {
             mainViewModel.loadAllFavourites()
 
             loadingScreen.hideSpinner()
-
+            self.searchBar.isEnabled = true
             tableView.reloadData()
+
             addTableView()
             defineTableViewConstraints()
             configureTableView()
@@ -109,20 +110,22 @@ private extension MainViewController {
 
         let favouriteBarButtonItem = UIBarButtonItem(image: UIImage(named: "icons8-heart-50 (1).png"), style: .plain, target: self, action: #selector(self.changeToFavouritesViewController))
         self.navigationItem.rightBarButtonItem = favouriteBarButtonItem
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .undo, target: self, action: #selector(self.exitSearchTable))
-        self.navigationItem.leftBarButtonItem?.isEnabled = false
+        //self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .undo, target: self, action: #selector(self.exitSearchTable))
+        //self.navigationItem.leftBarButtonItem?.isEnabled = false
     }
 
     func dataLoadMore() {
 
         Task {
 
+            self.searchBar.isEnabled = false
             loadingMore.showSpinner()
                 
             await mainViewModel.dataLoad()
             mainViewModel.setAllFavourites()
             
             loadingMore.hideSpinner()
+            self.searchBar.isEnabled = true
             tableView.reloadData()
         }
     }
@@ -154,14 +157,16 @@ private extension MainViewController {
         favouritesViewController.delegate = self
         navigationController?.pushViewController(favouritesViewController, animated: false)
     }
-    
-    @objc
+
     func exitSearchTable() {
 
-        self.mainViewModel.changeState()
+        if self.mainViewModel.getState() {
+
+            self.mainViewModel.changeState()
+        }
         self.mainViewModel.setDoneLoadedSearch(doneLoadedSearch: false)
         self.mainViewModel.resetCharacterThumbnailsSearch()
-        self.navigationItem.leftBarButtonItem?.isEnabled = false
+        //self.navigationItem.leftBarButtonItem?.isEnabled = false
         self.tableView.reloadData()
     }
 }
@@ -265,12 +270,14 @@ extension MainViewController: UISearchBarDelegate {
         
         self.navigationController?.navigationBar.tintColor = UIColor.black
         navigationItem.titleView = searchBar
+        self.searchBar.isEnabled = false
         searchBar.delegate = self
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         
         searchBar.text = ""
+        exitSearchTable()
         searchBar.showsCancelButton = false
         self.searchBar.endEditing(true)
     }
