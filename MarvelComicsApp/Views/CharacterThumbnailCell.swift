@@ -76,7 +76,7 @@ extension CharacterThumbnailCell {
 
         image.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            image.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
+            image.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 2),
             image.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor),
             image.topAnchor.constraint(equalTo: self.contentView.topAnchor),
             image.widthAnchor.constraint(equalToConstant: 125),

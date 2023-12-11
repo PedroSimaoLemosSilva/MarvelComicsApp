@@ -22,11 +22,12 @@ class FavouritesViewModel {
     var cache = NSCache<NSString, UIImage>()
 
     init(webservice: FavouritesWebserviceProtocol = FavouritesWebservice(), characterThumbnails: [CharacterThumbnail] = [],
-         characterThumbnailsDeleted: [CharacterThumbnail] = [], favouritesIdNotLoaded: Set<Int> = []) {
+         characterThumbnailsDeleted: [CharacterThumbnail] = [], favouriteIds: Set<Int> = [], favouritesIdNotLoaded: Set<Int> = []) {
 
         self.webservice = webservice
         self.characterThumbnails = characterThumbnails
         self.characterThumbnailsDeleted = characterThumbnailsDeleted
+        self.favouriteIds.setFavourites(favourites: favouriteIds)
         self.favouritesIdNotLoaded = favouritesIdNotLoaded
     }
 

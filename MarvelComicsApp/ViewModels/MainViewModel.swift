@@ -31,10 +31,18 @@ class MainViewModel {
 
     //var cache = NSCache<NSString, UIImage>()
 
-    init(webservice: MainWebserviceProtocol = MainWebservice(), characterThumbnails: [CharacterThumbnail] = []) {
+    init(webservice: MainWebserviceProtocol = MainWebservice(), favouriteIds : Set<Int> = [], characterThumbnails: [CharacterThumbnail] = [],
+         characterThumbnailsSearch: [CharacterThumbnail] = [], text: String = "", searchState: Bool = false, doneLoaded: Bool = false, doneLoadedSearch: Bool = false, task: Task<(), Never>? = nil) {
 
         self.webservice = webservice
+        self.favouriteIds.setFavourites(favourites: favouriteIds)
         self.characterThumbnails = characterThumbnails
+        self.characterThumbnailsSearch = characterThumbnailsSearch
+        self.text = text
+        self.searchState = searchState
+        self.doneLoaded = doneLoaded
+        self.doneLoadedSearch = doneLoadedSearch
+        self.task = task
     }
 
     func numberOfRows() -> Int? {
@@ -200,7 +208,7 @@ class MainViewModel {
                     self.doneLoaded = false
                 }
             }
-            //print(charactersData)
+
             for character in charactersData {
 
                 guard let id = character.id,
@@ -287,7 +295,7 @@ class MainViewModel {
         favouriteIds.getFavourites().forEach { id in
             
             if searchState {
-                //print(characterThumbnailsSearch)
+
                 if let characterThumbnail = characterThumbnailsSearch.first(where: {$0.id == id}) {
                     
                     characterThumbnail.favourite = true
@@ -323,7 +331,12 @@ class MainViewModel {
         
         return self.searchState
     }
-    
+
+    func getText() -> String {
+
+        return self.text
+    }
+
     func setText(text: String) {
         
         self.text = text
@@ -333,7 +346,6 @@ class MainViewModel {
 
         self.characterThumbnailsSearch = []
         self.webservice.resetSearchOffset()
-        print("reset")
     }
 
     func getDoneLoaded() -> Bool {
@@ -354,24 +366,6 @@ class MainViewModel {
     func setDoneLoadedSearch(doneLoadedSearch: Bool) {
 
          self.doneLoadedSearch = doneLoadedSearch
-    }
-
-    func runLoad(text: String) {
-
-        if let task = self.task {
-
-            task.cancel()
-            self.task = nil
-        }
-
-        self.task = Task {
-
-            self.resetCharacterThumbnailsSearch()
-            self.setText(text: text)
-            await self.dataLoadSearch()
-            print("loaded")
-            self.setAllFavourites()
-        }
     }
 }
 

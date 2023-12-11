@@ -12,9 +12,21 @@ final class MainViewModelTests: XCTestCase {
 
     var service: MockedMainWebservice!
 
+    var favouritesId: Set<Int>!
+
     var data: [CharacterThumbnail]!
 
-    var favouritesId: [Int]!
+    var searchData: [CharacterThumbnail]!
+
+    var text: String!
+
+    var searchState: Bool!
+
+    var doneLoaded: Bool!
+
+    var doneLoadedSearch: Bool!
+
+    var task: Task<(), Never>!
 
     var viewModel: MainViewModel!
 
@@ -22,15 +34,28 @@ final class MainViewModelTests: XCTestCase {
 
         try super.setUpWithError()
         self.service = MockedMainWebservice()
+        self.searchData = [CharacterThumbnail(id: 10, name: "Insonias", image: UIImage(), favourite: true), CharacterThumbnail(id: 11, name: "Intacto", image: UIImage(), favourite: false), CharacterThumbnail(id: 12, name: "Interno", image: UIImage(), favourite: false)]
         self.data = [CharacterThumbnail(id: 1, name: "Bruno Aleixo", image: UIImage(), favourite: true), CharacterThumbnail(id: 2, name: "Bussaco", image: UIImage(), favourite: false), CharacterThumbnail(id: 3, name: "Renato", image: UIImage(), favourite: false)]
-        self.favouritesId = [3]
-        self.viewModel = MainViewModel(webservice: self.service, characterThumbnails: self.data, favouriteId: self.favouritesId)
+        self.favouritesId = [1, 10, 11]
+        self.text = "In"
+        self.searchState = true
+        self.doneLoaded = true
+        self.doneLoadedSearch = true
+        self.task = nil
+        self.viewModel = MainViewModel(webservice: self.service, favouriteIds: self.favouritesId, characterThumbnails: self.data, characterThumbnailsSearch: self.searchData, text: self.text, searchState: self.searchState, doneLoaded: self.doneLoaded, doneLoadedSearch: self.doneLoadedSearch, task: self.task)
     }
 
     override func tearDownWithError() throws {
 
         self.service = nil
+        self.searchData = nil
         self.data = nil
+        self.favouritesId = nil
+        self.text = nil
+        self.searchState = nil
+        self.doneLoaded = nil
+        self.doneLoadedSearch = nil
+        self.task = nil
         self.viewModel = nil
         try super.tearDownWithError()
     }
@@ -48,24 +73,64 @@ final class MainViewModelTests: XCTestCase {
 
         let indexPath = IndexPath(row: 1, section: 0)
 
-        let expectedId = viewModel.characterThumbnails[indexPath.row].id
-        let expectedName = viewModel.characterThumbnails[indexPath.row].name
-        let expectedImage = viewModel.characterThumbnails[indexPath.row].image
+        let expectedId = viewModel.characterThumbnailsSearch[indexPath.row].id
+        let expectedName = viewModel.characterThumbnailsSearch[indexPath.row].name
+        let expectedImage = viewModel.characterThumbnailsSearch[indexPath.row].image
+        let expectedFavourite = viewModel.characterThumbnailsSearch[indexPath.row].favourite
 
-        guard let result = viewModel.characterForRowAt(indexPath: indexPath) else {
-
-            return
-        }
+        let result = viewModel.characterForRowAt(indexPath: indexPath)
 
         XCTAssertEqual(expectedId, result.0)
         XCTAssertEqual(expectedName, result.1)
         XCTAssertEqual(expectedImage, result.2)
+        XCTAssertEqual(expectedFavourite, result.3)
+    }
+
+    func testChangeFavourite() {
+
+        let id = 12
+
+        let expectedFavourite = true
+
+        viewModel.changeFavourite(id: id)
+
+        let result = viewModel.characterThumbnailsSearch[2].favourite
+
+        XCTAssertEqual(expectedFavourite, result)
+    }
+
+    func testChangeFavouriteForData() {
+
+        let id = 3
+
+        let expectedFavourite = true
+
+        viewModel.changeFavouriteForArray(id: id, array: self.data)
+
+        let result = data[2].favourite
+
+        XCTAssertEqual(expectedFavourite, result)
+    }
+
+    func testChangeFavouriteForSearchData() {
+
+        let id = 12
+
+        let expectedFavourite = true
+
+        viewModel.changeFavouriteForArray(id: id, array: self.searchData)
+
+        let result = searchData[2].favourite
+
+        XCTAssertEqual(expectedFavourite, result)
     }
 
     func testDataLoadOnFetchSuccess() async throws {
 
+        self.viewModel.changeState()
+
         let characterDataWrapper = CharactersDataWrapper(data: CharactersDataContainer(
-            results: [Character(id: 1, name: "Capitão Falcão", thumbnail: Image(path: "123", extension0: ".jpg"))]))
+            results: [Character(id: 5, name: "Capitão Falcão", thumbnail: Image(path: "123", extension0: ".jpg"))]))
         self.service.fetchCharactersInfoMockResult = characterDataWrapper
 
         var imageData = Data()
@@ -77,12 +142,15 @@ final class MainViewModelTests: XCTestCase {
         await viewModel.dataLoad()
 
         XCTAssertEqual(viewModel.characterThumbnails.count, 4)
-        XCTAssertEqual(viewModel.characterThumbnails[3].id, 1)
+        XCTAssertEqual(viewModel.characterThumbnails[3].id, 5)
         XCTAssertEqual(viewModel.characterThumbnails[3].name, "Capitão Falcão")
         XCTAssertEqual(viewModel.characterThumbnails[3].image.pngData(), UIImage(data: imageData)?.pngData())
+        XCTAssertEqual(viewModel.characterThumbnails[3].favourite, false)
     }
 
     func testDataLoadOnFetchFailure() async throws {
+
+        self.viewModel.changeState()
 
         self.service.fetchCharactersInfoMockResult = nil
 
@@ -92,6 +160,97 @@ final class MainViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.characterThumbnails.count, 3)
     }
 
+    func testDataLoadSearchOnFetchSuccess() async throws {
+
+        //self.viewModel.changeState()
+
+        let characterDataWrapper = CharactersDataWrapper(data: CharactersDataContainer(
+            results: [Character(id: 5, name: "Capitão Falcão", thumbnail: Image(path: "123", extension0: ".jpg"))]))
+        self.service.fetchCharactersInfoSearchMockResult = characterDataWrapper
+
+        var imageData = Data()
+        if let url = URL(string: "http://i.annihil.us/u/prod/marvel/i/mg/8/a0/523ca6f2b11e4.jpg") {
+
+            (imageData, _) = try await URLSession.shared.data(from: url)
+        }
+        self.service.fetchCharactersImageData = imageData
+        await viewModel.dataLoadSearch()
+
+        XCTAssertEqual(viewModel.characterThumbnailsSearch.count, 4)
+        XCTAssertEqual(viewModel.characterThumbnailsSearch[3].id, 5)
+        XCTAssertEqual(viewModel.characterThumbnailsSearch[3].name, "Capitão Falcão")
+        XCTAssertEqual(viewModel.characterThumbnailsSearch[3].image.pngData(), UIImage(data: imageData)?.pngData())
+        XCTAssertEqual(viewModel.characterThumbnailsSearch[3].favourite, false)
+    }
+
+    func testDataLoadSearchOnFetchFailure() async throws {
+
+        //self.viewModel.changeState()
+
+        self.service.fetchCharactersInfoSearchMockResult = nil
+
+        self.service.fetchCharactersImageData = nil
+        await viewModel.dataLoadSearch()
+
+        XCTAssertEqual(viewModel.characterThumbnailsSearch.count, 3)
+    }
+
+    func testFilterFavourites() {
+
+        let expected: [CharacterThumbnail] = [CharacterThumbnail(id: 1, name: "Bruno Aleixo", image: UIImage(), favourite: true), CharacterThumbnail(id: 10, name: "Insonias", image: UIImage(), favourite: true)]
+
+        let result = viewModel.filterFavourites()
+
+        XCTAssertEqual(expected.count, result.count)
+        XCTAssertEqual(expected[0].id, result[0].id)
+        XCTAssertEqual(expected[0].name, result[0].name)
+        XCTAssertEqual(expected[0].image, result[0].image)
+        XCTAssertEqual(expected[0].favourite, result[0].favourite)
+        XCTAssertEqual(expected[1].id, result[1].id)
+        XCTAssertEqual(expected[1].name, result[1].name)
+        XCTAssertEqual(expected[1].image, result[1].image)
+        XCTAssertEqual(expected[1].favourite, result[1].favourite)
+    }
+
+    func testFilterFavouritesFromArray() {
+
+        let expected: [CharacterThumbnail] = [CharacterThumbnail(id: 1, name: "Bruno Aleixo", image: UIImage(), favourite: true)]
+
+        let array = [CharacterThumbnail(id: 1, name: "Bruno Aleixo", image: UIImage(), favourite: true), CharacterThumbnail(id: 10, name: "Insonias", image: UIImage(), favourite: false)]
+        let result = viewModel.filterFavouritesFromArray(array: array)
+
+        XCTAssertEqual(expected[0].id, result[0].id)
+        XCTAssertEqual(expected[0].name, result[0].name)
+        XCTAssertEqual(expected[0].image, result[0].image)
+        XCTAssertEqual(expected[0].favourite, result[0].favourite)
+    }
+
+    /*
+    func testLoadAllFavourites() {
+
+        viewModel.favouritesId = [1,2,3]
+
+        let expected = true
+
+        viewModel.loadAllFavourites()
+
+        XCTAssertEqual(expected, viewModel.characterThumbnails[1].favourite)
+
+    }
+     */
+
+    func testSetAllFavourites() {
+
+        let expectedIdList: Set<Int> = [1, 10, 11]
+        let expectedCharacterFavourite = true
+
+        viewModel.setAllFavourites()
+
+        XCTAssertEqual(expectedIdList, viewModel.getFavourites())
+        XCTAssertEqual(expectedCharacterFavourite, viewModel.characterThumbnailsSearch[1].favourite)
+    }
+
+    /*
     func testChangeFavouriteCaseAppend() {
 
         let id = 4
@@ -102,7 +261,7 @@ final class MainViewModelTests: XCTestCase {
         let expectedImage = viewModel.characterThumbnails[0].image
         let expectedFavourite = viewModel.characterThumbnails[0].favourite
 
-        viewModel.changeFavourite(id: id, favourite: favourite)
+        viewModel.changeFavourite(id: id)
 
         XCTAssertEqual(3, viewModel.characterThumbnails.count)
         XCTAssertEqual(expectedId,viewModel.characterThumbnails[0].id)
@@ -122,7 +281,7 @@ final class MainViewModelTests: XCTestCase {
         let expectedImage = viewModel.characterThumbnails[1].image
         let expectedFavourite = false
 
-        viewModel.changeFavourite(id: id, favourite: favourite)
+        viewModel.changeFavourite(id: id)
 
         XCTAssertEqual(3, viewModel.characterThumbnails.count)
         XCTAssertEqual(expectedId,viewModel.characterThumbnails[1].id)
@@ -130,40 +289,100 @@ final class MainViewModelTests: XCTestCase {
         XCTAssertEqual(expectedImage, viewModel.characterThumbnails[1].image)
         XCTAssertEqual(expectedFavourite, viewModel.characterThumbnails[1].favourite)
     }
+     */
 
-    func testFilterFavourites() {
+    func testGetFavourites() {
 
-        let expected: [CharacterThumbnail] = [CharacterThumbnail(id: 1, name: "Bruno Aleixo", image: UIImage(), favourite: true)]
+        let expected: Set<Int> = [1, 10, 11]
 
-        let result = viewModel.filterFavourites()
+        let result = viewModel.getFavourites()
 
-        XCTAssertEqual(expected.count, result.count)
-        XCTAssertEqual(expected[0].id, result[0].id)
-        XCTAssertEqual(expected[0].name, result[0].name)
-        XCTAssertEqual(expected[0].image, result[0].image)
-        XCTAssertEqual(expected[0].favourite, result[0].favourite)
+        XCTAssertEqual(expected, result)
     }
-    /*
-    func testLoadAllFavourites() {
 
-        viewModel.favouritesId = [1,2,3]
+    func testChangeState() {
+
+        let expected = false
+
+        viewModel.changeState()
+
+        XCTAssertEqual(expected, viewModel.getState())
+    }
+
+    func testGetState() {
 
         let expected = true
 
-        viewModel.loadAllFavourites()
-
-        XCTAssertEqual(expected, viewModel.characterThumbnails[1].favourite)
-
+        XCTAssertEqual(expected, viewModel.getState())
     }
-     */
-    func testSetAllFavourites() {
 
-        let expectedIdList = [3]
-        let expectedCharacterFavourite = true
+    func testGetText() {
 
-        viewModel.setAllFavourites()
+        let expected = "In"
 
-        XCTAssertEqual(expectedIdList, viewModel.favouritesId)
-        XCTAssertEqual(expectedCharacterFavourite, viewModel.characterThumbnails[2].favourite)
+        let result = viewModel.getText()
+
+        XCTAssertEqual(expected, result)
     }
+
+    func testSetText() {
+
+        let expected = "Bruno"
+
+        let text = "Bruno"
+
+        viewModel.setText(text: text)
+
+        XCTAssertEqual(expected, viewModel.getText())
+    }
+
+    func testResetCharacterThumbnailsSearch() {
+
+        let expected: [CharacterThumbnail] = []
+
+        viewModel.resetCharacterThumbnailsSearch()
+
+        XCTAssertEqual(expected.count, viewModel.characterThumbnailsSearch.count)
+    }
+
+    func testGetDoneLoaded() {
+
+        let expected = true
+
+        let result = viewModel.getDoneLoaded()
+
+        XCTAssertEqual(expected, result)
+    }
+
+    func testGetDoneLoadedSearch() {
+
+        let expected = true
+
+        let result = viewModel.getDoneLoadedSearch()
+
+        XCTAssertEqual(expected, result)
+    }
+
+    func testSetDoneLoaded() {
+
+        let expected = false
+
+        viewModel.setDoneLoaded(doneLoaded: false)
+
+        let result = viewModel.getDoneLoaded()
+
+        XCTAssertEqual(expected, result)
+    }
+
+    func testSetDoneLoadedSearch() {
+
+        let expected = false
+
+        viewModel.setDoneLoadedSearch(doneLoadedSearch: false)
+
+        let result = viewModel.getDoneLoadedSearch()
+
+        XCTAssertEqual(expected, result)
+    }
+
 }

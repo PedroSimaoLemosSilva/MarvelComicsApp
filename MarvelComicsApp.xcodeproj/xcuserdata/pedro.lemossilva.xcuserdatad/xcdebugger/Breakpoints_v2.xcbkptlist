@@ -190,10 +190,137 @@
             filePath = "MarvelComicsAppTests/FavouritesViewModelTests.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "50"
-            endingLineNumber = "50"
+            startingLineNumber = "49"
+            endingLineNumber = "49"
             landmarkName = "testNumberOfRows()"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "02AC2142-3467-470D-BF13-6C4D91E37B69"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MarvelComicsApp/ViewModels/MainViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "190"
+            endingLineNumber = "190"
+            landmarkName = "dataLoadSearch()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "51268834-0DF3-40BA-A007-9EED24B8877C"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MarvelComicsApp/ViewModels/MainViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "211"
+            endingLineNumber = "211"
+            landmarkName = "dataLoadSearch()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "51268834-0DF3-40BA-A007-9EED24B8877C - 990e3b5f32add248"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for MarvelComicsApp.MainViewModel.dataLoadSearch() async -&gt; ()"
+                  moduleName = "MarvelComicsApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/pedro.lemossilva/Desktop/GitLabReps/MarvelComicsApp/MarvelComicsApp/ViewModels/MainViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "212"
+                  endingLineNumber = "212"
+                  offsetFromSymbolStart = "1347">
+               </Location>
+               <Location
+                  uuid = "51268834-0DF3-40BA-A007-9EED24B8877C - 579b2e0c70620e52"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(5) suspend resume partial function for MarvelComicsApp.MainViewModel.dataLoadSearch() async -&gt; ()"
+                  moduleName = "MarvelComicsApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/pedro.lemossilva/Desktop/GitLabReps/MarvelComicsApp/MarvelComicsApp/ViewModels/MainViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "212"
+                  endingLineNumber = "212"
+                  offsetFromSymbolStart = "4929">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5426B04A-9463-4C3B-84B4-8A1E0AE4BE01"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MarvelComicsApp/ViewModels/MainViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "189"
+            endingLineNumber = "189"
+            landmarkName = "dataLoadSearch()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "5426B04A-9463-4C3B-84B4-8A1E0AE4BE01 - 990e3b5f32add541"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for MarvelComicsApp.MainViewModel.dataLoadSearch() async -&gt; ()"
+                  moduleName = "MarvelComicsApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/pedro.lemossilva/Desktop/GitLabReps/MarvelComicsApp/MarvelComicsApp/ViewModels/MainViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "189"
+                  endingLineNumber = "189"
+                  offsetFromSymbolStart = "554">
+               </Location>
+               <Location
+                  uuid = "5426B04A-9463-4C3B-84B4-8A1E0AE4BE01 - 990e3b5f32add541"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for MarvelComicsApp.MainViewModel.dataLoadSearch() async -&gt; ()"
+                  moduleName = "MarvelComicsApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/pedro.lemossilva/Desktop/GitLabReps/MarvelComicsApp/MarvelComicsApp/ViewModels/MainViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "189"
+                  endingLineNumber = "189"
+                  offsetFromSymbolStart = "833">
+               </Location>
+               <Location
+                  uuid = "5426B04A-9463-4C3B-84B4-8A1E0AE4BE01 - 579b2e0c7062095b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(5) suspend resume partial function for MarvelComicsApp.MainViewModel.dataLoadSearch() async -&gt; ()"
+                  moduleName = "MarvelComicsApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/pedro.lemossilva/Desktop/GitLabReps/MarvelComicsApp/MarvelComicsApp/ViewModels/MainViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "189"
+                  endingLineNumber = "189"
+                  offsetFromSymbolStart = "2238">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

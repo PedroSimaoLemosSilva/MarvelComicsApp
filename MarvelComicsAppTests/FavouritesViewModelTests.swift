@@ -18,9 +18,9 @@ final class FavouritesViewModelTests: XCTestCase {
 
     var characterThumbnailsDeleted: [CharacterThumbnail]!
 
-    var favouritesId: [Int]!
+    var favouritesId: Set<Int>!
 
-    var favouritesIdNotLoaded: [Int]!
+    var favouritesIdNotLoaded: Set<Int>!
 
     override func setUpWithError() throws {
 
@@ -28,11 +28,10 @@ final class FavouritesViewModelTests: XCTestCase {
         self.service = MockedFavouritesWebservice()
         self.characterThumbnails = [CharacterThumbnail(id: 1, name: "Bruno Aleixo", image: UIImage(), favourite: true),CharacterThumbnail(id: 2, name: "Bussaco", image: UIImage(), favourite: true)]
         self.characterThumbnailsDeleted = [CharacterThumbnail(id: 4, name: "Renato", image: UIImage(), favourite: false)]
-        self.favouritesId = [1,2]
+        self.favouritesId = [1, 2]
         self.favouritesIdNotLoaded = [3]
         self.viewModel = FavouritesViewModel(webservice: service, characterThumbnails: characterThumbnails,
-                                             characterThumbnailsDeleted: characterThumbnailsDeleted,
-                                             favouritesId: favouritesId, favouritesIdNotLoaded: favouritesIdNotLoaded)
+                                             characterThumbnailsDeleted: characterThumbnailsDeleted, favouriteIds: favouritesId,favouritesIdNotLoaded: favouritesIdNotLoaded)
     }
 
     override func tearDownWithError() throws {
@@ -75,6 +74,23 @@ final class FavouritesViewModelTests: XCTestCase {
         XCTAssertEqual(expectedFavourite, result.3)
     }
 
+    func testCharacterForRowAtImage() {
+
+        let indexPath = IndexPath(row: 1, section: 0)
+
+        let expectedId = viewModel.characterThumbnails[indexPath.row].id
+        let expectedName = viewModel.characterThumbnails[indexPath.row].name
+        let expectedImage = viewModel.characterThumbnails[indexPath.row].image
+        let expectedFavourite = viewModel.characterThumbnails[indexPath.row].favourite
+
+        let result = viewModel.characterForRowAtImage(indexPath: indexPath)
+
+        XCTAssertEqual(expectedId, result.0)
+        XCTAssertEqual(expectedName, result.1)
+        XCTAssertEqual(expectedImage, result.2)
+        XCTAssertEqual(expectedFavourite, result.3)
+    }
+
     func testChangeFavouriteCaseAppend() {
 
         let id = 4
@@ -83,13 +99,13 @@ final class FavouritesViewModelTests: XCTestCase {
         let expectedId = viewModel.characterThumbnailsDeleted[0].id
         let expectedName = viewModel.characterThumbnailsDeleted[0].name
         let expectedImage = viewModel.characterThumbnailsDeleted[0].image
-        let expectedFavourite = viewModel.characterThumbnailsDeleted[0].favourite
+        let expectedFavourite = true
 
-        viewModel.changeFavourite(id: id, favourite: favourite)
+        viewModel.changeFavourite(id: id)
 
         XCTAssertEqual(3, viewModel.characterThumbnails.count)
         XCTAssertEqual(0, viewModel.characterThumbnailsDeleted.count)
-        XCTAssertEqual(3, viewModel.favouritesId.count)
+        XCTAssertEqual(3, viewModel.favouriteIds.countFavourite())
         XCTAssertEqual(1, viewModel.favouritesIdNotLoaded.count)
         XCTAssertEqual(expectedId,viewModel.characterThumbnails[2].id)
         XCTAssertEqual(expectedName, viewModel.characterThumbnails[2].name)
@@ -108,11 +124,11 @@ final class FavouritesViewModelTests: XCTestCase {
         let expectedImage = viewModel.characterThumbnails[1].image
         let expectedFavourite = false
 
-        viewModel.changeFavourite(id: id, favourite: favourite)
+        viewModel.changeFavourite(id: id)
 
         XCTAssertEqual(1, viewModel.characterThumbnails.count)
         XCTAssertEqual(2, viewModel.characterThumbnailsDeleted.count)
-        XCTAssertEqual(1, viewModel.favouritesId.count)
+        XCTAssertEqual(1, viewModel.favouriteIds.countFavourite())
         XCTAssertEqual(1, viewModel.favouritesIdNotLoaded.count)
         XCTAssertEqual(expectedId,viewModel.characterThumbnailsDeleted[1].id)
         XCTAssertEqual(expectedName, viewModel.characterThumbnailsDeleted[1].name)
@@ -133,12 +149,12 @@ final class FavouritesViewModelTests: XCTestCase {
     func testCheckFavouriteInList() {
 
         let expectedCount = 1
-        let expectedNotLoadedId = viewModel.favouritesIdNotLoaded[0]
+        let expectedNotLoadedId = 3
 
         viewModel.checkFavouriteInList()
 
         XCTAssertEqual(expectedCount, viewModel.favouritesIdNotLoaded.count)
-        XCTAssertEqual(expectedNotLoadedId, viewModel.favouritesIdNotLoaded[0])
+        XCTAssertEqual(expectedNotLoadedId, viewModel.favouritesIdNotLoaded.first)
     }
 
     func testDataLoadOnFetchSuccess() async throws {

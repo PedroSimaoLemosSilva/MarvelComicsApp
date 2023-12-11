@@ -327,7 +327,7 @@ extension MainViewController: UISearchBarDelegate {
         searchTimer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false, block: { [weak self] (timer) in
             DispatchQueue.main.async { [weak self] in
 
-                print(Thread.current)
+
                 if self?.mainViewModel.getState() == false {
 
                     self?.mainViewModel.changeState()
@@ -344,7 +344,7 @@ extension MainViewController: UISearchBarDelegate {
                     self?.mainViewModel.resetCharacterThumbnailsSearch()
                     self?.mainViewModel.setText(text: searchText)
                     await self?.mainViewModel.dataLoadSearch()
-                    print("loaded")
+                    
                     self?.mainViewModel.setAllFavourites()
                     self?.tableView.reloadData()
                 }
