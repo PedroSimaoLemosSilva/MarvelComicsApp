@@ -18,7 +18,7 @@ final class FavouritesViewModelTests: XCTestCase {
 
     var characterThumbnailsDeleted: [CharacterThumbnail]!
 
-    var favouritesId: Set<Int>!
+    var favouritesId: FavouritesSet!
 
     var favouritesIdNotLoaded: Set<Int>!
 
@@ -28,7 +28,8 @@ final class FavouritesViewModelTests: XCTestCase {
         self.service = MockedFavouritesWebservice()
         self.characterThumbnails = [CharacterThumbnail(id: 1, name: "Bruno Aleixo", image: UIImage(), favourite: true),CharacterThumbnail(id: 2, name: "Bussaco", image: UIImage(), favourite: true)]
         self.characterThumbnailsDeleted = [CharacterThumbnail(id: 4, name: "Renato", image: UIImage(), favourite: false)]
-        self.favouritesId = [1, 2]
+        FavouritesSet.sharedInstance.setFavourites(favourites: [1, 2])
+        self.favouritesId = FavouritesSet.sharedInstance
         self.favouritesIdNotLoaded = [3]
         self.viewModel = FavouritesViewModel(webservice: service, characterThumbnails: characterThumbnails,
                                              characterThumbnailsDeleted: characterThumbnailsDeleted, favouriteIds: favouritesId,favouritesIdNotLoaded: favouritesIdNotLoaded)
@@ -94,7 +95,6 @@ final class FavouritesViewModelTests: XCTestCase {
     func testChangeFavouriteCaseAppend() {
 
         let id = 4
-        let favourite = true
 
         let expectedId = viewModel.characterThumbnailsDeleted[0].id
         let expectedName = viewModel.characterThumbnailsDeleted[0].name
@@ -117,7 +117,6 @@ final class FavouritesViewModelTests: XCTestCase {
     func testChangeFavouriteCaseRemove() {
 
         let id = 2
-        let favourite = false
 
         let expectedId = viewModel.characterThumbnails[1].id
         let expectedName = viewModel.characterThumbnails[1].name

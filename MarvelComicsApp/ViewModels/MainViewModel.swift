@@ -13,7 +13,7 @@ class MainViewModel {
 
     private let webservice: MainWebserviceProtocol
 
-    private let favouriteIds: FavouritesSet = FavouritesSet.sharedInstance
+    private var favouriteIds: FavouritesSet = FavouritesSet.sharedInstance
 
     lazy var characterThumbnails: [CharacterThumbnail] = []
     
@@ -31,11 +31,11 @@ class MainViewModel {
 
     //var cache = NSCache<NSString, UIImage>()
 
-    init(webservice: MainWebserviceProtocol = MainWebservice(), favouriteIds : Set<Int> = [], characterThumbnails: [CharacterThumbnail] = [],
+    init(webservice: MainWebserviceProtocol = MainWebservice(), favouriteIds : FavouritesSet = FavouritesSet.sharedInstance, characterThumbnails: [CharacterThumbnail] = [],
          characterThumbnailsSearch: [CharacterThumbnail] = [], text: String = "", searchState: Bool = false, doneLoaded: Bool = false, doneLoadedSearch: Bool = false, task: Task<(), Never>? = nil) {
 
         self.webservice = webservice
-        self.favouriteIds.setFavourites(favourites: favouriteIds)
+        self.favouriteIds = favouriteIds
         self.characterThumbnails = characterThumbnails
         self.characterThumbnailsSearch = characterThumbnailsSearch
         self.text = text
@@ -80,8 +80,13 @@ class MainViewModel {
     func changeFavourite(id: Int) {
 
         if searchState {
-            
+
             self.changeFavouriteForArray(id: id, array: characterThumbnailsSearch)
+
+            if let characterThumbnail = characterThumbnails.first(where: {$0.id == id}) {
+
+                characterThumbnail.favourite.toggle()
+            }
         } else {
             
             self.changeFavouriteForArray(id: id, array: characterThumbnails)
@@ -95,8 +100,9 @@ class MainViewModel {
             characterThumbnail.favourite.toggle()
 
             if characterThumbnail.favourite {
-
+                
                 favouriteIds.addFavourite(id: id)
+            
             } else {
 
                 favouriteIds.removeFavourite(id: id)
@@ -255,11 +261,20 @@ class MainViewModel {
         
         var favouriteThumbnailsSearch: [CharacterThumbnail] = []
         if searchState {
-            
+
             favouriteThumbnailsSearch = filterFavouritesFromArray(array: characterThumbnailsSearch)
+
+            for character in characterThumbnails {
+
+                if let indexOfCharacterThumbnail = favouriteThumbnailsSearch.firstIndex(where: {$0.id == character.id}) {
+
+                    favouriteThumbnailsSearch.remove(at: indexOfCharacterThumbnail)
+                }
+            }
         }
         
         favouriteThumbnails.append(contentsOf: favouriteThumbnailsSearch)
+
         
         return favouriteThumbnails
     }
@@ -284,7 +299,7 @@ class MainViewModel {
 
             return
         }
-
+        
         favouriteIds.setFavourites(favourites: Set(auxfFavouritesId))
 
         setAllFavourites()
@@ -314,6 +329,7 @@ class MainViewModel {
     func saveChanges() {
 
         let array = Array(favouriteIds.getFavourites())
+        
         UserDefaults.standard.set(array, forKey: "favouriteId")
     }
 

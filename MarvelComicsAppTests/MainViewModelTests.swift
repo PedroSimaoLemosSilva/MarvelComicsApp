@@ -12,7 +12,7 @@ final class MainViewModelTests: XCTestCase {
 
     var service: MockedMainWebservice!
 
-    var favouritesId: Set<Int>!
+    var favouritesId: FavouritesSet!
 
     var data: [CharacterThumbnail]!
 
@@ -36,7 +36,8 @@ final class MainViewModelTests: XCTestCase {
         self.service = MockedMainWebservice()
         self.searchData = [CharacterThumbnail(id: 10, name: "Insonias", image: UIImage(), favourite: true), CharacterThumbnail(id: 11, name: "Intacto", image: UIImage(), favourite: false), CharacterThumbnail(id: 12, name: "Interno", image: UIImage(), favourite: false)]
         self.data = [CharacterThumbnail(id: 1, name: "Bruno Aleixo", image: UIImage(), favourite: true), CharacterThumbnail(id: 2, name: "Bussaco", image: UIImage(), favourite: false), CharacterThumbnail(id: 3, name: "Renato", image: UIImage(), favourite: false)]
-        self.favouritesId = [1, 10, 11]
+        FavouritesSet.sharedInstance.setFavourites(favourites: [1, 10, 11])
+        self.favouritesId = FavouritesSet.sharedInstance
         self.text = "In"
         self.searchState = true
         self.doneLoaded = true

@@ -22,12 +22,12 @@ class FavouritesViewModel {
     var cache = NSCache<NSString, UIImage>()
 
     init(webservice: FavouritesWebserviceProtocol = FavouritesWebservice(), characterThumbnails: [CharacterThumbnail] = [],
-         characterThumbnailsDeleted: [CharacterThumbnail] = [], favouriteIds: Set<Int> = [], favouritesIdNotLoaded: Set<Int> = []) {
-
+         characterThumbnailsDeleted: [CharacterThumbnail] = [], favouriteIds: FavouritesSet = FavouritesSet.sharedInstance, favouritesIdNotLoaded: Set<Int> = []) {
+        
         self.webservice = webservice
         self.characterThumbnails = characterThumbnails
         self.characterThumbnailsDeleted = characterThumbnailsDeleted
-        self.favouriteIds.setFavourites(favourites: favouriteIds)
+        self.favouriteIds = favouriteIds
         self.favouritesIdNotLoaded = favouritesIdNotLoaded
     }
 
@@ -167,7 +167,7 @@ class FavouritesViewModel {
     func checkFavouriteInList() {
 
         favouriteIds.getFavourites().forEach { id in
-
+            
             if let characterThumbnail = characterThumbnails.first(where: {$0.id == id}) {}
             else {
 

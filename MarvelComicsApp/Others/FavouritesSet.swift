@@ -34,7 +34,7 @@ class FavouritesSet {
     }
 
     func setFavourites(favourites: Set<Int>) {
-
+        
         self.favourites = favourites
     }
 

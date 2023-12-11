@@ -18,9 +18,9 @@ class FavouritesViewController: UIViewController {
     private let loadingScreen = IndicatorView()
 
     init(favouriteThumbnails: [CharacterThumbnail]) {
-
+        
         super.init(nibName: nil, bundle: nil)
-
+        
         favouritesViewModel.setCharacterThumbnails(characterThumbnails: favouriteThumbnails)
     }
     
@@ -32,7 +32,7 @@ class FavouritesViewController: UIViewController {
         super.viewDidLoad()
 
         Task {
-            
+
             self.view.backgroundColor = .white
             
             configureLoadingView()

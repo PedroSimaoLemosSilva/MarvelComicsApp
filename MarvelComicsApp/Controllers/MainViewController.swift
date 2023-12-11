@@ -154,6 +154,7 @@ private extension MainViewController {
     func changeToFavouritesViewController() {
 
         let favouritesViewController = FavouritesViewController(favouriteThumbnails: mainViewModel.filterFavourites())
+        
         favouritesViewController.delegate = self
         navigationController?.pushViewController(favouritesViewController, animated: false)
     }
@@ -193,7 +194,7 @@ extension MainViewController: FavouritesViewControllerDelegate {
 extension MainViewController: CharacterThumbnailCellDelegate {
 
     func sendCharacterClickedMain(id: Int) {
-
+       
         mainViewModel.changeFavourite(id: id)
         mainViewModel.saveChanges()
         tableView.reloadData()
